@@ -1,0 +1,1333 @@
+<html><head><base href="https://websim.com/racha-pelada-uniao/?">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Racha Pelada União - Sistema Interativo Aprimorado</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-color: #4CAF50;
+  --secondary-color: #FFA000;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --font-family: 'Roboto', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  line-height: 1.6;
+  color: var(--dark-color);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e0e8f0 100%);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 100%;
+  padding: 1rem;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+  margin-bottom: 0.5rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="time"],
+select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="time"]:focus,
+select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px;
+  text-align: left;
+}
+
+th {
+  background-color: var(--light-color);
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.team-lists {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.team-list {
+  flex: 1 1 48%;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.team-list h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+#blue-team {
+  background-color: #007bff;
+}
+
+#orange-team {
+  background-color: #fd7e14;
+}
+
+#blue-team-second {
+  background-color: #007bff;
+}
+
+#orange-team-second {
+  background-color: #fd7e14;
+}
+
+.team-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.team-list li {
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-list li::before {
+  content: attr(data-number);
+  margin-right: 0.5rem;
+}
+
+.totals {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.totals p {
+  flex: 1 1 30%;
+  margin-bottom: 0.5rem;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--secondary-color);
+  color: white;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .form-row .form-group {
+    flex: 1;
+    margin-right: 0.5rem;
+  }
+
+  .form-row .form-group:last-child {
+    margin-right: 0;
+  }
+}
+
+.edit-delete-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-btn, .delete-btn, .team-button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  width: auto;
+}
+
+.team-button {
+  margin-right: 0.5rem;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.remove-btn:hover {
+  background-color: #c82333;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.required-field::after {
+  content: " *";
+  color: red;
+}
+
+.goalkeeper-required::after {
+  content: " *";
+  color: red;
+}
+
+.nav-arrow {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+#current-time {
+  display: inline-block;
+  min-width: 200px;
+}
+
+th, td {
+  padding: 6px;
+}
+
+@media (min-width: 768px) {
+  th, td {
+    padding: 8px;
+    font-size: 1em;
+  }
+}
+
+.team-button.blue-team-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.team-button.orange-team-btn {
+  background-color: #fd7e14;
+  color: white;
+}
+
+.edit-btn {
+  background-color: #ffc107;
+  color: black;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover, .team-button:hover {
+  opacity: 0.8;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Racha Pelada União</h1>
+</header>
+
+<div class="container">
+  <div id="main-section">
+    <div class="card fade-in">
+      <h2>Data do Jogo: <span id="game-date"></span></h2>
+    </div>
+    <div class="card fade-in">
+      <h2>Cadastro do Jogador</h2>
+      <form id="player-form">
+        <div class="form-group">
+          <label for="saved-players">Jogador Cadastrado:</label>
+          <select id="saved-players">
+            <option value="">Selecione um jogador ou cadastre um novo</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="player-name" class="required-field goalkeeper-required">Nome do Jogador:</label>
+            <input type="text" id="player-name" required>
+          </div>
+          <div class="form-group">
+            <label for="player-position" class="required-field goalkeeper-required">Posição:</label>
+            <select id="player-position" required>
+              <option value="">Selecione</option>
+              <option value="Atacante">Atacante</option>
+              <option value="Meia">Meia</option>
+              <option value="Volante">Volante</option>
+              <option value="Zagueiro">Zagueiro</option>
+              <option value="Lateral">Lateral</option>
+              <option value="Goleiro">Goleiro</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="player-type" class="required-field">Tipo:</label>
+            <select id="player-type" required>
+              <option value="">Selecione</option>
+              <option value="Mensalista">Mensalista</option>
+              <option value="Diarista">Diarista</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="arrival-time" class="required-field goalkeeper-required">Chegada:</label>
+            <input type="time" id="arrival-time" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="amount-raised">Valor (R$):</label>
+            <input type="number" id="amount-raised" step="0.01">
+          </div>
+          <div class="form-group">
+            <label for="payment-method">Pagamento:</label>
+            <select id="payment-method">
+              <option value="">Selecione</option>
+              <option value="Dinheiro">Dinheiro</option>
+              <option value="Pix">Pix</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="payment-status">Status de Pagamento:</label>
+            <select id="payment-status">
+              <option value="">Selecione</option>
+              <option value="Em Dias">Em Dias</option>
+              <option value="Devendo">Devendo</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit">Cadastrar Jogador</button>
+      </form>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Lista de Ordem de Chegada</h2>
+      <table id="arrival-list">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Nome</th>
+            <th>Posição</th>
+            <th>Tipo</th>
+            <th>Chegada</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Lista de Goleiros</h2>
+      <table id="goalkeeper-list">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Nome</th>
+            <th>Posição</th>
+            <th>Chegada</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Jogadores do Segundo Tempo</h2>
+      <table id="substitute-list">
+        <thead>
+          <tr>
+            <th>Nº</th>
+            <th>Nome</th>
+            <th>Posição</th>
+            <th>Tipo</th>
+            <th>Chegada</th>
+            <th>Valor (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h2>
+        <button id="prev-time" class="nav-arrow">&lt;</button>
+        <span id="current-time">Times Primeiro Tempo</span>
+        <button id="next-time" class="nav-arrow">&gt;</button>
+      </h2>
+      <div id="times-primeiro-tempo">
+        <div class="team-lists">
+          <div class="team-list" id="blue-team">
+            <h3>Time Azul</h3>
+            <ul></ul>
+          </div>
+          <div class="team-list" id="orange-team">
+            <h3>Time Laranja</h3>
+            <ul></ul>
+          </div>
+        </div>
+      </div>
+      <div id="times-segundo-tempo" style="display: none;">
+        <div class="team-lists">
+          <div class="team-list" id="blue-team-second">
+            <h3>Time Azul (2º Tempo)</h3>
+            <ul></ul>
+          </div>
+          <div class="team-list" id="orange-team-second">
+            <h3>Time Laranja (2º Tempo)</h3>
+            <ul></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Registro de Gols e Cartões</h2>
+      <form id="goal-card-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="player-goal-card">Nome do Jogador:</label>
+            <select id="player-goal-card" required>
+              <option value="">Selecione o Jogador</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="goals-scored">Gols:</label>
+            <input type="number" id="goals-scored" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="card-type">Tipo de Cartão:</label>
+          <select id="card-type">
+            <option value="">Selecione o Tipo de Cartão</option>
+            <option value="Amarelo">Cartão Amarelo</option>
+            <option value="Azul">Cartão Azul</option>
+            <option value="Vermelho">Cartão Vermelho</option>
+          </select>
+        </div>
+        <button type="submit">Registrar</button>
+      </form>
+      <table id="goal-card-list">
+        <thead>
+          <tr>
+            <th>Jogador</th>
+            <th>Gols</th>
+            <th>Cartão</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Registro de Despesas</h2>
+      <form id="expense-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="expense-description">Descrição:</label>
+            <input type="text" id="expense-description" required>
+          </div>
+          <div class="form-group">
+            <label for="expense-value">Valor:</label>
+            <input type="number" id="expense-value" step="0.01" required>
+          </div>
+        </div>
+        <button type="submit">Cadastrar Despesa</button>
+      </form>
+      <table id="expense-list">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card fade-in">
+      <h2>Totais</h2>
+      <div class="totals">
+        <p>Total Arrecadado: R$ <span id="total-raised">0.00</span></p>
+        <p>Total Despesas: R$ <span id="total-expenses">0.00</span></p>
+        <p>Total Final: R$ <span id="final-total">0.00</span></p>
+      </div>
+    </div>
+
+    <div class="card fade-in">
+      <button id="generate-report">Gerar Relatório</button>
+      <button id="print-page">Imprimir</button>
+      <button id="share-whatsapp">Compartilhar no WhatsApp</button>
+      <button id="clear-all-data">Limpar Todos os Dados</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2024 Racha Pelada União - Todos os direitos reservados.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+let totalRaised = 0;
+let totalExpenses = 0;
+let players = [];
+let expenses = [];
+
+let firstHalfTeams = {
+  blue: [],
+  orange: []
+};
+
+let secondHalfTeams = {
+  blue: [],
+  orange: []
+};
+
+// Set fixed game date
+const gameDate = new Date().toLocaleDateString('pt-BR');
+document.getElementById('game-date').textContent = gameDate;
+
+function savePlayerData() {
+  const playerData = players.map(player => ({
+    name: player.name,
+    position: player.position,
+    type: player.type
+  }));
+  localStorage.setItem('persistentPlayerData', JSON.stringify(playerData));
+}
+
+function loadPlayerData() {
+  const storedData = localStorage.getItem('persistentPlayerData');
+  if (storedData) {
+    return JSON.parse(storedData);
+  }
+  return [];
+}
+
+function saveTeamsData() {
+  localStorage.setItem('firstHalfTeams', JSON.stringify(firstHalfTeams));
+  localStorage.setItem('secondHalfTeams', JSON.stringify(secondHalfTeams));
+}
+
+function loadTeamsData() {
+  const storedFirstHalfTeams = localStorage.getItem('firstHalfTeams');
+  const storedSecondHalfTeams = localStorage.getItem('secondHalfTeams');
+  
+  if (storedFirstHalfTeams) {
+    firstHalfTeams = JSON.parse(storedFirstHalfTeams);
+  }
+  
+  if (storedSecondHalfTeams) {
+    secondHalfTeams = JSON.parse(storedSecondHalfTeams);
+  }
+}
+
+function saveData() {
+  localStorage.setItem('players', JSON.stringify(players));
+  localStorage.setItem('expenses', JSON.stringify(expenses));
+  localStorage.setItem('totalRaised', totalRaised);
+  localStorage.setItem('totalExpenses', totalExpenses);
+}
+
+function loadData() {
+  const storedPlayers = localStorage.getItem('players');
+  const storedExpenses = localStorage.getItem('expenses');
+  const storedTotalRaised = localStorage.getItem('totalRaised');
+  const storedTotalExpenses = localStorage.getItem('totalExpenses');
+
+  if (storedPlayers) {
+    players = JSON.parse(storedPlayers);
+    players.forEach(player => {
+      player.arrivalDate = new Date(`2000-01-01T${player.arrivalTime}`);
+    });
+  }
+  if (storedExpenses) expenses = JSON.parse(storedExpenses);
+  if (storedTotalRaised) totalRaised = parseFloat(storedTotalRaised);
+  if (storedTotalExpenses) totalExpenses = parseFloat(storedTotalExpenses);
+
+  loadTeamsData();
+  
+  const persistentData = loadPlayerData();
+  const savedPlayersSelect = document.getElementById('saved-players');
+  savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
+  persistentData.forEach(player => {
+    const option = document.createElement('option');
+    option.value = JSON.stringify(player);
+    option.textContent = `${player.name} - ${player.position} - ${player.type}`;
+    savedPlayersSelect.appendChild(option);
+  });
+
+  updatePlayerLists();
+  updateTotals();
+  updatePlayerSelect();
+  updateGoalCardList();
+
+  updateTeamList('blue', true);
+  updateTeamList('orange', true);
+  updateTeamList('blue', false);
+  updateTeamList('orange', false);
+}
+
+loadData();
+
+document.getElementById('player-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('player-name').value;
+  const position = document.getElementById('player-position').value;
+  const type = document.getElementById('player-type').value;
+  const arrivalTime = document.getElementById('arrival-time').value;
+  const arrivalDate = new Date(`2000-01-01T${arrivalTime}`);
+  const amount = parseFloat(document.getElementById('amount-raised').value) || 0;
+  const paymentMethod = document.getElementById('payment-method').value;
+  const paymentStatus = document.getElementById('payment-status').value;
+
+  if (position === 'Goleiro') {
+    if (!name || !position || !arrivalTime) {
+      alert('Para goleiros, Nome, Posição e Chegada são obrigatórios.');
+      return;
+    }
+  } else {
+    if (!name || !position || !type || !arrivalTime) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+  }
+
+  if (players.some(p => p.name === name)) {
+    alert('Este jogador já está cadastrado. Não é permitido cadastrar o mesmo jogador duas vezes.');
+    return;
+  }
+
+  const player = { 
+    name, 
+    position, 
+    type, 
+    arrivalTime, 
+    arrivalDate, 
+    amount, 
+    paymentMethod, 
+    paymentStatus 
+  };
+  players.push(player);
+
+  if (paymentStatus === 'Em Dias') {
+    totalRaised += amount;
+  }
+  updateTotals();
+  updatePlayerLists();
+  updatePlayerSelect();
+  savePlayerData();
+  saveData();
+  this.reset();
+  saveTeamsData(); // Add this line
+});
+
+document.getElementById('saved-players').addEventListener('change', function() {
+  const selectedPlayer = JSON.parse(this.value);
+  if (selectedPlayer) {
+    document.getElementById('player-name').value = selectedPlayer.name;
+    document.getElementById('player-position').value = selectedPlayer.position;
+    document.getElementById('player-type').value = selectedPlayer.type;
+  } else {
+    document.getElementById('player-form').reset();
+  }
+});
+
+document.getElementById('player-position').addEventListener('change', function() {
+  const isGoalkeeper = this.value === 'Goleiro';
+  document.getElementById('player-type').disabled = isGoalkeeper;
+  document.getElementById('amount-raised').disabled = isGoalkeeper;
+  document.getElementById('payment-method').disabled = isGoalkeeper;
+  document.getElementById('payment-status').disabled = isGoalkeeper;
+});
+
+function addPlayerToList(player, tableBody, index) {
+  const row = tableBody.insertRow();
+  if (player.position === 'Goleiro') {
+    row.innerHTML = `
+      <td>${index}</td>
+      <td>${player.name}</td>
+      <td>${player.position}</td>
+      <td>${player.arrivalTime}</td>
+      <td>R$ ${player.amount ? player.amount.toFixed(2) : '0.00'}</td>
+    `;
+  } else {
+    row.innerHTML = `
+      <td>${index}</td>
+      <td>${player.name}</td>
+      <td>${player.position}</td>
+      <td>${player.type === 'Mensalista' ? 'M' : 'D'}</td>
+      <td>${player.arrivalTime}</td>
+      <td>R$ ${player.amount ? player.amount.toFixed(2) : '0.00'}</td>
+    `;
+  }
+  
+  const actionsCell = row.insertCell();
+  const buttonsDiv = document.createElement('div');
+  buttonsDiv.classList.add('edit-delete-buttons');
+  
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Editar';
+  editButton.classList.add('edit-btn');
+  editButton.addEventListener('click', () => editPlayer(player, row));
+  
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Excluir';
+  deleteButton.classList.add('delete-btn');
+  deleteButton.addEventListener('click', () => deletePlayer(player, row));
+  
+  buttonsDiv.appendChild(editButton);
+  buttonsDiv.appendChild(deleteButton);
+  
+  const blueTeamButton = document.createElement('button');
+  blueTeamButton.textContent = 'Azul';
+  blueTeamButton.classList.add('team-button', 'blue-team-btn');
+  blueTeamButton.addEventListener('click', () => assignToTeam(player, 'blue'));
+  
+  const orangeTeamButton = document.createElement('button');
+  orangeTeamButton.textContent = 'Laranja';
+  orangeTeamButton.classList.add('team-button', 'orange-team-btn');
+  orangeTeamButton.addEventListener('click', () => assignToTeam(player, 'orange'));
+  
+  if (tableBody.id === 'substitute-list') {
+    blueTeamButton.disabled = true;
+    orangeTeamButton.disabled = true;
+  }
+  
+  buttonsDiv.appendChild(blueTeamButton);
+  buttonsDiv.appendChild(orangeTeamButton);
+  
+  actionsCell.appendChild(buttonsDiv);
+}
+
+let blueTeamCount = 0;
+let orangeTeamCount = 0;
+let blueGoalkeeper = false;
+let orangeGoalkeeper = false;
+let blueTeamCountSecond = 0;
+let orangeTeamCountSecond = 0;
+let blueGoalkeeperSecond = false;
+let orangeGoalkeeperSecond = false;
+
+function assignToTeam(player, team) {
+  const isPrimeiroTempo = currentTime === 'primeiro';
+  const teamList = document.getElementById(`${team}-team${isPrimeiroTempo ? '' : '-second'}`).getElementsByTagName('ul')[0];
+  const otherTeam = team === 'blue' ? 'orange' : 'blue';
+  const otherTeamList = document.getElementById(`${otherTeam}-team${isPrimeiroTempo ? '' : '-second'}`).getElementsByTagName('ul')[0];
+
+  const substitueList = document.getElementById('substitute-list');
+  const isSecondHalfPlayer = Array.from(substitueList.getElementsByTagName('tr')).some(row => row.cells[1].textContent === player.name);
+
+  if (isPrimeiroTempo && isSecondHalfPlayer) {
+    alert('Não é permitido adicionar jogadores do segundo tempo aos times do primeiro tempo.');
+    return;
+  }
+
+  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
+
+  const existingPlayer = targetTeams[team].find(p => p.name === player.name);
+  if (existingPlayer) {
+    alert('Este jogador já está neste time.');
+    return;
+  }
+
+  if (player.position === 'Goleiro') {
+    if (targetTeams[team].some(p => p.position === 'Goleiro')) {
+      alert('Este time já tem um goleiro.');
+      return;
+    }
+  } else {
+    const fieldPlayers = targetTeams[team].filter(p => p.position !== 'Goleiro').length;
+    const maxFieldPlayers = isPrimeiroTempo ? 10 : 10;
+    if (fieldPlayers >= maxFieldPlayers) {
+      alert('Este time já está completo para jogadores de linha.');
+      return;
+    }
+  }
+
+  // New check for second half players
+  if (!isPrimeiroTempo && isSecondHalfPlayer) {
+    const totalPlayers = targetTeams[team].length;
+    if (totalPlayers >= 11) {
+      alert('Não é possível adicionar jogadores do segundo tempo. O time já está completo com 11 jogadores.');
+      return;
+    }
+  }
+
+  const existingInOtherTeam = targetTeams[otherTeam].findIndex(p => p.name === player.name);
+  if (existingInOtherTeam !== -1) {
+    targetTeams[otherTeam].splice(existingInOtherTeam, 1);
+    updateTeamList(otherTeam, isPrimeiroTempo);
+  }
+
+  targetTeams[team].push(player);
+  updateTeamList(team, isPrimeiroTempo);
+  updatePlayerRowColor(player, team);
+  saveTeamsData();
+}
+
+function updateTeamList(team, isPrimeiroTempo) {
+  const teamList = document.getElementById(`${team}-team${isPrimeiroTempo ? '' : '-second'}`).getElementsByTagName('ul')[0];
+  teamList.innerHTML = '';
+  
+  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
+
+  // Sort players to ensure goalkeeper is first
+  const sortedPlayers = targetTeams[team].sort((a, b) => {
+    if (a.position === 'Goleiro') return -1;
+    if (b.position === 'Goleiro') return 1;
+    return 0;
+  });
+
+  sortedPlayers.forEach((player, index) => {
+    const li = document.createElement('li');
+    // Always set goalkeeper as number 1, adjust others accordingly
+    const playerNumber = player.position === 'Goleiro' ? 1 : index + 1;
+    li.setAttribute('data-number', playerNumber);
+    li.textContent = `${player.name} - ${player.position}`;
+    
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'X';
+    removeButton.classList.add('remove-btn');
+    removeButton.addEventListener('click', () => removeFromTeam(player, team, isPrimeiroTempo));
+    li.appendChild(removeButton);
+
+    teamList.appendChild(li);
+  });
+}
+
+function removeFromTeam(player, team, isPrimeiroTempo) {
+  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
+  const index = targetTeams[team].findIndex(p => p.name === player.name);
+  
+  if (index !== -1) {
+    targetTeams[team].splice(index, 1);
+    updateTeamList(team, isPrimeiroTempo);
+    updatePlayerRowColor(player, null);
+    saveTeamsData(); // Add this line
+  }
+}
+
+function updatePlayerRowColor(player, team) {
+  const tables = [
+    document.getElementById('arrival-list'),
+    document.getElementById('goalkeeper-list'),
+    document.getElementById('substitute-list')
+  ];
+
+  tables.forEach(table => {
+    const rows = table.getElementsByTagName('tr');
+    for (let row of rows) {
+      if (row.cells[1] && row.cells[1].textContent === player.name) {
+        row.style.backgroundColor = team ? (team === 'blue' ? '#cce5ff' : '#ffeeba') : '';
+        break;
+      }
+    }
+  });
+}
+
+function editPlayer(player, row) {
+  document.getElementById('player-name').value = player.name;
+  document.getElementById('player-position').value = player.position;
+  document.getElementById('player-type').value = player.type;
+  document.getElementById('arrival-time').value = player.arrivalTime;
+  document.getElementById('amount-raised').value = player.amount || '';
+  document.getElementById('payment-method').value = player.paymentMethod || '';
+  document.getElementById('payment-status').value = player.paymentStatus || '';
+
+  const index = players.indexOf(player);
+  if (index > -1) {
+    players.splice(index, 1);
+    if (player.paymentStatus === 'Em Dias') {
+      totalRaised -= player.amount;
+    }
+    updateTotals();
+    updatePlayerLists();
+    updatePlayerSelect();
+  }
+
+  row.remove();
+  document.getElementById('player-name').focus();
+}
+
+function deletePlayer(player, row) {
+  if (confirm(`Tem certeza que deseja excluir ${player.name}?`)) {
+    const index = players.indexOf(player);
+    if (index > -1) {
+      players.splice(index, 1);
+      if (player.paymentStatus === 'Em Dias') {
+        totalRaised -= player.amount;
+      }
+      updateTotals();
+      updatePlayerLists();
+      updatePlayerSelect();
+      saveData();
+    }
+    row.remove();
+  }
+}
+
+function updatePlayerSelect() {
+  const select = document.getElementById('player-goal-card');
+  select.innerHTML = '<option value="">Selecione o Jogador</option>';
+  players.forEach(player => {
+    const option = document.createElement('option');
+    option.value = player.name;
+    option.textContent = player.name;
+    select.appendChild(option);
+  });
+}
+
+document.getElementById('goal-card-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const playerName = document.getElementById('player-goal-card').value;
+  const goals = parseInt(document.getElementById('goals-scored').value);
+  const cardType = document.getElementById('card-type').value;
+
+  if (!playerName || isNaN(goals)) {
+    alert('Por favor, selecione um jogador e preencha o número de gols corretamente.');
+    return;
+  }
+
+  const player = players.find(p => p.name === playerName);
+  if (player) {
+    player.goals = (player.goals || 0) + goals;
+    if (cardType) {
+      player.card = cardType;
+    }
+    alert(`Registrado: ${playerName} - Gols: ${goals} - Cartão: ${cardType || 'Nenhum'}`);
+    updatePlayerStats(player);
+    updateGoalCardList();
+    saveData();
+  } else {
+    alert('Jogador não encontrado!');
+  }
+  this.reset();
+});
+
+function updatePlayerStats(player) {
+  const teamLists = [
+    document.getElementById('blue-team').getElementsByTagName('ul')[0],
+    document.getElementById('orange-team').getElementsByTagName('ul')[0],
+    document.getElementById('blue-team-second').getElementsByTagName('ul')[0],
+    document.getElementById('orange-team-second').getElementsByTagName('ul')[0]
+  ];
+  teamLists.forEach(list => {
+    const playerItem = Array.from(list.children).find(li => li.textContent.includes(player.name));
+    if (playerItem) {
+      playerItem.textContent = `${player.name} - ${player.position} - Gols: ${player.goals || 0}${player.card ? ` - Cartão: ${player.card}` : ''}`;
+    }
+  });
+}
+
+function updateGoalCardList() {
+  const tableBody = document.getElementById('goal-card-list').getElementsByTagName('tbody')[0];
+  tableBody.innerHTML = '';
+  
+  players.forEach(player => {
+    if (player.goals || player.card) {
+      const row = tableBody.insertRow();
+      row.innerHTML = `
+        <td>${player.name}</td>
+        <td>${player.goals || 0}</td>
+        <td>${player.card || '-'}</td>
+        <td></td>
+      `;
+      
+      const actionsCell = row.insertCell();
+      const editButton = document.createElement('button');
+      editButton.textContent = 'Editar';
+      editButton.classList.add('edit-btn');
+      editButton.addEventListener('click', () => editGoalCard(player));
+      
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Excluir';
+      deleteButton.classList.add('delete-btn');
+      deleteButton.addEventListener('click', () => deleteGoalCard(player));
+      
+      actionsCell.appendChild(editButton);
+      actionsCell.appendChild(deleteButton);
+    }
+  });
+}
+
+function editGoalCard(player) {
+  document.getElementById('player-goal-card').value = player.name;
+  document.getElementById('goals-scored').value = player.goals || 0;
+  document.getElementById('card-type').value = player.card || '';
+}
+
+function deleteGoalCard(player) {
+  if (confirm(`Tem certeza que deseja excluir o registro de ${player.name}?`)) {
+    delete player.goals;
+    delete player.card;
+    updateGoalCardList();
+    updatePlayerStats(player);
+    saveData();
+  }
+}
+
+document.getElementById('expense-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const description = document.getElementById('expense-description').value;
+  const value = parseFloat(document.getElementById('expense-value').value);
+
+  if (!description || isNaN(value)) {
+    alert('Por favor, preencha a descrição e o valor da despesa corretamente.');
+    return;
+  }
+
+  expenses.push({ description, value });
+  totalExpenses += value;
+  updateTotals();
+  updateExpenseList();
+  saveData();
+
+  alert(`Despesa registrada: ${description} - R$ ${value.toFixed(2)}`);
+  this.reset();
+});
+
+function updateExpenseList() {
+  const tableBody = document.getElementById('expense-list').getElementsByTagName('tbody')[0];
+  tableBody.innerHTML = '';
+  
+  expenses.forEach((expense, index) => {
+    const row = tableBody.insertRow();
+    row.innerHTML = `
+      <td>${expense.description}</td>
+      <td>R$ ${expense.value.toFixed(2)}</td>
+    `;
+    
+    const actionsCell = row.insertCell();
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Editar';
+    editButton.classList.add('edit-btn');
+    editButton.addEventListener('click', () => editExpense(expense));
+    
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Excluir';
+    deleteButton.classList.add('delete-btn');
+    deleteButton.addEventListener('click', () => deleteExpense(index));
+    
+    actionsCell.appendChild(editButton);
+    actionsCell.appendChild(deleteButton);
+  });
+}
+
+function editExpense(expense) {
+  document.getElementById('expense-description').value = expense.description;
+  document.getElementById('expense-value').value = expense.value;
+}
+
+function deleteExpense(index) {
+  if (confirm('Tem certeza que deseja excluir esta despesa?')) {
+    totalExpenses -= expenses[index].value;
+    expenses.splice(index, 1);
+    updateExpenseList();
+    updateTotals();
+    saveData();
+  }
+}
+
+function updateTotals() {
+  totalRaised = players.reduce((sum, player) => sum + (player.amount || 0), 0);
+  document.getElementById('total-raised').textContent = totalRaised.toFixed(2);
+  document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
+  document.getElementById('final-total').textContent = (totalRaised - totalExpenses).toFixed(2);
+}
+
+document.getElementById('generate-report').addEventListener('click', function() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  let yPos = 10;
+  
+  doc.setFontSize(18);
+  doc.text("Relatório do Racha Pelada União", 10, yPos);
+  yPos += 10;
+  
+  doc.setFontSize(12);
+  doc.text(`Total Arrecadado: R$ ${totalRaised.toFixed(2)}`, 10, yPos);
+  yPos += 7;
+  doc.text(`Total Despesas: R$ ${totalExpenses.toFixed(2)}`, 10, yPos);
+  yPos += 7;
+  doc.text(`Total Final: R$ ${(totalRaised - totalExpenses).toFixed(2)}`, 10, yPos);
+  yPos += 10;
+  
+  doc.setFontSize(14);
+  doc.text("Jogadores:", 10, yPos);
+  yPos += 7;
+  
+  doc.setFontSize(10);
+  players.forEach((player, index) => {
+    doc.text(`${index + 1}. ${player.name} - ${player.position} - ${player.type} - Chegada: ${player.arrivalTime}${player.amount ? ` - R$ ${player.amount.toFixed(2)}` : ''}${player.paymentMethod ? ` (${player.paymentMethod})` : ''}${player.paymentStatus ? ` - ${player.paymentStatus}` : ''}`, 10, yPos);
+    yPos += 5;
+    if (player.goals) {
+      doc.text(`  Gols: ${player.goals}`, 10, yPos);
+      yPos += 5;
+    }
+    if (player.card) {
+      doc.text(`  Cartão: ${player.card}`, 10, yPos);
+      yPos += 5;
+    }
+    
+    if (yPos > 280) {
+      doc.addPage();
+      yPos = 10;
+    }
+  });
+  
+  yPos += 5;
+  doc.setFontSize(14);
+  doc.text("Despesas:", 10, yPos);
+  yPos += 7;
+  
+  doc.setFontSize(10);
+  expenses.forEach(expense => {
+    doc.text(`${expense.description}: R$ ${expense.value.toFixed(2)}`, 10, yPos);
+    yPos += 5;
+    
+    if (yPos > 280) {
+      doc.addPage();
+      yPos = 10;
+    }
+  });
+  
+  doc.save("relatorio-racha-pelada-uniao.pdf");
+});
+
+document.getElementById('print-page').addEventListener('click', function() {
+  window.print();
+});
+
+document.getElementById('share-whatsapp').addEventListener('click', function() {
+  const message = encodeURIComponent(`Relatório do Racha Pelada União\n\nTotal Arrecadado: R$ ${totalRaised.toFixed(2)}\nTotal Despesas: R$ ${totalExpenses.toFixed(2)}\nTotal Final: R$ ${(totalRaised - totalExpenses).toFixed(2)}`);
+  const whatsappUrl = `https://wa.me/?text=${message}`;
+  window.open(whatsappUrl, '_blank');
+});
+
+document.getElementById('clear-all-data').addEventListener('click', function() {
+  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+    const persistentData = loadPlayerData();
+    localStorage.clear();
+    players = persistentData;
+    expenses = [];
+    totalRaised = 0;
+    totalExpenses = 0;
+    firstHalfTeams = { blue: [], orange: [] }; // Reset first half teams
+    secondHalfTeams = { blue: [], orange: [] }; // Reset second half teams
+    updatePlayerLists();
+    updateTotals();
+    updatePlayerSelect();
+    updateGoalCardList();
+    updateExpenseList();
+    updateTeamList('blue', true);
+    updateTeamList('orange', true);
+    updateTeamList('blue', false);
+    updateTeamList('orange', false);
+    savePlayerData();
+    saveTeamsData(); // Add this line
+    alert('Todos os dados foram limpos, exceto informações básicas dos jogadores.');
+  }
+});
+
+function updatePlayerLists() {
+  const arrivalList = document.getElementById('arrival-list').getElementsByTagName('tbody')[0];
+  const goalkeeperList = document.getElementById('goalkeeper-list').getElementsByTagName('tbody')[0];
+  const substituteList = document.getElementById('substitute-list').getElementsByTagName('tbody')[0];
+
+  arrivalList.innerHTML = '';
+  goalkeeperList.innerHTML = '';
+  substituteList.innerHTML = '';
+
+  players.sort((a, b) => {
+    const cutoffTime = new Date('2000-01-01T06:30:00');
+    const aIsMensalista = a.type === 'Mensalista' && a.arrivalDate <= cutoffTime;
+    const bIsMensalista = b.type === 'Mensalista' && b.arrivalDate <= cutoffTime;
+
+    if (aIsMensalista && !bIsMensalista) {
+      return -1;
+    } else if (!aIsMensalista && bIsMensalista) {
+      return 1;
+    } else {
+      return a.arrivalDate - b.arrivalDate;
+    }
+  });
+
+  let arrivalCount = 0;
+  let goalkeeperCount = 0;
+  let substituteCount = 0;
+
+  players.forEach((player) => {
+    if (player.position === 'Goleiro') {
+      addPlayerToList(player, goalkeeperList, goalkeeperCount + 1);
+      goalkeeperCount++;
+    } else if (arrivalCount < 20) {
+      addPlayerToList(player, arrivalList, arrivalCount + 1);
+      arrivalCount++;
+    } else {
+      addPlayerToList(player, substituteList, substituteCount + 21);
+      substituteCount++;
+    }
+  });
+}
+
+loadData();
+
+let currentTime = 'primeiro';
+
+document.getElementById('prev-time').addEventListener('click', switchTime);
+document.getElementById('next-time').addEventListener('click', switchTime);
+
+function switchTime() {
+  if (currentTime === 'primeiro') {
+    currentTime = 'segundo';
+    document.getElementById('times-primeiro-tempo').style.display = 'none';
+    document.getElementById('times-segundo-tempo').style.display = 'block';
+    document.getElementById('current-time').textContent = 'Times Segundo Tempo';
+    
+    // Copy first half teams to second half teams if they're empty
+    if (secondHalfTeams.blue.length === 0 && secondHalfTeams.orange.length === 0) {
+      secondHalfTeams.blue = [...firstHalfTeams.blue];
+      secondHalfTeams.orange = [...firstHalfTeams.orange];
+    }
+    
+    // Update second half teams
+    updateTeamList('blue', false);
+    updateTeamList('orange', false);
+  } else {
+    currentTime = 'primeiro';
+    document.getElementById('times-primeiro-tempo').style.display = 'block';
+    document.getElementById('times-segundo-tempo').style.display = 'none';
+    document.getElementById('current-time').textContent = 'Times Primeiro Tempo';
+    
+    // Update first half teams
+    updateTeamList('blue', true);
+    updateTeamList('orange', true);
+  }
+}
+
+// Initialize team lists
+updateTeamList('blue', true);
+updateTeamList('orange', true);
+updateTeamList('blue', false);
+updateTeamList('orange', false);
+</script>
+</body></html>
