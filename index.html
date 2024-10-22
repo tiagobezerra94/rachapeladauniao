@@ -234,17 +234,17 @@ footer {
 
 .edit-delete-buttons {
   display: flex;
-  gap: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  max-width: 100%;
 }
 
 .edit-btn, .delete-btn, .team-button {
   padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   width: auto;
-}
-
-.team-button {
-  margin-right: 0.5rem;
+  white-space: nowrap;
+  flex: 0 1 auto;
 }
 
 .remove-btn {
@@ -328,6 +328,31 @@ th, td {
 
 .edit-btn:hover, .delete-btn:hover, .team-button:hover {
   opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85rem;
+  }
+
+  th, td {
+    padding: 4px;
+  }
+
+  .edit-delete-buttons {
+    gap: 0.15rem;
+  }
+
+  .edit-btn, .delete-btn, .team-button {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  th:last-child, 
+  td:last-child {
+    width: 1%;
+    white-space: nowrap;
+  }
 }
 </style>
 </head>
