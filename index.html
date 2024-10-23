@@ -726,9 +726,9 @@ footer {
     <div class="card fade-in">
       <h2>Totais</h2>
       <div class="totals">
-        <p>Valor (R$): <span id="total-raised">0.00</span></p>
-        <p>Entrada: R$ <span id="total-expenses">0.00</span></p>
-        <p>Despesa: R$ <span id="final-total">0.00</span></p>
+        <p>Entrada: R$ <span id="total-raised">0.00</span></p>
+        <p>Saída: R$ <span id="total-expenses">0.00</span></p>
+        <p>Total: R$ <span id="final-total">0.00</span></p>
       </div>
     </div>
 
@@ -849,6 +849,51 @@ loadData();
 
 document.getElementById('arrival-position-filter').addEventListener('change', updatePlayerLists);
 document.getElementById('substitute-position-filter').addEventListener('change', updatePlayerLists);
+
+document.getElementById('clear-all-data').addEventListener('click', function() {
+  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+    // Clear all data structures
+    players = [];
+    expenses = [];
+    totalRaised = 0;
+    totalExpenses = 0;
+    
+    firstHalfTeams = {
+      blue: [],
+      orange: []
+    };
+    
+    secondHalfTeams = {
+      blue: [],
+      orange: []
+    };
+    
+    // Clear all displays
+    updatePlayerLists();
+    updateExpenseList();
+    updateTotals();
+    updateGoalCardList();
+    updateTeamList('blue', true);
+    updateTeamList('orange', true);
+    updateTeamList('blue', false);
+    updateTeamList('orange', false);
+    
+    // Clear localStorage
+    localStorage.removeItem('players');
+    localStorage.removeItem('expenses');
+    localStorage.removeItem('totalRaised');
+    localStorage.removeItem('totalExpenses');
+    localStorage.removeItem('firstHalfTeams');
+    localStorage.removeItem('secondHalfTeams');
+    
+    // Reset forms
+    document.getElementById('player-form').reset();
+    document.getElementById('goal-card-form').reset();
+    document.getElementById('expense-form').reset();
+    
+    alert('Todos os dados foram limpos com sucesso!');
+  }
+});
 
 document.getElementById('prev-time').addEventListener('click', function() {
   currentTime = 'primeiro';
@@ -1005,7 +1050,7 @@ function updatePlayerLists() {
         addPlayerToList(player, arrivalList, arrivalCount + 1);
         arrivalCount++;
       } else if (matchesSubstituteFilter) {
-        addPlayerToList(player, substituteList, substituteCount + 21);
+        addPlayerToList(player, substituteList, substituteCount, 21);
         substituteCount++;
       }
     });
@@ -1461,16 +1506,15 @@ document.getElementById('expense-form').addEventListener('submit', function(e) {
     return;
   }
 
-  // Store expense values as positive for entrada, negative for despesa
-  const adjustedValue = type === 'entrada' ? Math.abs(value) : -Math.abs(value);
+  // Store expense values as positive numbers always
+  const expenseValue = Math.abs(value);
   
-  expenses.push({ type, description, value: adjustedValue });
-  totalExpenses = expenses.reduce((sum, exp) => sum - exp.value, 0);
+  expenses.push({ type, description, value: expenseValue });
   updateTotals();
   updateExpenseList();
   saveData();
 
-  alert(`${type === 'entrada' ? 'Entrada' : 'Despesa'} registrada: ${description} - R$ ${Math.abs(value).toFixed(2)}`);
+  alert(`${type === 'entrada' ? 'Entrada' : 'Despesa'} registrada: ${description} - R$ ${expenseValue.toFixed(2)}`);
   this.reset();
 });
 
@@ -1513,7 +1557,6 @@ function editExpense(expense) {
 
 function deleteExpense(index) {
   if (confirm('Tem certeza que deseja excluir esta despesa?')) {
-    totalExpenses -= expenses[index].value;
     expenses.splice(index, 1);
     updateExpenseList();
     updateTotals();
@@ -1522,10 +1565,28 @@ function deleteExpense(index) {
 }
 
 function updateTotals() {
-  totalRaised = players.reduce((sum, player) => sum + (player.amount || 0), 0);
-  document.getElementById('total-raised').textContent = totalRaised.toFixed(2);
-  document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
-  document.getElementById('final-total').textContent = (totalRaised - totalExpenses).toFixed(2);
+  // Calculate total raised from players with payment status 'Em Dias'
+  totalRaised = players
+    .filter(player => player.paymentStatus === 'Em Dias')
+    .reduce((sum, player) => sum + (player.amount || 0), 0);
+
+  // Calculate income from 'entrada' transactions
+  let totalIncome = expenses
+    .filter(exp => exp.type === 'entrada')
+    .reduce((sum, exp) => sum + exp.value, 0);
+    
+  // Calculate total expenses (only 'despesa' transactions)
+  let totalExpense = expenses
+    .filter(exp => exp.type === 'despesa')
+    .reduce((sum, exp) => sum + Math.abs(exp.value), 0);
+
+  // Total is entries minus expenses
+  let finalTotal = (totalRaised + totalIncome) - totalExpense;
+
+  // Update display
+  document.getElementById('total-raised').textContent = (totalRaised + totalIncome).toFixed(2); // Entrada (all income)
+  document.getElementById('total-expenses').textContent = totalExpense.toFixed(2); // Saída
+  document.getElementById('final-total').textContent = finalTotal.toFixed(2); // Total
 }
 
 document.getElementById('generate-report').addEventListener('click', function() {
