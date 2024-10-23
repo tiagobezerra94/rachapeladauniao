@@ -384,6 +384,20 @@ footer {
   outline: none;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
 }
+
+#goal-card-list td {
+  vertical-align: top;
+  width: 50%;
+  padding: 10px;
+}
+
+#goal-card-list .edit-delete-buttons {
+  margin-top: 5px;
+}
+
+#goal-card-list td:empty {
+  background-color: #f8f9fa;
+}
 </style>
 </head>
 <body>
@@ -649,10 +663,8 @@ footer {
       <table id="goal-card-list">
         <thead>
           <tr>
-            <th>Jogador</th>
-            <th>Gols</th>
-            <th>Cartão</th>
-            <th>Ações</th>
+            <th style="background-color: #007bff; color: white;">Time Azul</th>
+            <th style="background-color: #fd7e14; color: white;">Time Laranja</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -1342,31 +1354,60 @@ function updateGoalCardList() {
   const tableBody = document.getElementById('goal-card-list').getElementsByTagName('tbody')[0];
   tableBody.innerHTML = '';
   
+  // Separate players by team
+  let blueTeamPlayers = [];
+  let orangeTeamPlayers = [];
+  
   players.forEach(player => {
     if (player.goals || player.card) {
-      const row = tableBody.insertRow();
-      row.innerHTML = `
-        <td>${player.name}</td>
-        <td>${player.goals || 0}</td>
-        <td>${player.card || '-'}</td>
-        <td></td>
-      `;
-      
-      const actionsCell = row.insertCell();
-      const editButton = document.createElement('button');
-      editButton.textContent = 'Editar';
-      editButton.classList.add('edit-btn');
-      editButton.addEventListener('click', () => editGoalCard(player));
-      
-      const deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Excluir';
-      deleteButton.classList.add('delete-btn');
-      deleteButton.addEventListener('click', () => deleteGoalCard(player));
-      
-      actionsCell.appendChild(editButton);
-      actionsCell.appendChild(deleteButton);
+      if (firstHalfTeams.blue.find(p => p.name === player.name) || 
+          secondHalfTeams.blue.find(p => p.name === player.name)) {
+        blueTeamPlayers.push(player);
+      } else if (firstHalfTeams.orange.find(p => p.name === player.name) || 
+                 secondHalfTeams.orange.find(p => p.name === player.name)) {
+        orangeTeamPlayers.push(player);
+      }
     }
   });
+  
+  // Get max length between teams to ensure equal rows
+  const maxRows = Math.max(blueTeamPlayers.length, orangeTeamPlayers.length);
+  
+  for (let i = 0; i < maxRows; i++) {
+    const row = tableBody.insertRow();
+    
+    // Blue team column
+    if (i < blueTeamPlayers.length) {
+      const player = blueTeamPlayers[i];
+      const blueCell = row.insertCell();
+      blueCell.style.backgroundColor = '#cce5ff';
+      blueCell.innerHTML = `
+        ${player.name} - Gols: ${player.goals || 0}${player.card ? ` - ${player.card}` : ''}
+        <div class="edit-delete-buttons">
+          <button class="edit-btn" onclick="editGoalCard(${JSON.stringify(player)})">Editar</button>
+          <button class="delete-btn" onclick="deleteGoalCard(${JSON.stringify(player)})">Excluir</button>
+        </div>
+      `;
+    } else {
+      row.insertCell().innerHTML = '-';
+    }
+    
+    // Orange team column
+    if (i < orangeTeamPlayers.length) {
+      const player = orangeTeamPlayers[i];
+      const orangeCell = row.insertCell();
+      orangeCell.style.backgroundColor = '#ffeeba';
+      orangeCell.innerHTML = `
+        ${player.name} - Gols: ${player.goals || 0}${player.card ? ` - ${player.card}` : ''}
+        <div class="edit-delete-buttons">
+          <button class="edit-btn" onclick="editGoalCard(${JSON.stringify(player)})">Editar</button>
+          <button class="delete-btn" onclick="deleteGoalCard(${JSON.stringify(player)})">Excluir</button>
+        </div>
+      `;
+    } else {
+      row.insertCell().innerHTML = '-';
+    }
+  }
 }
 
 function editGoalCard(player) {
