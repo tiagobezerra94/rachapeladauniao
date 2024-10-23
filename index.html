@@ -1252,23 +1252,44 @@ document.getElementById('clear-all-data').addEventListener('click', function() {
   if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
     const persistentData = loadPlayerData();
     localStorage.clear();
-    players = persistentData;
+    players = [];  // Clear players array completely
     expenses = [];
     totalRaised = 0;
     totalExpenses = 0;
-    firstHalfTeams = { blue: [], orange: [] }; // Reset first half teams
-    secondHalfTeams = { blue: [], orange: [] }; // Reset second half teams
-    updatePlayerLists();
+    firstHalfTeams = { blue: [], orange: [] };
+    secondHalfTeams = { blue: [], orange: [] };
+
+    // Reset all lists
+    const arrivalList = document.getElementById('arrival-list').getElementsByTagName('tbody')[0];
+    const goalkeeperList = document.getElementById('goalkeeper-list').getElementsByTagName('tbody')[0];
+    const substituteList = document.getElementById('substitute-list').getElementsByTagName('tbody')[0];
+    
+    arrivalList.innerHTML = '';
+    goalkeeperList.innerHTML = '';
+    substituteList.innerHTML = '';
+
+    // Reset teams display
+    document.getElementById('blue-team').getElementsByTagName('ul')[0].innerHTML = '';
+    document.getElementById('orange-team').getElementsByTagName('ul')[0].innerHTML = '';
+    document.getElementById('blue-team-second').getElementsByTagName('ul')[0].innerHTML = '';
+    document.getElementById('orange-team-second').getElementsByTagName('ul')[0].innerHTML = '';
+
     updateTotals();
     updatePlayerSelect();
     updateGoalCardList();
     updateExpenseList();
-    updateTeamList('blue', true);
-    updateTeamList('orange', true);
-    updateTeamList('blue', false);
-    updateTeamList('orange', false);
-    savePlayerData();
-    saveTeamsData(); // Add this line
+    
+    // Restore persistent player data to saved players select
+    const savedPlayersSelect = document.getElementById('saved-players');
+    savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
+    persistentData.forEach(player => {
+      const option = document.createElement('option');
+      option.value = JSON.stringify(player);
+      option.textContent = `${player.name} - ${player.position} - ${player.type}`;
+      savedPlayersSelect.appendChild(option);
+    });
+
+    saveTeamsData();
     alert('Todos os dados foram limpos, exceto informações básicas dos jogadores.');
   }
 });
