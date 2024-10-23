@@ -398,6 +398,22 @@ footer {
 #goal-card-list td:empty {
   background-color: #f8f9fa;
 }
+
+.print-btn {
+  background-color: var(--info-color) !important;
+}
+
+.print-btn:hover {
+  background-color: #138496 !important;
+}
+
+.clear-btn {
+  background-color: var(--danger-color) !important;
+}
+
+.clear-btn:hover {
+  background-color: #c82333 !important;
+}
 </style>
 </head>
 <body>
@@ -672,9 +688,17 @@ footer {
     </div>
 
     <div class="card fade-in">
-      <h2>Registro de Despesas</h2>
+      <h2>Registro de Entradas e Despesas</h2>
       <form id="expense-form">
         <div class="form-row">
+          <div class="form-group">
+            <label for="transaction-type">Tipo:</label>
+            <select id="transaction-type" required>
+              <option value="">Selecione</option>
+              <option value="entrada">Entrada</option>
+              <option value="despesa">Despesa</option>
+            </select>
+          </div>
           <div class="form-group">
             <label for="expense-description">Descrição:</label>
             <input type="text" id="expense-description" required>
@@ -684,11 +708,12 @@ footer {
             <input type="number" id="expense-value" step="0.01" required>
           </div>
         </div>
-        <button type="submit">Cadastrar Despesa</button>
+        <button type="submit">Cadastrar</button>
       </form>
       <table id="expense-list">
         <thead>
           <tr>
+            <th>Tipo</th>
             <th>Descrição</th>
             <th>Valor</th>
             <th>Ações</th>
@@ -701,17 +726,16 @@ footer {
     <div class="card fade-in">
       <h2>Totais</h2>
       <div class="totals">
-        <p>Total Arrecadado: R$ <span id="total-raised">0.00</span></p>
-        <p>Total Despesas: R$ <span id="total-expenses">0.00</span></p>
-        <p>Total Final: R$ <span id="final-total">0.00</span></p>
+        <p>Valor (R$): <span id="total-raised">0.00</span></p>
+        <p>Entrada: R$ <span id="total-expenses">0.00</span></p>
+        <p>Despesa: R$ <span id="final-total">0.00</span></p>
       </div>
     </div>
 
     <div class="card fade-in">
       <button id="generate-report">Gerar Relatório</button>
-      <button id="print-page">Imprimir</button>
-      <button id="share-whatsapp">Compartilhar no WhatsApp</button>
-      <button id="clear-all-data">Limpar Todos os Dados</button>
+      <button id="print-page" class="print-btn">Imprimir</button>
+      <button id="clear-all-data" class="clear-btn">Limpar Todos os Dados</button>
     </div>
   </div>
 </div>
@@ -776,7 +800,7 @@ function loadTeamsData() {
   if (storedSecondHalfTeams) {
     secondHalfTeams = JSON.parse(storedSecondHalfTeams);
   }
-  
+
   // Update all team displays
   updateTeamList('blue', true);
   updateTeamList('orange', true);
@@ -1428,21 +1452,25 @@ function deleteGoalCard(player) {
 
 document.getElementById('expense-form').addEventListener('submit', function(e) {
   e.preventDefault();
+  const type = document.getElementById('transaction-type').value;
   const description = document.getElementById('expense-description').value;
   const value = parseFloat(document.getElementById('expense-value').value);
 
-  if (!description || isNaN(value)) {
-    alert('Por favor, preencha a descrição e o valor da despesa corretamente.');
+  if (!type || !description || isNaN(value)) {
+    alert('Por favor, preencha todos os campos corretamente.');
     return;
   }
 
-  expenses.push({ description, value });
-  totalExpenses += value;
+  // Store expense values as positive for entrada, negative for despesa
+  const adjustedValue = type === 'entrada' ? Math.abs(value) : -Math.abs(value);
+  
+  expenses.push({ type, description, value: adjustedValue });
+  totalExpenses = expenses.reduce((sum, exp) => sum - exp.value, 0);
   updateTotals();
   updateExpenseList();
   saveData();
 
-  alert(`Despesa registrada: ${description} - R$ ${value.toFixed(2)}`);
+  alert(`${type === 'entrada' ? 'Entrada' : 'Despesa'} registrada: ${description} - R$ ${Math.abs(value).toFixed(2)}`);
   this.reset();
 });
 
@@ -1452,9 +1480,12 @@ function updateExpenseList() {
   
   expenses.forEach((expense, index) => {
     const row = tableBody.insertRow();
+    row.style.backgroundColor = expense.type === 'entrada' ? '#d4edda' : '#f8d7da';
+    
     row.innerHTML = `
+      <td>${expense.type === 'entrada' ? 'Entrada' : 'Despesa'}</td>
       <td>${expense.description}</td>
-      <td>R$ ${expense.value.toFixed(2)}</td>
+      <td>R$ ${Math.abs(expense.value).toFixed(2)}</td>
     `;
     
     const actionsCell = row.insertCell();
@@ -1473,9 +1504,11 @@ function updateExpenseList() {
   });
 }
 
+// Update edit expense function
 function editExpense(expense) {
+  document.getElementById('transaction-type').value = expense.type;
   document.getElementById('expense-description').value = expense.description;
-  document.getElementById('expense-value').value = expense.value;
+  document.getElementById('expense-value').value = Math.abs(expense.value);
 }
 
 function deleteExpense(index) {
@@ -1500,92 +1533,191 @@ document.getElementById('generate-report').addEventListener('click', function() 
   const doc = new jsPDF();
   
   let yPos = 10;
+  const leftMargin = 10;
+  const pageWidth = doc.internal.pageSize.width;
   
-  doc.setFontSize(18);
-  doc.text("Relatório do Racha Pelada União", 10, yPos);
-  yPos += 10;
-  
+  // Title and Date
+  doc.setFontSize(16);
+  doc.text("RACHA PELADA UNIÃO", pageWidth/2, yPos, { align: 'center' });
+  yPos += 8;
   doc.setFontSize(12);
-  doc.text(`Total Arrecadado: R$ ${totalRaised.toFixed(2)}`, 10, yPos);
-  yPos += 7;
-  doc.text(`Total Despesas: R$ ${totalExpenses.toFixed(2)}`, 10, yPos);
-  yPos += 7;
-  doc.text(`Total Final: R$ ${(totalRaised - totalExpenses).toFixed(2)}`, 10, yPos);
-  yPos += 10;
-  
+  doc.text(`Data: ${gameDate}`, pageWidth/2, yPos, { align: 'center' });
+  yPos += 15;
+
+  // Helper function to create table headers
+  function createTableHeader(headers, y) {
+    doc.setFillColor(200, 200, 200);
+    doc.rect(leftMargin, y-5, pageWidth-20, 7, 'F');
+    doc.text(headers.join('   '), leftMargin, y);
+    return y + 8;
+  }
+
+  // Lista de Ordem de Chegada
   doc.setFontSize(14);
-  doc.text("Jogadores:", 10, yPos);
-  yPos += 7;
+  doc.text("Lista de Ordem de Chegada", leftMargin, yPos);
+  yPos += 8;
   
   doc.setFontSize(10);
-  players.forEach((player, index) => {
-    doc.text(`${index + 1}. ${player.name} - ${player.position} - ${player.type} - ${player.arrivalTime}${player.amount ? ` - R$ ${player.amount.toFixed(2)}` : ''}${player.paymentMethod ? ` (${player.paymentMethod})` : ''}${player.paymentStatus ? ` - ${player.paymentStatus}` : ''}`, 10, yPos);
-    yPos += 5;
-
-    if (yPos > 280) {
-      doc.addPage();
-      yPos = 10;
-    }
-  });
+  yPos = createTableHeader(['Nome', 'Posição', 'Tipo', 'Chegada', 'Valor'], yPos);
+  
+  players
+    .filter(p => p.position !== 'Goleiro')
+    .slice(0, 20)
+    .forEach((player, index) => {
+      const row = [
+        player.name,
+        player.position,
+        player.type,
+        player.arrivalTime,
+        `R$ ${player.amount?.toFixed(2) || '0.00'}`
+      ];
+      doc.text(row.join('   '), leftMargin, yPos);
+      yPos += 6;
+      
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 10;
+      }
+    });
   
   yPos += 5;
+  
+  // Lista de Goleiros
   doc.setFontSize(14);
-  doc.text("Despesas:", 10, yPos);
-  yPos += 7;
+  doc.text("Lista de Goleiros", leftMargin, yPos);
+  yPos += 8;
   
   doc.setFontSize(10);
-  expenses.forEach(expense => {
-    doc.text(`${expense.description}: R$ ${expense.value.toFixed(2)}`, 10, yPos);
-    yPos += 5;
+  yPos = createTableHeader(['Nome', 'Chegada'], yPos);
+  
+  players
+    .filter(p => p.position === 'Goleiro')
+    .forEach(player => {
+      doc.text(`${player.name}   ${player.arrivalTime}`, leftMargin, yPos);
+      yPos += 6;
+      
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 10;
+      }
+    });
+  
+  yPos += 5;
+
+  // Jogadores do Segundo Tempo
+  doc.setFontSize(14);
+  doc.text("Jogadores do Segundo Tempo", leftMargin, yPos);
+  yPos += 8;
+  
+  doc.setFontSize(10);
+  yPos = createTableHeader(['Nome', 'Posição', 'Tipo', 'Chegada', 'Valor'], yPos);
+  
+  players
+    .filter(p => p.position !== 'Goleiro')
+    .slice(20)
+    .forEach(player => {
+      const row = [
+        player.name,
+        player.position,
+        player.type,
+        player.arrivalTime,
+        `R$ ${player.amount?.toFixed(2) || '0.00'}`
+      ];
+      doc.text(row.join('   '), leftMargin, yPos);
+      yPos += 6;
+      
+      if (yPos > 280) {
+        doc.addPage();
+        yPos = 10;
+      }
+    });
+  
+  yPos += 5;
+
+  // Times Primeiro Tempo
+  if (yPos > 240) {
+    doc.addPage();
+    yPos = 10;
+  }
+
+  doc.setFontSize(14);
+  doc.text("Times Primeiro Tempo", leftMargin, yPos);
+  yPos += 8;
+  
+  doc.setFontSize(10);
+  // Create two columns for teams
+  const midPage = pageWidth / 2;
+  
+  doc.setFillColor(204, 229, 255); // Light blue
+  doc.rect(leftMargin, yPos-5, midPage-15, 7, 'F');
+  doc.text("Time Azul", leftMargin, yPos);
+  
+  doc.setFillColor(255, 238, 186); // Light orange
+  doc.rect(midPage, yPos-5, midPage-15, 7, 'F');
+  doc.text("Time Laranja", midPage, yPos);
+  yPos += 8;
+
+  const maxFirstHalf = Math.max(firstHalfTeams.blue.length, firstHalfTeams.orange.length);
+  for(let i = 0; i < maxFirstHalf; i++) {
+    if(firstHalfTeams.blue[i]) {
+      const player = players.find(p => p.name === firstHalfTeams.blue[i].name);
+      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
+      doc.text(text, leftMargin, yPos);
+    }
+    if(firstHalfTeams.orange[i]) {
+      const player = players.find(p => p.name === firstHalfTeams.orange[i].name);
+      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
+      doc.text(text, midPage, yPos);
+    }
+    yPos += 6;
     
     if (yPos > 280) {
       doc.addPage();
       yPos = 10;
     }
-  });
-  
-  doc.save("relatorio-racha-pelada-uniao.pdf");
-});
-
-document.getElementById('print-page').addEventListener('click', function() {
-  window.print();
-});
-
-document.getElementById('share-whatsapp').addEventListener('click', function() {
-  const message = encodeURIComponent(`Relatório do Racha Pelada União\n\nTotal Arrecadado: R$ ${totalRaised.toFixed(2)}\nTotal Despesas: R$ ${totalExpenses.toFixed(2)}\nTotal Final: R$ ${(totalRaised - totalExpenses).toFixed(2)}`);
-  const whatsappUrl = `https://wa.me/?text=${message}`;
-  window.open(whatsappUrl, '_blank');
-});
-
-document.getElementById('clear-all-data').addEventListener('click', function() {
-  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-    const persistentData = loadPlayerData();
-    localStorage.clear();
-    players = persistentData;
-    expenses = [];
-    totalRaised = 0;
-    totalExpenses = 0;
-    firstHalfTeams = { blue: [], orange: [] }; 
-    secondHalfTeams = { blue: [], orange: [] }; 
-    updatePlayerLists();
-    updateTotals();
-    updatePlayerSelect();
-    updateGoalCardList();
-    updateExpenseList();
-    updateTeamList('blue', true);
-    updateTeamList('orange', true);
-    updateTeamList('blue', false);
-    updateTeamList('orange', false);
-    savePlayerData();
-    saveTeamsData();
-    alert('Todos os dados foram limpos, exceto informações básicas dos jogadores.');
   }
-});
+  
+  yPos += 5;
 
-// Initialize team lists
-updateTeamList('blue', true);
-updateTeamList('orange', true);
-updateTeamList('blue', false);
-updateTeamList('orange', false);
+  // Times Segundo Tempo
+  if (yPos > 240) {
+    doc.addPage();
+    yPos = 10;
+  }
+
+  doc.setFontSize(14);
+  doc.text("Times Segundo Tempo", leftMargin, yPos);
+  yPos += 8;
+  
+  doc.setFontSize(10);
+  
+  doc.setFillColor(204, 229, 255); // Light blue
+  doc.rect(leftMargin, yPos-5, midPage-15, 7, 'F');
+  doc.text("Time Azul", leftMargin, yPos);
+  
+  doc.setFillColor(255, 238, 186); // Light orange
+  doc.rect(midPage, yPos-5, midPage-15, 7, 'F');
+  doc.text("Time Laranja", midPage, yPos);
+  yPos += 8;
+
+  const maxSecondHalf = Math.max(secondHalfTeams.blue.length, secondHalfTeams.orange.length);
+  for(let i = 0; i < maxSecondHalf; i++) {
+    if(secondHalfTeams.blue[i]) {
+      const player = players.find(p => p.name === secondHalfTeams.blue[i].name);
+      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
+      doc.text(text, leftMargin, yPos);
+    }
+    if(secondHalfTeams.orange[i]) {
+      const player = players.find(p => p.name === secondHalfTeams.orange[i].name);
+      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
+      doc.text(text, midPage, yPos);
+    }
+    yPos += 6;
+  }
+
+  // Save the PDF
+  doc.save(`Racha_Pelada_Uniao_${gameDate.replace(/\//g, '-')}.pdf`);
+});
 </script>
-</body></html>
+</body>
+</html>
