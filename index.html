@@ -977,6 +977,8 @@ function updateTeamList(team, isPrimeiroTempo) {
 
     teamList.appendChild(li);
   });
+
+  updateTeamGoals();
 }
 
 function removeFromTeam(player, team, isPrimeiroTempo) {
@@ -1059,6 +1061,31 @@ function updatePlayerSelect() {
   });
 }
 
+function updateTeamGoals() {
+  let blueGoals = 0;
+  let orangeGoals = 0;
+  
+  // Check first half teams
+  firstHalfTeams.blue.forEach(player => {
+    blueGoals += player.goals || 0;
+  });
+  firstHalfTeams.orange.forEach(player => {
+    orangeGoals += player.goals || 0;
+  });
+  
+  // Check second half teams
+  secondHalfTeams.blue.forEach(player => {
+    blueGoals += player.goals || 0;
+  });
+  secondHalfTeams.orange.forEach(player => {
+    orangeGoals += player.goals || 0;
+  });
+  
+  // Update display
+  document.getElementById('blue-team-goals').textContent = blueGoals;
+  document.getElementById('orange-team-goals').textContent = orangeGoals;
+}
+
 document.getElementById('goal-card-form').addEventListener('submit', function(e) {
   e.preventDefault();
   const playerName = document.getElementById('player-goal-card').value;
@@ -1076,10 +1103,12 @@ document.getElementById('goal-card-form').addEventListener('submit', function(e)
     if (cardType) {
       player.card = cardType;
     }
-    alert(`Registrado: ${playerName} - Gols: ${goals} - Cartão: ${cardType || 'Nenhum'}`);
     updatePlayerStats(player);
     updateGoalCardList();
+    updateTeamGoals(); // Add this line
     saveData();
+    
+    alert(`Registrado: ${playerName} - Gols: ${goals} - Cartão: ${cardType || 'Nenhum'}`);
   } else {
     alert('Jogador não encontrado!');
   }
@@ -1144,6 +1173,7 @@ function deleteGoalCard(player) {
     delete player.card;
     updateGoalCardList();
     updatePlayerStats(player);
+    updateTeamGoals(); // Add this line
     saveData();
   }
 }
@@ -1310,6 +1340,7 @@ document.getElementById('clear-all-data').addEventListener('click', function() {
     updatePlayerSelect();
     updateGoalCardList();
     updateExpenseList();
+    updateTeamGoals(); // Add this line
 
     updateSavedPlayers();
     alert('Todos os dados foram limpos, exceto informações básicas dos jogadores.');
@@ -1392,5 +1423,6 @@ updateTeamList('blue', true);
 updateTeamList('orange', true);
 updateTeamList('blue', false);
 updateTeamList('orange', false);
+updateTeamGoals(); // Add this line to initialize team goals display
 </script>
 </body></html>
