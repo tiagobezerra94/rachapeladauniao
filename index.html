@@ -259,6 +259,7 @@ footer {
   cursor: pointer;
   margin-left: 5px;
 }
+
 .remove-btn:hover {
   background-color: #c82333;
 }
@@ -283,11 +284,38 @@ footer {
 }
 
 .nav-arrow {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  position: static;  
+  display: inline-block;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 0 10px;
+  margin: 0 5px;
+  font-size: 14px;
+  border: none;
+}
+
+.time-navigation {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#current-time {
+  display: inline-block;
+  min-width: 200px;
+  margin: 0 10px;
+  vertical-align: middle;
+}
+
+.team-goals {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 #current-time {
@@ -489,11 +517,11 @@ th, td {
     </div>
 
     <div class="card fade-in">
-      <h2>
+      <div class="time-navigation">
         <button id="prev-time" class="nav-arrow">&lt;</button>
         <span id="current-time">Times Primeiro Tempo</span>
         <button id="next-time" class="nav-arrow">&gt;</button>
-      </h2>
+      </div>
       <div id="times-primeiro-tempo">
         <div class="team-lists">
           <div class="team-list" id="blue-team">
@@ -560,9 +588,16 @@ th, td {
     </div>
 
     <div class="card fade-in">
-      <h2>Registro de Despesas</h2>
-      <form id="expense-form">
+      <h2>Registro de Entradas e Despesas</h2>
+      <form id="transaction-form">
         <div class="form-row">
+          <div class="form-group">
+            <label for="transaction-type">Tipo:</label>
+            <select id="transaction-type" required>
+              <option value="entrada">Entrada</option>
+              <option value="despesa">Despesa</option>
+            </select>
+          </div>
           <div class="form-group">
             <label for="expense-description">Descrição:</label>
             <input type="text" id="expense-description" required>
@@ -572,7 +607,7 @@ th, td {
             <input type="number" id="expense-value" step="0.01" required>
           </div>
         </div>
-        <button type="submit">Cadastrar Despesa</button>
+        <button type="submit">Cadastrar Transação</button>
       </form>
       <table id="expense-list">
         <thead>
@@ -598,8 +633,12 @@ th, td {
     <div class="card fade-in">
       <button id="generate-report">Gerar Relatório</button>
       <button id="print-page">Imprimir</button>
-      <button id="share-whatsapp">Compartilhar no WhatsApp</button>
       <button id="clear-all-data">Limpar Todos os Dados</button>
+    </div>
+
+    <div class="team-goals">
+      <p>Time Azul: <span id="blue-team-goals">0</span></p>
+      <p>Time Laranja: <span id="orange-team-goals">0</span></p>
     </div>
   </div>
 </div>
@@ -689,16 +728,7 @@ function loadData() {
 
   loadTeamsData();
   
-  const persistentData = loadPlayerData();
-  const savedPlayersSelect = document.getElementById('saved-players');
-  savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
-  persistentData.forEach(player => {
-    const option = document.createElement('option');
-    option.value = JSON.stringify(player);
-    option.textContent = `${player.name} - ${player.position} - ${player.type}`;
-    savedPlayersSelect.appendChild(option);
-  });
-
+  updateSavedPlayers();
   updatePlayerLists();
   updateTotals();
   updatePlayerSelect();
@@ -711,6 +741,21 @@ function loadData() {
 }
 
 loadData();
+
+function updateSavedPlayers() {
+  const savedPlayersSelect = document.getElementById('saved-players');
+  const players = loadPlayerData();
+  savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
+  
+  players.sort((a, b) => a.name.localeCompare(b.name));
+  
+  players.forEach(player => {
+    const option = document.createElement('option');
+    option.value = JSON.stringify(player);
+    option.textContent = `${player.name} - ${player.position} - ${player.type}`;
+    savedPlayersSelect.appendChild(option);
+  });
+}
 
 document.getElementById('player-form').addEventListener('submit', function(e) {
   e.preventDefault();
@@ -761,7 +806,7 @@ document.getElementById('player-form').addEventListener('submit', function(e) {
   savePlayerData();
   saveData();
   this.reset();
-  saveTeamsData(); // Add this line
+  saveTeamsData();
 });
 
 document.getElementById('saved-players').addEventListener('change', function() {
@@ -887,7 +932,6 @@ function assignToTeam(player, team) {
     }
   }
 
-  // New check for second half players
   if (!isPrimeiroTempo && isSecondHalfPlayer) {
     const totalPlayers = targetTeams[team].length;
     if (totalPlayers >= 11) {
@@ -904,8 +948,6 @@ function assignToTeam(player, team) {
 
   targetTeams[team].push(player);
   updateTeamList(team, isPrimeiroTempo);
-  updatePlayerRowColor(player, team);
-  saveTeamsData();
 }
 
 function updateTeamList(team, isPrimeiroTempo) {
@@ -923,7 +965,6 @@ function updateTeamList(team, isPrimeiroTempo) {
 
   sortedPlayers.forEach((player, index) => {
     const li = document.createElement('li');
-    // Always set goalkeeper as number 1, adjust others accordingly
     const playerNumber = player.position === 'Goleiro' ? 1 : index + 1;
     li.setAttribute('data-number', playerNumber);
     li.textContent = `${player.name} - ${player.position}`;
@@ -945,12 +986,10 @@ function removeFromTeam(player, team, isPrimeiroTempo) {
   if (index !== -1) {
     targetTeams[team].splice(index, 1);
     updateTeamList(team, isPrimeiroTempo);
-    updatePlayerRowColor(player, null);
-    saveTeamsData(); // Add this line
   }
 }
 
-function updatePlayerRowColor(player, team) {
+function updatePlayerRowColor(player) {
   const tables = [
     document.getElementById('arrival-list'),
     document.getElementById('goalkeeper-list'),
@@ -961,7 +1000,7 @@ function updatePlayerRowColor(player, team) {
     const rows = table.getElementsByTagName('tr');
     for (let row of rows) {
       if (row.cells[1] && row.cells[1].textContent === player.name) {
-        row.style.backgroundColor = team ? (team === 'blue' ? '#cce5ff' : '#ffeeba') : '';
+        row.style.backgroundColor = '';
         break;
       }
     }
@@ -1109,23 +1148,24 @@ function deleteGoalCard(player) {
   }
 }
 
-document.getElementById('expense-form').addEventListener('submit', function(e) {
+document.getElementById('transaction-form').addEventListener('submit', function(e) {
   e.preventDefault();
+  const transactionType = document.getElementById('transaction-type').value;
   const description = document.getElementById('expense-description').value;
   const value = parseFloat(document.getElementById('expense-value').value);
 
   if (!description || isNaN(value)) {
-    alert('Por favor, preencha a descrição e o valor da despesa corretamente.');
+    alert('Por favor, preencha a descrição e o valor corretamente.');
     return;
   }
 
-  expenses.push({ description, value });
+  expenses.push({ description, value, transactionType });
   totalExpenses += value;
   updateTotals();
   updateExpenseList();
   saveData();
 
-  alert(`Despesa registrada: ${description} - R$ ${value.toFixed(2)}`);
+  alert(`Transação registrada: ${description} - R$ ${value.toFixed(2)}`);
   this.reset();
 });
 
@@ -1242,24 +1282,17 @@ document.getElementById('print-page').addEventListener('click', function() {
   window.print();
 });
 
-document.getElementById('share-whatsapp').addEventListener('click', function() {
-  const message = encodeURIComponent(`Relatório do Racha Pelada União\n\nTotal Arrecadado: R$ ${totalRaised.toFixed(2)}\nTotal Despesas: R$ ${totalExpenses.toFixed(2)}\nTotal Final: R$ ${(totalRaised - totalExpenses).toFixed(2)}`);
-  const whatsappUrl = `https://wa.me/?text=${message}`;
-  window.open(whatsappUrl, '_blank');
-});
-
 document.getElementById('clear-all-data').addEventListener('click', function() {
   if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
     const persistentData = loadPlayerData();
     localStorage.clear();
-    players = [];  // Clear players array completely
+    players = [];
     expenses = [];
     totalRaised = 0;
     totalExpenses = 0;
     firstHalfTeams = { blue: [], orange: [] };
     secondHalfTeams = { blue: [], orange: [] };
 
-    // Reset all lists
     const arrivalList = document.getElementById('arrival-list').getElementsByTagName('tbody')[0];
     const goalkeeperList = document.getElementById('goalkeeper-list').getElementsByTagName('tbody')[0];
     const substituteList = document.getElementById('substitute-list').getElementsByTagName('tbody')[0];
@@ -1268,7 +1301,6 @@ document.getElementById('clear-all-data').addEventListener('click', function() {
     goalkeeperList.innerHTML = '';
     substituteList.innerHTML = '';
 
-    // Reset teams display
     document.getElementById('blue-team').getElementsByTagName('ul')[0].innerHTML = '';
     document.getElementById('orange-team').getElementsByTagName('ul')[0].innerHTML = '';
     document.getElementById('blue-team-second').getElementsByTagName('ul')[0].innerHTML = '';
@@ -1278,18 +1310,8 @@ document.getElementById('clear-all-data').addEventListener('click', function() {
     updatePlayerSelect();
     updateGoalCardList();
     updateExpenseList();
-    
-    // Restore persistent player data to saved players select
-    const savedPlayersSelect = document.getElementById('saved-players');
-    savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
-    persistentData.forEach(player => {
-      const option = document.createElement('option');
-      option.value = JSON.stringify(player);
-      option.textContent = `${player.name} - ${player.position} - ${player.type}`;
-      savedPlayersSelect.appendChild(option);
-    });
 
-    saveTeamsData();
+    updateSavedPlayers();
     alert('Todos os dados foram limpos, exceto informações básicas dos jogadores.');
   }
 });
@@ -1335,8 +1357,6 @@ function updatePlayerLists() {
   });
 }
 
-loadData();
-
 let currentTime = 'primeiro';
 
 document.getElementById('prev-time').addEventListener('click', switchTime);
@@ -1349,13 +1369,11 @@ function switchTime() {
     document.getElementById('times-segundo-tempo').style.display = 'block';
     document.getElementById('current-time').textContent = 'Times Segundo Tempo';
     
-    // Copy first half teams to second half teams if they're empty
     if (secondHalfTeams.blue.length === 0 && secondHalfTeams.orange.length === 0) {
       secondHalfTeams.blue = [...firstHalfTeams.blue];
       secondHalfTeams.orange = [...firstHalfTeams.orange];
     }
     
-    // Update second half teams
     updateTeamList('blue', false);
     updateTeamList('orange', false);
   } else {
@@ -1364,7 +1382,6 @@ function switchTime() {
     document.getElementById('times-segundo-tempo').style.display = 'none';
     document.getElementById('current-time').textContent = 'Times Primeiro Tempo';
     
-    // Update first half teams
     updateTeamList('blue', true);
     updateTeamList('orange', true);
   }
