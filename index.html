@@ -28,6 +28,7 @@ body {
   color: var(--dark-color);
   background: linear-gradient(135deg, #f5f7fa 0%, #e0e8f0 100%);
   min-height: 100vh;
+  font-size: 14px; /* Add base font size */
 }
 
 .container {
@@ -44,7 +45,18 @@ header {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
 
@@ -70,6 +82,7 @@ label {
   display: block;
   margin-bottom: 0.25rem;
   font-weight: bold;
+  font-size: 0.9rem; /* Update form labels size */
 }
 
 input[type="text"],
@@ -80,7 +93,7 @@ select {
   padding: 0.5rem;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Update input font sizes */
   transition: border-color 0.3s ease;
 }
 
@@ -98,7 +111,7 @@ button {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Update button font sizes */
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
@@ -122,8 +135,10 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  padding: 6px;
+  padding: 4px 6px; /* Update table padding */
   text-align: left;
+  font-size: 0.9rem; /* Update table font sizes */
+  vertical-align: middle; /* Add this */
 }
 
 th {
@@ -184,6 +199,7 @@ tr:nth-child(even) {
   justify-content: space-between;
   align-items: center;
   text-align: left;
+  font-size: 0.9rem; /* Update team list font sizes */
 }
 
 .team-list li span {
@@ -241,12 +257,15 @@ footer {
 .edit-delete-buttons {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap; /* Add this */
+  justify-content: flex-start; /* Add this */
 }
 
 .edit-btn, .delete-btn, .team-button {
   padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem; /* Update edit and delete button sizes */
   width: auto;
+  margin: 2px; /* Add this */
 }
 
 .team-button {
@@ -258,13 +277,14 @@ footer {
   color: white;
   border: none;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  font-size: 12px;
+  width: 18px; /* Update remove button width */
+  height: 18px; /* Update remove button height */
+  font-size: 10px; /* Update remove button font size */
   line-height: 1;
   cursor: pointer;
   margin-left: 5px;
 }
+
 .remove-btn:hover {
   background-color: #c82333;
 }
@@ -314,7 +334,7 @@ footer {
 @media (min-width: 768px) {
   th, td {
     padding: 8px;
-    font-size: 1em;
+    font-size: 0.9rem; /* Update table font sizes */
   }
 }
 
@@ -347,7 +367,7 @@ footer {
   padding: 0.5rem;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Update select font sizes */
   max-width: 200px;
 }
 
@@ -398,7 +418,7 @@ footer {
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  font-size: 1rem;
+  font-size: 0.9rem; /* Update secondary button font sizes */
   border-radius: 4px;
   cursor: pointer;
   flex: 1;
@@ -409,43 +429,73 @@ footer {
   background-color: #e69100;
 }
 
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.5);
-  z-index: 1000;
-}
-
-.modal-content {
-  background-color: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 600px;
+.search-container {
   position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.close-modal {
+.search-container input {
+  padding-right: 35px;
+}
+
+.search-icon {
   position: absolute;
   right: 10px;
-  top: 10px;
-  font-size: 24px;
+  color: #666;
   cursor: pointer;
 }
 
-#edit-players-modal table {
-  width: 100%;
-  margin-top: 1rem;
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
 }
 
-#edit-players-modal th, 
-#edit-players-modal td {
-  padding: 8px;
+.search-results div {
+  padding: 6px 10px; /* Update search result padding */
+  font-size: 0.9rem; /* Update search result font sizes */
+  cursor: pointer;
+}
+
+.search-results div:hover {
+  background-color: #f8f9fa;
+}
+
+/* Update the button sizes and spacing */
+.edit-btn, .delete-btn, .team-button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  width: auto;
+  margin: 2px; /* Add this */
+}
+
+/* Add max-width to the actions column */
+th:last-child, td:last-child {
+  max-width: 200px; /* Add this */
+  width: 200px; /* Add this */
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .edit-delete-buttons {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  th:last-child, td:last-child {
+    max-width: 150px;
+    width: 150px;
+  }
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -465,14 +515,18 @@ footer {
       <div class="button-group" style="margin-bottom: 1rem;">
         <button id="import-players" class="secondary-btn">Importar Jogadores</button>
         <button id="export-players" class="secondary-btn">Exportar Jogadores</button>
-        <button id="edit-players" class="secondary-btn">Editar Jogadores</button>
       </div>
       <form id="player-form">
         <div class="form-group">
-          <label for="saved-players">Jogador Cadastrado:</label>
-          <select id="saved-players">
-            <option value="">Selecione um jogador ou cadastre um novo</option>
-          </select>
+          <label for="player-search">Buscar jogador cadastrado:</label>
+          <div class="search-container">
+            <input type="text" id="player-search" placeholder="Digite para buscar jogador...">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <div class="search-results" id="search-results"></div>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -728,25 +782,6 @@ footer {
       <button id="print-page" class="print-btn">Imprimir</button>
       <button id="clear-all-data" class="clear-btn">Limpar Todos os Dados</button>
     </div>
-  </div>
-</div>
-
-<div id="edit-players-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <h2>Editar Jogadores</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Posição</th>
-          <th>Tipo</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="edit-players-list">
-      </tbody>
-    </table>
   </div>
 </div>
 
@@ -1067,15 +1102,39 @@ function updatePlayerLists() {
 }
 
 function updateSavedPlayersSelect() {
-  const savedPlayersSelect = document.getElementById('saved-players');
+  const searchInput = document.getElementById('player-search');
+  const searchResults = document.getElementById('search-results');
   const persistentData = loadPlayerData();
-  savedPlayersSelect.innerHTML = '<option value="">Selecione um jogador ou cadastre um novo</option>';
 
-  persistentData.forEach(player => {
-    const option = document.createElement('option');
-    option.value = JSON.stringify(player);
-    option.textContent = `${player.name} - ${player.position} - ${player.type}`;
-    savedPlayersSelect.appendChild(option);
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const filteredPlayers = persistentData.filter(player => 
+      player.name.toLowerCase().includes(searchTerm) ||
+      player.position.toLowerCase().includes(searchTerm) ||
+      player.type.toLowerCase().includes(searchTerm)
+    );
+
+    searchResults.innerHTML = '';
+    searchResults.style.display = filteredPlayers.length && searchTerm ? 'block' : 'none';
+
+    filteredPlayers.forEach(player => {
+      const div = document.createElement('div');
+      div.textContent = `${player.name} - ${player.position} - ${player.type}`;
+      div.addEventListener('click', () => {
+        document.getElementById('player-name').value = player.name;
+        document.getElementById('player-position').value = player.position;
+        document.getElementById('player-type').value = player.type;
+        searchInput.value = '';
+        searchResults.style.display = 'none';
+      });
+      searchResults.appendChild(div);
+    });
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      searchResults.style.display = 'none';
+    }
   });
 }
 
@@ -1130,17 +1189,6 @@ document.getElementById('player-form').addEventListener('submit', function(e) {
   saveData();
   this.reset();
   saveTeamsData();
-});
-
-document.getElementById('saved-players').addEventListener('change', function() {
-  const selectedPlayer = JSON.parse(this.value);
-  if (selectedPlayer) {
-    document.getElementById('player-name').value = selectedPlayer.name;
-    document.getElementById('player-position').value = selectedPlayer.position;
-    document.getElementById('player-type').value = selectedPlayer.type;
-  } else {
-    document.getElementById('player-form').reset();
-  }
 });
 
 document.getElementById('player-position').addEventListener('change', function() {
@@ -1553,63 +1601,6 @@ document.getElementById('export-players').addEventListener('click', function() {
   a.click();
   window.URL.revokeObjectURL(url);
 });
-
-document.getElementById('edit-players').addEventListener('click', function() {
-  const modal = document.getElementById('edit-players-modal');
-  const tbody = document.getElementById('edit-players-list');
-  tbody.innerHTML = '';
-  
-  const persistentData = loadPlayerData();
-  
-  persistentData.forEach(player => {
-    const row = tbody.insertRow();
-    row.innerHTML = `
-      <td><input type="text" value="${player.name}" class="edit-name"></td>
-      <td>
-        <select class="edit-position">
-          <option value="Atacante" ${player.position === 'Atacante' ? 'selected' : ''}>Atacante</option>
-          <option value="Meia" ${player.position === 'Meia' ? 'selected' : ''}>Meia</option>
-          <option value="Volante" ${player.position === 'Volante' ? 'selected' : ''}>Volante</option>
-          <option value="Zagueiro" ${player.position === 'Zagueiro' ? 'selected' : ''}>Zagueiro</option>
-          <option value="Lateral" ${player.position === 'Lateral' ? 'selected' : ''}>Lateral</option>
-          <option value="Goleiro" ${player.position === 'Goleiro' ? 'selected' : ''}>Goleiro</option>
-        </select>
-      </td>
-      <td>
-        <select class="edit-type">
-          <option value="Mensalista" ${player.type === 'Mensalista' ? 'selected' : ''}>Mensalista</option>
-          <option value="Diarista" ${player.type === 'Diarista' ? 'selected' : ''}>Diarista</option>
-        </select>
-      </td>
-      <td>
-        <button class="delete-btn" onclick="deletePlayerFromList(this)">Excluir</button>
-      </td>
-    `;
-  });
-  
-  modal.style.display = 'block';
-});
-
-document.querySelector('.close-modal').addEventListener('click', function() {
-  document.getElementById('edit-players-modal').style.display = 'none';
-  
-  const rows = document.getElementById('edit-players-list').getElementsByTagName('tr');
-  const updatedData = Array.from(rows).map(row => ({
-    name: row.querySelector('.edit-name').value,
-    position: row.querySelector('.edit-position').value,
-    type: row.querySelector('.edit-type').value
-  }));
-  
-  localStorage.setItem('persistentPlayerData', JSON.stringify(updatedData));
-  updateSavedPlayersSelect();
-});
-
-function deletePlayerFromList(button) {
-  if (confirm('Tem certeza que deseja excluir este jogador?')) {
-    const row = button.closest('tr');
-    row.remove();
-  }
-}
 
 loadData();
 </script>
