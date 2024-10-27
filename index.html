@@ -386,7 +386,69 @@ footer {
 .clear-btn:hover {
   background-color: #c82333 !important;
 }
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.secondary-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.secondary-btn:hover {
+  background-color: #e69100;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#edit-players-modal table {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+#edit-players-modal th, 
+#edit-players-modal td {
+  padding: 8px;
+}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
 <header>
@@ -400,6 +462,11 @@ footer {
     </div>
     <div class="card fade-in">
       <h2>Cadastro do Jogador</h2>
+      <div class="button-group" style="margin-bottom: 1rem;">
+        <button id="import-players" class="secondary-btn">Importar Jogadores</button>
+        <button id="export-players" class="secondary-btn">Exportar Jogadores</button>
+        <button id="edit-players" class="secondary-btn">Editar Jogadores</button>
+      </div>
       <form id="player-form">
         <div class="form-group">
           <label for="saved-players">Jogador Cadastrado:</label>
@@ -664,6 +731,25 @@ footer {
   </div>
 </div>
 
+<div id="edit-players-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-modal">&times;</span>
+    <h2>Editar Jogadores</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Posição</th>
+          <th>Tipo</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="edit-players-list">
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <footer>
   <p>&copy; 2024 Racha Pelada União - Todos os direitos reservados.</p>
 </footer>
@@ -730,6 +816,16 @@ function loadTeamsData() {
   updateTeamList('orange', false);
 }
 
+function updateTotals() {
+  const totalRaisedSpan = document.getElementById('total-raised');
+  const totalExpensesSpan = document.getElementById('total-expenses');
+  const finalTotalSpan = document.getElementById('final-total');
+
+  totalRaisedSpan.textContent = totalRaised.toFixed(2);
+  totalExpensesSpan.textContent = totalExpenses.toFixed(2);
+  finalTotalSpan.textContent = (totalRaised - totalExpenses).toFixed(2);
+}
+
 function saveData() {
   localStorage.setItem('players', JSON.stringify(players));
   localStorage.setItem('expenses', JSON.stringify(expenses));
@@ -765,6 +861,26 @@ function loadData() {
   updateTeamList('orange', true);
   updateTeamList('blue', false);
   updateTeamList('orange', false);
+}
+
+function updateExpenseList() {
+  const expenseList = document.getElementById('expense-list').getElementsByTagName('tbody')[0];
+  expenseList.innerHTML = '';
+  
+  expenses.forEach((expense, index) => {
+    const row = expenseList.insertRow();
+    row.innerHTML = `
+      <td>${expense.type === 'entrada' ? 'Entrada' : 'Despesa'}</td>
+      <td>${expense.description}</td>
+      <td>R$ ${expense.value.toFixed(2)}</td>
+      <td>
+        <div class="edit-delete-buttons">
+          <button class="edit-btn" onclick="editExpense(${index})">Editar</button>
+          <button class="delete-btn" onclick="deleteExpense(${index})">Excluir</button>
+        </div>
+      </td>
+    `;
+  });
 }
 
 loadData();
@@ -1312,556 +1428,190 @@ function updatePlayerStats(player) {
     document.getElementById('blue-team-second').getElementsByTagName('ul')[0],
     document.getElementById('orange-team-second').getElementsByTagName('ul')[0]
   ];
+
   teamLists.forEach(list => {
-    const playerItem = Array.from(list.children).find(li => li.textContent.includes(player.name));
-    if (playerItem) {
-      playerItem.textContent = `${player.name} - ${player.position}`;
-    }
+    Array.from(list.children).forEach(li => {
+      if (li.textContent.includes(player.name)) {
+        li.innerHTML += `
+          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
+          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
+        `;
+      }
+    });
   });
 }
 
 function updateGoalCardList() {
-  const tableBody = document.getElementById('goal-card-list').getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = '';
-  
-  let blueTeamPlayers = [];
-  let orangeTeamPlayers = [];
-  let blueTeamGoals = 0;
-  let orangeTeamGoals = 0;
-  
-  players.forEach(player => {
-    if (player.goals || player.card) {
-      if (firstHalfTeams.blue.find(p => p.name === player.name) || 
-          secondHalfTeams.blue.find(p => p.name === player.name)) {
-        blueTeamPlayers.push(player);
-        blueTeamGoals += player.goals || 0;
-      } else if (firstHalfTeams.orange.find(p => p.name === player.name) || 
-                 secondHalfTeams.orange.find(p => p.name === player.name)) {
-        orangeTeamPlayers.push(player);
-        orangeTeamGoals += player.goals || 0;
+  const table = document.getElementById('goal-card-list').getElementsByTagName('tbody')[0];
+  table.innerHTML = '';
+  let currentRow = table.insertRow();
+
+  const teamPlayers = {
+    blue: [...firstHalfTeams.blue, ...secondHalfTeams.blue],
+    orange: [...firstHalfTeams.orange, ...secondHalfTeams.orange]
+  };
+
+  const maxPlayers = Math.max(teamPlayers.blue.length, teamPlayers.orange.length);
+
+  for (let i = 0; i < maxPlayers; i++) {
+    const bluePlayer = teamPlayers.blue[i];
+    const orangePlayer = teamPlayers.orange[i];
+
+    const blueCell = currentRow.insertCell();
+    const orangeCell = currentRow.insertCell();
+
+    if (bluePlayer) {
+      const player = players.find(p => p.name === bluePlayer.name);
+      if (player) {
+        blueCell.innerHTML = `
+          ${player.name}
+          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
+          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
+        `;
       }
     }
-  });
+
+    if (orangePlayer) {
+      const player = players.find(p => p.name === orangePlayer.name);
+      if (player) {
+        orangeCell.innerHTML = `
+          ${player.name}
+          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
+          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
+        `;
+      }
+    }
+
+    currentRow = table.insertRow();
+  }
+}
+
+document.getElementById('import-players').addEventListener('click', function() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.txt';
   
-  const totalRow = tableBody.insertRow();
-  const blueTotalCell = totalRow.insertCell();
-  const orangeTotalCell = totalRow.insertCell();
-  
-  blueTotalCell.style.backgroundColor = '#cce5ff';
-  blueTotalCell.style.fontWeight = 'bold';
-  blueTotalCell.textContent = `Total de Gols: ${blueTeamGoals}`;
-  
-  orangeTotalCell.style.backgroundColor = '#ffeeba';
-  orangeTotalCell.style.fontWeight = 'bold';
-  orangeTotalCell.textContent = `Total de Gols: ${orangeTeamGoals}`;
-  
-  const separatorRow = tableBody.insertRow();
-  const blueSpace = separatorRow.insertCell();
-  const orangeSpace = separatorRow.insertCell();
-  blueSpace.style.height = '10px';
-  orangeSpace.style.height = '10px';
-  
-  const maxRows = Math.max(blueTeamPlayers.length, orangeTeamPlayers.length);
-  
-  for (let i = 0; i < maxRows; i++) {
-    const row = tableBody.insertRow();
-    
-    if (i < blueTeamPlayers.length) {
-      const player = blueTeamPlayers[i];
-      const blueCell = row.insertCell();
-      blueCell.style.backgroundColor = '#cce5ff';
-      blueCell.innerHTML = `
-        ${player.name} - Gols: ${player.goals || 0}${player.card ? ` - ${player.card}` : ''}
-        <div class="edit-delete-buttons">
-          <button class="edit-btn" onclick='editGoalCard(${JSON.stringify(JSON.stringify(player))})'>Editar</button>
-          <button class="delete-btn" onclick='deleteGoalCard(${JSON.stringify(JSON.stringify(player))})'>Excluir</button>
-        </div>
-      `;
-    } else {
-      row.insertCell().innerHTML = '-';
+  input.onchange = function(e) {
+    const file = e.target.files[0];
+    if (!file.name.endsWith('.txt')) {
+      alert('Por favor, selecione um arquivo .txt');
+      return;
     }
     
-    if (i < orangeTeamPlayers.length) {
-      const player = orangeTeamPlayers[i];
-      const orangeCell = row.insertCell();
-      orangeCell.style.backgroundColor = '#ffeeba';
-      orangeCell.innerHTML = `
-        ${player.name} - Gols: ${player.goals || 0}${player.card ? ` - ${player.card}` : ''} 
-        <div class="edit-delete-buttons">
-          <button class="edit-btn" onclick='editGoalCard(${JSON.stringify(JSON.stringify(player))})'>Editar</button>
-          <button class="delete-btn" onclick='deleteGoalCard(${JSON.stringify(JSON.stringify(player))})'>Excluir</button>
-        </div>
-      `;
-    } else {
-      row.insertCell().innerHTML = '-';
-    }
-  }
-}
+    const reader = new FileReader();
+    
+    reader.onload = function(event) {
+      try {
+        const content = event.target.result;
+        const lines = content.split('\n');
+        const importedData = lines.map(line => {
+          const [name, position, type] = line.split(',').map(item => item.trim());
+          return { name, position, type };
+        }).filter(player => player.name && player.position && player.type);
 
-function editGoalCard(playerStr) {
-  const player = JSON.parse(playerStr);
-  document.getElementById('player-goal-card').value = player.name;
-  document.getElementById('goals-scored').value = player.goals || 0;
-  document.getElementById('card-type').value = player.card || '';
-}
+        if (importedData.length === 0) {
+          throw new Error('Arquivo vazio ou formato inválido');
+        }
 
-function deleteGoalCard(playerStr) {
-  const player = JSON.parse(playerStr);
-  if (confirm(`Tem certeza que deseja excluir o registro de ${player.name}?`)) {
-    const realPlayer = players.find(p => p.name === player.name);
-    if (realPlayer) {
-      delete realPlayer.goals;
-      delete realPlayer.card;
-      updateGoalCardList();
-      updatePlayerStats(realPlayer);
-      saveData();
-    }
-  }
-}
+        const isValid = importedData.every(player => 
+          player.name && 
+          player.position && 
+          ['Atacante', 'Meia', 'Volante', 'Zagueiro', 'Lateral', 'Goleiro'].includes(player.position) &&
+          ['Mensalista', 'Diarista'].includes(player.type)
+        );
 
-document.getElementById('expense-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const type = document.getElementById('transaction-type').value;
-  const description = document.getElementById('expense-description').value;
-  const value = parseFloat(document.getElementById('expense-value').value);
+        if (!isValid) {
+          throw new Error('Formato inválido. O arquivo deve conter: Nome, Posição, Tipo em cada linha, separados por vírgula');
+        }
 
-  if (!type || !description || isNaN(value)) {
-    alert('Por favor, preencha todos os campos corretamente.');
-    return;
-  }
-
-  const expenseValue = Math.abs(value);
+        localStorage.setItem('persistentPlayerData', JSON.stringify(importedData));
+        updateSavedPlayersSelect();
+        alert('Jogadores importados com sucesso!');
+      } catch (error) {
+        alert('Erro ao importar arquivo: ' + error.message);
+      }
+    };
+    
+    reader.readAsText(file);
+  };
   
-  expenses.push({ type, description, value: expenseValue });
-  updateTotals();
-  updateExpenseList();
-  saveData();
-
-  alert(`${type === 'entrada' ? 'Entrada' : 'Despesa'} registrada: ${description} - R$ ${expenseValue.toFixed(2)}`);
-  this.reset();
+  input.click();
 });
 
-function updateExpenseList() {
-  const tableBody = document.getElementById('expense-list').getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = '';
+document.getElementById('export-players').addEventListener('click', function() {
+  const persistentData = loadPlayerData();
   
-  expenses.forEach((expense, index) => {
-    const row = tableBody.insertRow();
-    row.style.backgroundColor = expense.type === 'entrada' ? '#d4edda' : '#f8d7da';
-    
+  const content = persistentData.map(player => 
+    `${player.name}, ${player.position}, ${player.type}`
+  ).join('\n');
+  
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'jogadores.txt';
+  a.click();
+  window.URL.revokeObjectURL(url);
+});
+
+document.getElementById('edit-players').addEventListener('click', function() {
+  const modal = document.getElementById('edit-players-modal');
+  const tbody = document.getElementById('edit-players-list');
+  tbody.innerHTML = '';
+  
+  const persistentData = loadPlayerData();
+  
+  persistentData.forEach(player => {
+    const row = tbody.insertRow();
     row.innerHTML = `
-      <td>${expense.type === 'entrada' ? 'Entrada' : 'Despesa'}</td>
-      <td>${expense.description}</td>
-      <td>R$ ${Math.abs(expense.value).toFixed(2)}</td>
+      <td><input type="text" value="${player.name}" class="edit-name"></td>
+      <td>
+        <select class="edit-position">
+          <option value="Atacante" ${player.position === 'Atacante' ? 'selected' : ''}>Atacante</option>
+          <option value="Meia" ${player.position === 'Meia' ? 'selected' : ''}>Meia</option>
+          <option value="Volante" ${player.position === 'Volante' ? 'selected' : ''}>Volante</option>
+          <option value="Zagueiro" ${player.position === 'Zagueiro' ? 'selected' : ''}>Zagueiro</option>
+          <option value="Lateral" ${player.position === 'Lateral' ? 'selected' : ''}>Lateral</option>
+          <option value="Goleiro" ${player.position === 'Goleiro' ? 'selected' : ''}>Goleiro</option>
+        </select>
+      </td>
+      <td>
+        <select class="edit-type">
+          <option value="Mensalista" ${player.type === 'Mensalista' ? 'selected' : ''}>Mensalista</option>
+          <option value="Diarista" ${player.type === 'Diarista' ? 'selected' : ''}>Diarista</option>
+        </select>
+      </td>
+      <td>
+        <button class="delete-btn" onclick="deletePlayerFromList(this)">Excluir</button>
+      </td>
     `;
-    
-    const actionsCell = row.insertCell();
-    const editButton = document.createElement('button');
-    editButton.textContent = 'Editar';
-    editButton.classList.add('edit-btn');
-    editButton.addEventListener('click', () => editExpense(expense));
-    
-    const deleteButton = document.createElement('button');
-    deleteButton.textContent = 'Excluir';
-    deleteButton.classList.add('delete-btn');
-    deleteButton.addEventListener('click', () => deleteExpense(index));
-    
-    actionsCell.appendChild(editButton);
-    actionsCell.appendChild(deleteButton);
   });
-}
-
-function editExpense(expense) {
-  document.getElementById('transaction-type').value = expense.type;
-  document.getElementById('expense-description').value = expense.description;
-  document.getElementById('expense-value').value = Math.abs(expense.value);
-}
-
-function deleteExpense(index) {
-  if (confirm('Tem certeza que deseja excluir esta despesa?')) {
-    expenses.splice(index, 1);
-    updateExpenseList();
-    updateTotals();
-    saveData();
-  }
-}
-
-function updateTotals() {
-  totalRaised = players
-    .filter(player => player.paymentStatus === 'Em Dias')
-    .reduce((sum, player) => sum + (player.amount || 0), 0);
-
-  let totalIncome = expenses
-    .filter(exp => exp.type === 'entrada')
-    .reduce((sum, exp) => sum + exp.value, 0);
-    
-  let totalExpense = expenses
-    .filter(exp => exp.type === 'despesa')
-    .reduce((sum, exp) => sum + Math.abs(exp.value), 0);
-
-  let finalTotal = (totalRaised + totalIncome) - totalExpense;
-
-  document.getElementById('total-raised').textContent = (totalRaised + totalIncome).toFixed(2);
-  document.getElementById('total-expenses').textContent = totalExpense.toFixed(2);
-  document.getElementById('final-total').textContent = finalTotal.toFixed(2);
-}
-
-document.getElementById('generate-report').addEventListener('click', function() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
   
-  let yPos = 10;
-  const leftMargin = 10;
-  const pageWidth = doc.internal.pageSize.width;
-  
-  doc.setFontSize(16);
-  doc.text("RACHA PELADA UNIÃO", pageWidth / 2, yPos, { align: 'center' });
-  yPos += 8;
-  doc.setFontSize(12);
-  doc.text(`Data: ${gameDate}`, pageWidth / 2, yPos, { align: 'center' });
-  yPos += 15;
-
-  function createTableHeader(headers, y) {
-    doc.setFillColor(200, 200, 200);
-    doc.rect(leftMargin, y - 5, pageWidth - 20, 7, 'F');
-    doc.text(headers.join('   '), leftMargin, y);
-    return y + 8;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Lista de Ordem de Chegada", leftMargin, yPos);
-  yPos += 8;
-  
-  doc.setFontSize(10);
-  doc.setDrawColor(0);
-  doc.setFillColor(230, 230, 230);
-  yPos = createTableHeader(['Nome', 'Posição', 'Tipo', 'Chegada', 'Valor'], yPos);
-  
-  players
-    .filter(p => p.position !== 'Goleiro')
-    .slice(0, 20)
-    .forEach((player, idx) => {
-      if (idx % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-        doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-      }
-      const row = [
-        player.name,
-        player.position,
-        player.type,
-        player.arrivalTime,
-        `R$ ${player.amount?.toFixed(2) || '0.00'}`
-      ];
-      doc.text(row.join('   '), leftMargin, yPos);
-      yPos += 6;
-      
-      if (yPos > 280) {
-        doc.addPage();
-        yPos = 10;
-      }
-    });
-  
-  yPos += 10;
-  doc.setFontSize(14);
-  doc.text("Lista de Goleiros", leftMargin, yPos);
-  yPos += 8;
-  
-  doc.setFontSize(10);
-  doc.setFillColor(230, 230, 230);
-  yPos = createTableHeader(['Nome', 'Chegada'], yPos);
-  
-  players
-    .filter(p => p.position === 'Goleiro')
-    .forEach((player, idx) => {
-      if (idx % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-        doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-      }
-      doc.text(`${player.name}   ${player.arrivalTime}`, leftMargin, yPos);
-      yPos += 6;
-      
-      if (yPos > 280) {
-        doc.addPage();
-        yPos = 10;
-      }
-    });
-  
-  yPos += 10;
-  doc.setFontSize(14);
-  doc.text("Jogadores do Segundo Tempo", leftMargin, yPos);
-  yPos += 8;
-  
-  doc.setFontSize(10);
-  doc.setFillColor(230, 230, 230);
-  yPos = createTableHeader(['Nome', 'Posição', 'Tipo', 'Chegada', 'Valor'], yPos);
-  
-  players
-    .filter(p => p.position !== 'Goleiro')
-    .slice(20)
-    .forEach((player, idx) => {
-      if (idx % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-        doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-      }
-      const row = [
-        player.name,
-        player.position,
-        player.type,
-        player.arrivalTime,
-        `R$ ${player.amount?.toFixed(2) || '0.00'}`
-      ];
-      doc.text(row.join('   '), leftMargin, yPos);
-      yPos += 6;
-      
-      if (yPos > 280) {
-        doc.addPage();
-        yPos = 10;
-      }
-    });
-
-  yPos += 10;
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 10;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Times Primeiro Tempo", leftMargin, yPos);
-  yPos += 8;
-  
-  const midPage = pageWidth / 2;
-  
-  doc.setFillColor(204, 229, 255);
-  doc.rect(leftMargin, yPos - 5, midPage - 15, 7, 'F');
-  doc.text("Time Azul", leftMargin, yPos);
-  
-  doc.setFillColor(255, 238, 186);
-  doc.rect(midPage, yPos - 5, midPage - 15, 7, 'F');
-  doc.text("Time Laranja", midPage, yPos);
-  yPos += 8;
-
-  const maxFirstHalf = Math.max(firstHalfTeams.blue.length, firstHalfTeams.orange.length);
-  for(let i = 0; i < maxFirstHalf; i++) {
-    if (i % 2 === 0) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-    }
-    
-    if(firstHalfTeams.blue[i]) {
-      const player = players.find(p => p.name === firstHalfTeams.blue[i].name);
-      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
-      doc.text(text, leftMargin, yPos);
-    }
-    if(firstHalfTeams.orange[i]) {
-      const player = players.find(p => p.name === firstHalfTeams.orange[i].name);
-      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
-      doc.text(text, midPage, yPos);
-    }
-    yPos += 6;
-    
-    if (yPos > 280) {
-      doc.addPage();
-      yPos = 10;
-    }
-  }
-
-  yPos += 10;
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 10;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Times Segundo Tempo", leftMargin, yPos);
-  yPos += 8;
-  
-  doc.setFillColor(204, 229, 255);
-  doc.rect(leftMargin, yPos - 5, midPage - 15, 7, 'F');
-  doc.text("Time Azul", leftMargin, yPos);
-  
-  doc.setFillColor(255, 238, 186);
-  doc.rect(midPage, yPos - 5, midPage - 15, 7, 'F');
-  doc.text("Time Laranja", midPage, yPos);
-  yPos += 8;
-
-  const maxSecondHalf = Math.max(secondHalfTeams.blue.length, secondHalfTeams.orange.length);
-  for(let i = 0; i < maxSecondHalf; i++) {
-    if (i % 2 === 0) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-    }
-    
-    if(secondHalfTeams.blue[i]) {
-      const player = players.find(p => p.name === secondHalfTeams.blue[i].name);
-      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
-      doc.text(text, leftMargin, yPos);
-    }
-    if(secondHalfTeams.orange[i]) {
-      const player = players.find(p => p.name === secondHalfTeams.orange[i].name);
-      const text = `${player.name} - ${player.position}${player.goals ? ` - Gols: ${player.goals}` : ''}${player.card ? ` - ${player.card}` : ''}`;
-      doc.text(text, midPage, yPos);
-    }
-    yPos += 6;
-    
-    if (yPos > 280) {
-      doc.addPage();
-      yPos = 10;
-    }
-  }
-
-  yPos += 10;
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 10;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Registro de Gols e Cartões", leftMargin, yPos);
-  yPos += 8;
-
-  let blueTeamGoals = 0;
-  let orangeTeamGoals = 0;
-  
-  players.forEach(player => {
-    if (player.goals) {
-      if (firstHalfTeams.blue.find(p => p.name === player.name) || 
-          secondHalfTeams.blue.find(p => p.name === player.name)) {
-        blueTeamGoals += player.goals;
-      } else if (firstHalfTeams.orange.find(p => p.name === player.name) || 
-                 secondHalfTeams.orange.find(p => p.name === player.name)) {
-        orangeTeamGoals += player.goals;
-      }
-    }
-  });
-
-  doc.setFillColor(204, 229, 255);
-  doc.rect(leftMargin, yPos - 5, midPage - 15, 7, 'F');
-  doc.text(`Time Azul - Total de Gols: ${blueTeamGoals}`, leftMargin, yPos);
-  
-  doc.setFillColor(255, 238, 186);
-  doc.rect(midPage, yPos - 5, midPage - 15, 7, 'F');
-  doc.text(`Time Laranja - Total de Gols: ${orangeTeamGoals}`, midPage, yPos);
-  yPos += 8;
-
-  const blueTeamPlayers = players.filter(p => 
-    (p.goals || p.card) && 
-    (firstHalfTeams.blue.find(bp => bp.name === p.name) || 
-     secondHalfTeams.blue.find(bp => bp.name === p.name))
-  );
-
-  const orangeTeamPlayers = players.filter(p => 
-    (p.goals || p.card) && 
-    (firstHalfTeams.orange.find(bp => bp.name === p.name) || 
-     secondHalfTeams.orange.find(bp => bp.name === p.name))
-  );
-
-  const maxPlayers = Math.max(blueTeamPlayers.length, orangeTeamPlayers.length);
-  
-  for(let i = 0; i < maxPlayers; i++) {
-    if (i % 2 === 0) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-    }
-    
-    if(blueTeamPlayers[i]) {
-      const text = `${blueTeamPlayers[i].name} - Gols: ${blueTeamPlayers[i].goals || 0}${blueTeamPlayers[i].card ? ` - ${blueTeamPlayers[i].card}` : ''}`;
-      doc.text(text, leftMargin, yPos);
-    }
-    if(orangeTeamPlayers[i]) {
-      const text = `${orangeTeamPlayers[i].name} - Gols: ${orangeTeamPlayers[i].goals || 0}${orangeTeamPlayers[i].card ? ` - ${orangeTeamPlayers[i].card}` : ''}`;
-      doc.text(text, midPage, yPos);
-    }
-    yPos += 6;
-    
-    if (yPos > 280) {
-      doc.addPage();
-      yPos = 10;
-    }
-  }
-
-  yPos += 10;
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 10;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Registro de Entradas e Despesas", leftMargin, yPos);
-  yPos += 8;
-  
-  doc.setFontSize(10);
-  doc.setFillColor(230, 230, 230);
-  yPos = createTableHeader(['Tipo', 'Descrição', 'Valor'], yPos);
-
-  expenses.forEach((expense, idx) => {
-    if (idx % 2 === 0) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-    }
-    const row = [
-      expense.type === 'entrada' ? 'Entrada' : 'Despesa',
-      expense.description,
-      `R$ ${Math.abs(expense.value).toFixed(2)}`
-    ];
-    doc.text(row.join('   '), leftMargin, yPos);
-    yPos += 6;
-    
-    if (yPos > 280) {
-      doc.addPage();
-      yPos = 10;
-    }
-  });
-
-  yPos += 10;
-  if (yPos > 240) {
-    doc.addPage();
-    yPos = 10;
-  }
-
-  doc.setFontSize(14);
-  doc.text("Totais", leftMargin, yPos);
-  yPos += 8;
-
-  doc.setFontSize(10);
-  
-  const totalIncome = players
-    .filter(player => player.paymentStatus === 'Em Dias')
-    .reduce((sum, player) => sum + (player.amount || 0), 0) + 
-    expenses
-    .filter(exp => exp.type === 'entrada')
-    .reduce((sum, exp) => sum + exp.value, 0);
-
-  const totalExpenses = expenses
-    .filter(exp => exp.type === 'despesa')
-    .reduce((sum, exp) => sum + Math.abs(exp.value), 0);
-
-  const finalTotal = totalIncome - totalExpenses;
-
-  doc.setFillColor(230, 230, 230);
-  yPos = createTableHeader(['Descrição', 'Valor'], yPos);
-  
-  const totalsRows = [
-    ['Total de Entradas', `R$ ${totalIncome.toFixed(2)}`],
-    ['Total de Saídas', `R$ ${totalExpenses.toFixed(2)}`],
-    ['Total Final', `R$ ${finalTotal.toFixed(2)}`]
-  ];
-
-  totalsRows.forEach((row, idx) => {
-    if (idx % 2 === 0) {
-      doc.setFillColor(240, 240, 240);
-      doc.rect(leftMargin, yPos - 5, pageWidth - 20, 7, 'F');
-    }
-    doc.text(row.join('   '), leftMargin, yPos);
-    yPos += 6;
-  });
-
-  doc.save(`relatorio_racha_${gameDate.replace(/\//g, '-')}.pdf`);
+  modal.style.display = 'block';
 });
 
-// Print page functionality
-document.getElementById('print-page').addEventListener('click', function() {
-  window.print();
+document.querySelector('.close-modal').addEventListener('click', function() {
+  document.getElementById('edit-players-modal').style.display = 'none';
+  
+  const rows = document.getElementById('edit-players-list').getElementsByTagName('tr');
+  const updatedData = Array.from(rows).map(row => ({
+    name: row.querySelector('.edit-name').value,
+    position: row.querySelector('.edit-position').value,
+    type: row.querySelector('.edit-type').value
+  }));
+  
+  localStorage.setItem('persistentPlayerData', JSON.stringify(updatedData));
+  updateSavedPlayersSelect();
 });
+
+function deletePlayerFromList(button) {
+  if (confirm('Tem certeza que deseja excluir este jogador?')) {
+    const row = button.closest('tr');
+    row.remove();
+  }
+}
+
+loadData();
 </script>
 </body>
 </html>
