@@ -5,15 +5,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --primary-color: #4CAF50;
-  --secondary-color: #FFA000;
-  --success-color: #28a745;
-  --danger-color: #dc3545;
-  --warning-color: #ffc107;
-  --info-color: #17a2b8;
-  --light-color: #f8f9fa;
-  --dark-color: #343a40;
-  --font-family: 'Roboto', sans-serif;
+  --primary-color: #00b894; /* Fresh teal */
+  --secondary-color: #2d3436; /* Deep charcoal */
+  --accent-color: #fdcb6e; /* Warm gold */
 }
 
 * {
@@ -23,55 +17,96 @@
 }
 
 body {
-  font-family: var(--font-family);
-  line-height: 1.6;
-  color: var(--dark-color);
-  background: linear-gradient(135deg, #f5f7fa 0%, #e0e8f0 100%);
-  min-height: 100vh;
-  font-size: 14px; /* Add base font size */
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.4;
+  font-size: 14px; /* Reduced from default 16px */
+  color: var(--secondary-color);
+  background: linear-gradient(135deg, #00b894 0%, #00a18c 100%);
+  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
+  background-repeat: repeat;
 }
 
 .container {
   max-width: 100%;
-  padding: 1rem;
+  padding: 0.75rem; /* Reduced from 1rem */
+  border-radius: 8px;
+  margin: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.95);
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(240, 206, 110, 0.1)" stroke-width="2"/></svg>');
+  background-repeat: repeat;
+  z-index: -1;
 }
 
 header {
-  background-color: var(--primary-color);
-  color: white;
+  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
+  position: relative;
+  padding: 2rem;
   text-align: center;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
-h1 {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+header h1 {
+  color: #ffffff;
+  opacity: 0.95;
+  font-size: 1.5rem; /* Reduced from 2rem */
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
-h2 {
-  font-size: 1.4rem;
-  margin-bottom: 0.5rem;
+header::before {
+  content: "⚽";
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  z-index: 1;
 }
 
-h3 {
-  font-size: 1.2rem;
+header::after {
+  content: "⚽";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  header h1 {
+    font-size: 1.2rem; /* Reduced from 1.5rem */
+  }
+}
+
+h1, h2 {
   margin-bottom: 0.5rem;
 }
 
 .card {
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background: #fff;
+  border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+.card h2 {
+  color: var(--secondary-color);
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem; /* Add explicit smaller size */
 }
 
 .form-group {
@@ -82,72 +117,87 @@ label {
   display: block;
   margin-bottom: 0.25rem;
   font-weight: bold;
-  font-size: 0.9rem; /* Update form labels size */
 }
 
 input[type="text"],
 input[type="number"],
 input[type="time"],
 select {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 0.9rem; /* Update input font sizes */
-  transition: border-color 0.3s ease;
+  height: 36px; /* Reduced from 48px */
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  padding: 0.5rem; /* Reduced from 0.75rem */
+  font-size: 14px; /* Reduced from 16px */
+  background: #f8f9fa;
+  transition: all 0.3s ease;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="time"]:focus,
+input:focus,
 select:focus {
   border-color: var(--primary-color);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+  box-shadow: 0 0 0 3px rgba(0,184,148,0.2);
 }
 
 button {
+  height: 36px; /* Reduced from 48px */
   background-color: var(--primary-color);
   color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem; /* Update button font sizes */
-  border-radius: 4px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-size: 0.9rem; /* Reduced from 1rem */
+  font-weight: 600;
   cursor: pointer;
   width: 100%;
   margin-top: 0.5rem;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem; /* Added smaller padding */
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #00a18c;
 }
 
-button:active {
-  transform: scale(0.98);
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 4px 6px; /* Update table padding */
+  padding: 0.5rem; /* Reduced from 0.75rem */
   text-align: left;
-  font-size: 0.9rem; /* Update table font sizes */
-  vertical-align: middle; /* Add this */
 }
 
 th {
-  background-color: var(--light-color);
-  font-weight: bold;
+  background: var(--secondary-color);
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.8em; /* Reduced from 0.9em */
+  letter-spacing: 1px;
 }
 
 tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: rgba(0, 184, 148, 0.1);
+}
+
+tr:hover {
+  background-color: rgba(0, 184, 148, 0.2);
 }
 
 .team-lists {
@@ -155,11 +205,16 @@ tr:nth-child(even) {
   flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 1rem;
+  gap: 0.75rem;
 }
 
 .team-list {
   flex: 1 1 48%;
   margin-bottom: 1rem;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background: #fff;
   padding: 1rem;
 }
 
@@ -167,22 +222,15 @@ tr:nth-child(even) {
   text-align: center;
   margin-bottom: 0.5rem;
   color: white;
+  font-size: 1rem; /* Add explicit smaller size */
 }
 
-#blue-team {
-  background-color: #007bff;
+#blue-team, #blue-team-second {
+  background: linear-gradient(135deg, #0984e3 0%, #0652DD 100%);
 }
 
-#orange-team {
-  background-color: #fd7e14;
-}
-
-#blue-team-second {
-  background-color: #007bff;
-}
-
-#orange-team-second {
-  background-color: #fd7e14;
+#orange-team, #orange-team-second {
+  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
 }
 
 .team-list ul {
@@ -191,25 +239,40 @@ tr:nth-child(even) {
 }
 
 .team-list li {
-  background-color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0.5rem;
   padding: 0.5rem;
-  border-radius: 4px;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
   text-align: left;
-  font-size: 0.9rem; /* Update team list font sizes */
+  transition: transform 0.2s ease;
+  font-size: 0.9em; /* Added explicit smaller size */
+  gap: 0.5rem;
 }
 
 .team-list li span {
-  flex-grow: 1;
-  text-align: left;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.team-list li::before {
-  content: attr(data-number);
-  margin-right: 0.5rem;
+.team-list li button {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  margin-left: auto;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .totals {
@@ -227,66 +290,135 @@ tr:nth-child(even) {
 
 footer {
   text-align: center;
-  padding: 1rem;
-  background-color: var(--secondary-color);
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
+  border-top: 4px solid var(--accent-color);
   color: white;
-  margin-top: 1rem;
+}
+
+.tab-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
+  padding: 0.5rem;
+}
+
+.tab-button {
+  flex: 1;
+  min-width: calc(50% - 0.25rem);
+  padding: 0.4rem; /* Reduced padding */
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.75rem; /* Reduced from 0.85rem */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab-button.active {
+  background: var(--primary-color);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.fixed-buttons {
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
+  padding: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.fixed-buttons button {
+  flex: 1;
+  margin: 0;
 }
 
 @media (min-width: 768px) {
+  .tab-button {
+    min-width: auto;
+    font-size: 0.8rem; /* Reduced from 0.9rem */
+  }
+}
+
+@media (max-width: 767px) {
   .container {
-    max-width: 750px;
-    margin: 0 auto;
+    margin: 0.5rem;
+    padding: 0.5rem; /* Reduced from 0.75rem */
   }
 
-  .form-row {
-    display: flex;
-    justify-content: space-between;
+  header {
+    padding: 1rem;
   }
 
-  .form-row .form-group {
-    flex: 1;
-    margin-right: 0.5rem;
+  h1 {
+    font-size: 1.2rem; /* Reduced from 1.5rem */
+    text-align: center;
   }
 
-  .form-row .form-group:last-child {
-    margin-right: 0;
+  input[type="text"],
+  input[type="number"],
+  input[type="time"],
+  select {
+    width: 100%;
+  }
+
+  button,
+  .edit-delete-buttons button {
+    min-height: 36px; /* Reduced from 44px */
+    padding: 0.25rem 0.5rem; /* Reduced padding */
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .totals {
+    flex-direction: column;
+  }
+
+  .totals p {
+    flex: 1 1 100%;
+    text-align: center;
   }
 }
 
-.edit-delete-buttons {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap; /* Add this */
-  justify-content: flex-start; /* Add this */
+.search-container {
+  position: relative;
+  margin-top: 1.5rem;
 }
 
-.edit-btn, .delete-btn, .team-button {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem; /* Update edit and delete button sizes */
-  width: auto;
-  margin: 2px; /* Add this */
+.search-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
 }
 
-.team-button {
-  margin-right: 0.5rem;
-}
-
-.remove-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 18px; /* Update remove button width */
-  height: 18px; /* Update remove button height */
-  font-size: 10px; /* Update remove button font size */
-  line-height: 1;
-  cursor: pointer;
-  margin-left: 5px;
-}
-
-.remove-btn:hover {
-  background-color: #c82333;
+.search-input {
+  padding-right: 35px;
+  width: 100%;
 }
 
 @keyframes fadeIn {
@@ -294,208 +426,135 @@ footer {
   to { opacity: 1; }
 }
 
-.fade-in {
-  animation: fadeIn 0.5s ease-in;
-}
-
-.required-field::after {
-  content: " *";
-  color: red;
-}
-
-.goalkeeper-required::after {
-  content: " *";
-  color: red;
-}
-
-.nav-arrow {
-  position: sticky;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 10px;
-}
-
-.time-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  th, td {
-    padding: 8px;
-    font-size: 0.9rem; /* Update table font sizes */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.team-button.blue-team-btn {
-  background-color: #007bff;
-  color: white;
+.fade-in {
+  animation: slideIn 0.3s ease-out;
 }
 
-.team-button.orange-team-btn {
-  background-color: #fd7e14;
-  color: white;
+.search-result-item:hover {
+  background-color: #f5f5f5;
 }
 
-.edit-btn {
-  background-color: #ffc107;
-  color: black;
+.search-result-item:last-child {
+  border-bottom: none;
 }
 
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
+.rules-section {
+  padding: 1.5rem;
+  line-height: 1.6;
 }
 
-.edit-btn:hover, .delete-btn:hover, .team-button:hover {
-  opacity: 0.8;
+.rules-section h3 {
+  color: var(--primary-color);
+  margin: 2rem 0 1rem 0;
+  font-size: 1.1rem; /* Reduced from 1.3rem */
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
 }
 
-.form-group select {
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 0.9rem; /* Update select font sizes */
-  max-width: 200px;
+.rules-section h3:first-child {
+  margin-top: 0;
 }
 
-.form-group select:focus {
-  border-color: var(--primary-color);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
-}
-
-#print-card-list td {
-  vertical-align: top;
-  width: 50%;
-  padding: 10px;
-}
-
-#print-card-list .edit-delete-buttons {
-  margin-top: 5px;
-}
-
-#print-card-list td:empty {
-  background-color: #f8f9fa;
-}
-
-.print-btn {
-  background-color: var(--info-color) !important;
-}
-
-.print-btn:hover {
-  background-color: #138496 !important;
-}
-
-.clear-btn {
-  background-color: var(--danger-color) !important;
-}
-
-.clear-btn:hover {
-  background-color: #c82333 !important;
-}
-
-.button-group {
-  display: flex;
-  gap: 0.5rem;
+.rules-section ul {
+  list-style-type: none;
+  padding-left: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.secondary-btn {
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem; /* Update secondary button font sizes */
-  border-radius: 4px;
-  cursor: pointer;
-  flex: 1;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+.rules-section ul ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding-left: 2rem;
 }
 
-.secondary-btn:hover {
-  background-color: #e69100;
-}
-
-.search-container {
+.rules-section li {
   position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  line-height: 1.4;
+  font-size: 0.9em; /* Added explicit smaller size */
 }
 
-.search-container input {
-  padding-right: 35px;
-}
-
-.search-icon {
+.rules-section li::before {
+  content: "•";
+  color: var(--primary-color);
+  font-weight: bold;
   position: absolute;
-  right: 10px;
-  color: #666;
-  cursor: pointer;
+  left: -1rem;
 }
 
-.search-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  max-height: 200px;
-  overflow-y: auto;
+.rules-section p {
+  margin: 1rem 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+  .rules-section {
+    padding: 1rem;
+  }
+
+  .rules-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .rules-section ul {
+    padding-left: 1.2rem;
+  }
+}
+
+.arrival-tab-navigation {
+  position: sticky;
+  top: 0;
   z-index: 1000;
+  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
+  padding: 0.5rem;
+}
+
+.arrival-tab-button {
+  flex: 1;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.75rem; /* Reduced from 0.85rem */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.arrival-tab-button.active {
+  background: var(--primary-color);
+}
+
+.arrival-tab-content {
   display: none;
 }
 
-.search-results div {
-  padding: 6px 10px; /* Update search result padding */
-  font-size: 0.9rem; /* Update search result font sizes */
-  cursor: pointer;
+.arrival-tab-content.active {
+  display: block;
 }
 
-.search-results div:hover {
-  background-color: #f8f9fa;
-}
-
-/* Update the button sizes and spacing */
-.edit-btn, .delete-btn, .team-button {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  width: auto;
-  margin: 2px; /* Add this */
-}
-
-/* Add max-width to the actions column */
-th:last-child, td:last-child {
-  max-width: 200px; /* Add this */
-  width: 200px; /* Add this */
-}
-
-/* Add responsive styles for smaller screens */
-@media (max-width: 768px) {
-  .edit-delete-buttons {
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-  
-  th:last-child, td:last-child {
-    max-width: 150px;
-    width: 150px;
-  }
+.priority-indicator {
+  font-size: 0.6rem;
+  background-color: var(--accent-color);
+  color: black;
+  padding: 1px 4px;
+  border-radius: 2px;
+  margin-bottom: 2px;
+  display: inline-block;
 }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -507,281 +566,316 @@ th:last-child, td:last-child {
 
 <div class="container">
   <div id="main-section">
-    <div class="card fade-in">
-      <h2>Data do Racha: <span id="game-date"></span></h2>
+    <div class="tab-navigation">
+      <button class="tab-button active" data-tab="cadastro">JOGADORES</button>
+      <button class="tab-button" data-tab="ordem-chegada">LISTA DE CHEGADA</button>
+      <button class="tab-button" data-tab="times">TIMES</button>
+      <button class="tab-button" data-tab="regulamento">REGULAMENTO</button>
     </div>
-    <div class="card fade-in">
-      <h2>Cadastro do Jogador</h2>
-      <div class="button-group" style="margin-bottom: 1rem;">
-        <button id="import-players" class="secondary-btn">Importar Jogadores</button>
-        <button id="export-players" class="secondary-btn">Exportar Jogadores</button>
-      </div>
-      <form id="player-form">
-        <div class="form-group">
-          <label for="player-search">Buscar jogador cadastrado:</label>
-          <div class="search-container">
-            <input type="text" id="player-search" placeholder="Digite para buscar jogador...">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            <div class="search-results" id="search-results"></div>
-          </div>
-        </div>
-        <div class="form-row">
+
+    <div id="tab-cadastro" class="tab-content active">
+      <div class="card fade-in">
+        <h2>Cadastro do Jogador</h2>
+        <form id="player-form">
           <div class="form-group">
-            <label for="player-name" class="required-field goalkeeper-required">Nome do Jogador:</label>
+            <label for="player-name" class="required-field">Nome do Jogador:</label>
             <input type="text" id="player-name" required>
           </div>
-          <div class="form-group">
-            <label for="player-position" class="required-field goalkeeper-required">Posição:</label>
-            <select id="player-position" required>
-              <option value="">Selecione</option>
-              <option value="Atacante">Atacante</option>
-              <option value="Meia">Meia</option>
-              <option value="Volante">Volante</option>
-              <option value="Zagueiro">Zagueiro</option>
-              <option value="Lateral">Lateral</option>
-              <option value="Goleiro">Goleiro</option>
-            </select>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="player-position" class="required-field">Posição:</label>
+              <select id="player-position" required>
+                <option value="">Selecione</option>
+                <option value="Atacante">Atacante</option>
+                <option value="Meio-Campo">Meio-Campo</option>
+                <option value="Volante">Volante</option>
+                <option value="Zagueiro">Zagueiro</option>
+                <option value="Lateral">Lateral</option>
+                <option value="Goleiro">Goleiro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="player-type">Tipo:</label>
+              <select id="player-type">
+                <option value="">Selecione</option>
+                <option value="M">M</option>
+                <option value="D">D</option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="player-type" class="required-field">Tipo:</label>
-            <select id="player-type" required>
-              <option value="">Selecione</option>
-              <option value="Mensalista">Mensalista</option>
-              <option value="Diarista">Diarista</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="arrival-time" class="required-field goalkeeper-required">Chegada:</label>
-            <input type="time" id="arrival-time" required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="amount-raised">Valor (R$):</label>
-            <input type="number" id="amount-raised" step="0.01">
-          </div>
-          <div class="form-group">
-            <label for="payment-method">Pagamento:</label>
-            <select id="payment-method">
-              <option value="">Selecione</option>
-              <option value="Dinheiro">Dinheiro</option>
-              <option value="Pix">Pix</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="payment-status">Status de Pagamento:</label>
-            <select id="payment-status">
-              <option value="">Selecione</option>
-              <option value="Em Dias">Em Dias</option>
-              <option value="Devendo">Devendo</option>
-            </select>
-          </div>
-        </div>
-        <button type="submit">Cadastrar Jogador</button>
-      </form>
-    </div>
+          <button type="submit">Cadastrar Jogador</button>
+        </form>
 
-    <div class="card fade-in">
-      <h2>Lista de Ordem de Chegada</h2>
-      <div class="form-group">
-        <label for="arrival-position-filter">Filtrar por Posição:</label>
-        <select id="arrival-position-filter">
-          <option value="">Todas as Posições</option>
-          <option value="Atacante">Atacante</option>
-          <option value="Meia">Meia</option>
-          <option value="Volante">Volante</option>
-          <option value="Zagueiro">Zagueiro</option>
-          <option value="Lateral">Lateral</option>
-        </select>
-      </div>
-      <table id="arrival-list">
-        <thead>
-          <tr>
-            <th>Nº</th>
-            <th>Nome</th>
-            <th>Posição</th>
-            <th>Tipo</th>
-            <th>Chegada</th>
-            <th>Valor (R$)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card fade-in">
-      <h2>Lista de Goleiros</h2>
-      <table id="goalkeeper-list">
-        <thead>
-          <tr>
-            <th>Nº</th>
-            <th>Nome</th>
-            <th>Posição</th>
-            <th>Chegada</th>
-            <th>Valor (R$)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card fade-in">
-      <h2>Jogadores do Segundo Tempo</h2>
-      <div class="form-group">
-        <label for="substitute-position-filter">Filtrar por Posição:</label>
-        <select id="substitute-position-filter">
-          <option value="">Todas as Posições</option>
-          <option value="Atacante">Atacante</option>
-          <option value="Meia">Meia</option>
-          <option value="Volante">Volante</option>
-          <option value="Zagueiro">Zagueiro</option>
-          <option value="Lateral">Lateral</option>
-        </select>
-      </div>
-      <table id="substitute-list">
-        <thead>
-          <tr>
-            <th>Nº</th>
-            <th>Nome</th>
-            <th>Posição</th>
-            <th>Tipo</th>
-            <th>Chegada</th>
-            <th>Valor (R$)</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <div class="card fade-in">
-      <div class="time-navigation">
-        <button id="prev-time" class="nav-arrow">&lt;</button>
-        <h2><span id="current-time">Times Primeiro Tempo</span></h2>
-        <button id="next-time" class="nav-arrow">&gt;</button>
-      </div>
-      <div id="times-primeiro-tempo">
-        <div class="team-lists">
-          <div class="team-list" id="blue-team">
-            <h3>Time Azul</h3>
-            <ul></ul>
-          </div>
-          <div class="team-list" id="orange-team">
-            <h3>Time Laranja</h3>  
-            <ul></ul>
+        <div class="search-container">
+          <label for="player-search">Buscar Jogador:</label>
+          <div style="position: relative;">
+            <input type="text" id="player-search" class="search-input" placeholder="Digite o nome do jogador para editar">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+            </svg>
           </div>
         </div>
-      </div>
-      <div id="times-segundo-tempo" style="display: none;">
-        <div class="team-lists">
-          <div class="team-list" id="blue-team-second">
-            <h3>Time Azul (2º Tempo)</h3>
-            <ul></ul>
-          </div>
-          <div class="team-list" id="orange-team-second">
-            <h3>Time Laranja (2º Tempo)</h3>
-            <ul></ul>
+
+        <div class="import-export-buttons" style="display: flex; gap: 1rem; margin-top: 1rem;">
+          <button id="export-players" type="button" style="flex: 1; background-color: #2196F3;">EXPORTAR</button>
+          <button id="import-players" type="button" style="flex: 1; background-color: #4CAF50;">IMPORTAR</button>
+          <button id="clear-all-data" style="flex: 1; background-color: #f44336;">LIMPAR TUDO</button>
+          <input type="file" id="import-file" accept=".xlsx" style="display: none;">
+        </div>
+
+        <div class="registered-players" style="margin-top: 1.5rem;">
+          <h3>Jogadores Cadastrados</h3>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Posição</th>
+                  <th>Tipo</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="registered-players-list">
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card fade-in">
-      <h2>Registro de Gols e Cartões</h2>
-      <form id="goal-card-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="player-goal-card">Nome do Jogador:</label>
-            <select id="player-goal-card" required>
-              <option value="">Selecione o Jogador</option>
-            </select>
+    <div id="tab-ordem-chegada" class="tab-content">
+      <div class="card fade-in">
+        <div class="search-container">
+          <label for="arrival-player-search">Buscar Jogador:</label>
+          <div style="position: relative;">
+            <input type="text" id="arrival-player-search" class="search-input" placeholder="Digite o nome do jogador para adicionar à lista">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
+            </svg>
           </div>
-          <div class="form-group">
-            <label for="goals-scored">Gols:</label>
-            <input type="number" id="goals-scored" required>
-          </div>
+          <div id="arrival-search-results" style="margin-top: 0.5rem;"></div>
         </div>
-        <div class="form-group">
-          <label for="card-type">Tipo de Cartão:</label>
-          <select id="card-type">
-            <option value="">Selecione o Tipo de Cartão</option>
-            <option value="Amarelo">Cartão Amarelo</option>
-            <option value="Azul">Cartão Azul</option>
-            <option value="Vermelho">Cartão Vermelho</option>
-          </select>
-        </div>
-        <button type="submit">Registrar</button>
-      </form>
-      <table id="goal-card-list">
-        <thead>
-          <tr>
-            <th style="background-color: #007bff; color: white;">Time Azul</th>
-            <th style="background-color: #fd7e14; color: white;">Time Laranja</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
 
-    <div class="card fade-in">
-      <h2>Registro de Entradas e Despesas</h2>
-      <form id="expense-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="transaction-type">Tipo:</label>
-            <select id="transaction-type" required>
-              <option value="">Selecione</option>
-              <option value="entrada">Entrada</option>
-              <option value="despesa">Despesa</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="expense-description">Descrição:</label>
-            <input type="text" id="expense-description" required>
-          </div>
-          <div class="form-group">
-            <label for="expense-value">Valor:</label>
-            <input type="number" id="expense-value" step="0.01" required>
+        <div class="arrival-tab-navigation" style="display: flex; gap: 0.25rem; margin-bottom: 1rem;">
+          <button class="arrival-tab-button active" data-arrival-tab="first-half">Primeiro Tempo (1-20)</button>
+          <button class="arrival-tab-button" data-arrival-tab="goalkeepers">Goleiros 1/4</button>
+          <button class="arrival-tab-button" data-arrival-tab="second-half">Segundo Tempo (21-40)</button>
+        </div>
+
+        <div id="arrival-tab-first-half" class="arrival-tab-content active">
+          <div class="card fade-in">
+            <h2>Primeiro Tempo (1-20)</h2>
+            <div class="form-group">
+              <label for="arrival-position-filter">Filtrar por Posição:</label>
+              <select id="arrival-position-filter">
+                <option value="">Todas as Posições</option>
+                <option value="Atacante">Atacante</option>
+                <option value="Meio-Campo">Meio-Campo</option>
+                <option value="Volante">Volante</option>
+                <option value="Zagueiro">Zagueiro</option>
+                <option value="Lateral">Lateral</option>
+              </select>
+            </div>
+            <div class="table-responsive">
+              <table id="arrival-list">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Nome</th>
+                    <th>Posição</th>
+                    <th>Tipo</th>
+                    <th>Chegada</th>
+                    <th>Valor (R$)</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <button type="submit">Cadastrar</button>
-      </form>
-      <table id="expense-list">
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
 
-    <div class="card fade-in">
-      <h2>Totais</h2>
-      <div class="totals">
-        <p>Entrada: R$ <span id="total-raised">0.00</span></p>
-        <p>Saída: R$ <span id="total-expenses">0.00</span></p>
-        <p>Total: R$ <span id="final-total">0.00</span></p>
+        <div id="arrival-tab-goalkeepers" class="arrival-tab-content">
+          <div class="card fade-in">
+            <h2>Goleiros 1/4</h2>
+            <div class="table-responsive">
+              <table id="goalkeeper-list">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Nome</th>
+                    <th>Posição</th>
+                    <th>Chegada</th>
+                    <th>Valor (R$)</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div id="arrival-tab-second-half" class="arrival-tab-content">
+          <div class="card fade-in">
+            <h2>Segundo Tempo (21-40)</h2>
+            <div class="form-group">
+              <label for="substitute-position-filter">Filtrar por Posição:</label>
+              <select id="substitute-position-filter">
+                <option value="">Todas as Posições</option>
+                <option value="Atacante">Atacante</option>
+                <option value="Meio-Campo">Meio-Campo</option>
+                <option value="Volante">Volante</option>
+                <option value="Zagueiro">Zagueiro</option>
+                <option value="Lateral">Lateral</option>
+              </select>
+            </div>
+            <div class="table-responsive">
+              <table id="substitute-list">
+                <thead>
+                  <tr>
+                    <th>Nº</th>
+                    <th>Nome</th>
+                    <th>Posição</th>
+                    <th>Tipo</th>
+                    <th>Chegada</th>
+                    <th>Valor (R$)</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="card fade-in">
-      <button id="generate-report">Gerar Relatório</button>
-      <button id="print-page" class="print-btn">Imprimir</button>
-      <button id="clear-all-data" class="clear-btn">Limpar Todos os Dados</button>
+    <div id="tab-times" class="tab-content">
+      <div class="card fade-in">
+        <h2>Times Primeiro Tempo</h2>
+        <div id="times-primeiro-tempo">
+          <div class="team-lists">
+            <div class="team-list" id="blue-team">
+              <h3>Time Azul</h3>
+              <ul></ul>
+            </div>
+            <div class="team-list" id="orange-team">
+              <h3>Time Laranja</h3>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+        
+        <button onclick="generateSecondHalfTeams()" 
+                style="margin-top: 1rem; background-color: #4CAF50;">
+          GERAR TIME SEGUNDO TEMPO
+        </button>
+
+        <h2 style="margin-top: 2rem;">Times Segundo Tempo</h2>
+        <div id="times-segundo-tempo">
+          <div class="team-lists">
+            <div class="team-list" id="blue-team-second">
+              <h3>Time Azul (2º Tempo)</h3>
+              <ul></ul>
+            </div>
+            <div class="team-list" id="orange-team-second">
+              <h3>Time Laranja (2º Tempo)</h3>
+              <ul></ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <div id="tab-regulamento" class="tab-content">
+      <div class="card fade-in">
+        <h2>Regulamento do Racha Pelada União</h2>
+        
+        <div class="rules-section">
+          <h3>1. Regras Gerais</h3>
+          <ul>
+            <li>Os times são formados por 2 participantes que estejam na ordem de entrada e em dia com o racha</li>
+            <li>A escolha inicial dos times é feita por cara ou coroa</li>
+            <li>Os primeiros 20 atletas que chegarem ao campo e estiverem em dia começarão jogando</li>
+            <li>É obrigatório que o atleta, ao chegar, procure o responsável pela lista para quitar débitos e validar presença</li>
+          </ul>
+
+          <h3>2. Reservas e Substituições</h3>
+          <ul>
+            <li>Atletas que jogarem no primeiro tempo podem ser substituídos no segundo tempo, dependendo do número de reservas</li>
+            <li>Time que estiver perdendo no fim do primeiro tempo escolhe primeiro reserva</li>
+            <li>Em caso de empate, decisão por cara ou coroa</li>
+            <li>Atleta não pode jogar em time diferente do que começou</li>
+          </ul>
+
+          <h3>3. Requisitos para Jogar</h3>
+          <ul>
+            <li>Estar em dia (débito máximo de R$10,00)</li>
+            <li>Respeitar a ordem de chegada</li>
+            <li>Estar com colete padronizado pelo racha</li>
+            <li>Não estar com sintomas de embriaguez</li>
+            <li>Não usar chuteiras de trava ou estar descalço</li>
+          </ul>
+
+          <h3>4. Mensalistas e Diaristas</h3>
+          <ul>
+            <li>D: R$10,00 por jogo</li>
+            <li>M: R$40,00 mensais</li>
+            <li>M pagam no primeiro domingo de cada mês</li>
+            <li>Opção de pagar R$10,00 no primeiro domingo, quitando o restante no domingo seguinte</li>
+            <li>M têm prioridade até 6:30 da manhã</li>
+            <li>Após 6:00, M entram na ordem normal com D</li>
+          </ul>
+
+          <h3>5. Cartões e Punições</h3>
+          <ul>
+            <li>Cartão Amarelo: R$3,00</li>
+            <li>Cartão Azul: R$4,00 + 5 minutos fora</li>
+            <li>Cartão Vermelho: R$5,00 + exclusão do jogo (time pode substituir após 5 minutos)</li>
+            <li>Cartões devem ser pagos no domingo seguinte</li>
+            <li>Proibido qualquer tipo de agressão, violência ou ameaças</li>
+            <li>Casos de violência serão levados ao Conselho Gestor</li>
+            <li>Punições podem variar de suspensão até desligamento do racha</li>
+          </ul>
+
+          <h3>6. Goleiros</h3>
+          <ul>
+            <li>Opções de remuneração:
+              <ul>
+                <li>R$10,00 por tempo jogado</li>
+                <li>Participação na confraternização (com direito a acompanhantes e filhos menores de 12 anos)</li>
+              </ul>
+            </li>
+            <li>Necessário 70% de presença para benefícios</li>
+            <li>Goleiros não são isentos de multas por cartões</li>
+          </ul>
+
+          <h3>7. Convidados</h3>
+          <ul>
+            <li>Permitido mediante pagamento da diária</li>
+            <li>Jogam após mensalistas e diaristas na ordem</li>
+            <li>Cartões do convidado são responsabilidade do atleta que o convidou</li>
+            <li>A partir do segundo racha, podem entrar de saída se estiverem em dia</li>
+            <li>Valor do colete será convertido em crédito após 3 meses sem falta</li>
+          </ul>
+
+          <h3>8. Eventos e Confraternização</h3>
+          <ul>
+            <li>Mínimo de 3 meses de participação para eventos</li>
+            <li>Atletas afastados por contusões comprovadas mantêm direitos</li>
+            <li>Para confraternização: mínimo 70% de presença nas mensalidades</li>
+            <li>Possibilidade de complementar valor para atingir percentual necessário</li>
+            <li> direito a levar esposa/namorada e filhos menores de 12 anos (goleiros)</li>
+          </ul>
+
+          <p style="margin-top: 2rem; font-style: italic; text-align: center;">
+            Casos não previstos neste regulamento serão decididos por votação e posteriormente incluídos.
+          </p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -792,10 +886,7 @@ th:last-child, td:last-child {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 let currentTime = 'primeiro'; 
-let totalRaised = 0;
-let totalExpenses = 0;
 let players = [];
-let expenses = [];
 
 let firstHalfTeams = {
   blue: [],
@@ -807,802 +898,810 @@ let secondHalfTeams = {
   orange: []
 };
 
-const gameDate = new Date().toLocaleDateString('pt-BR');
-document.getElementById('game-date').textContent = gameDate;
+document.addEventListener('DOMContentLoaded', function() {
+  const tabs = document.querySelectorAll('.tab-button');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      const tabContent = document.getElementById(`tab-${tab.dataset.tab}`);
+      if (tabContent) {
+        tabContent.classList.add('active');
+      }
+    });
+  });
 
-function savePlayerData() {
-  const playerData = players.map(player => ({
-    name: player.name,
-    position: player.position,
-    type: player.type
-  }));
-  localStorage.setItem('persistentPlayerData', JSON.stringify(playerData));
-}
+  const arrivalTabs = document.querySelectorAll('.arrival-tab-button');
+  arrivalTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.arrival-tab-button').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.arrival-tab-content').forEach(c => c.classList.remove('active'));
+      
+      tab.classList.add('active');
+      const tabContent = document.getElementById(`arrival-tab-${tab.dataset.arrivalTab}`);
+      if (tabContent) {
+        tabContent.classList.add('active');
+      }
+    });
+  });
 
-function loadPlayerData() {
-  const storedData = localStorage.getItem('persistentPlayerData');
-  if (storedData) {
-    const data = JSON.parse(storedData);
-    return data.sort((a, b) => a.name.localeCompare(b.name));
-  }
-  return [];
-}
+  setupPlayerSearch();
 
-function saveTeamsData() {
-  localStorage.setItem('firstHalfTeams', JSON.stringify(firstHalfTeams));
-  localStorage.setItem('secondHalfTeams', JSON.stringify(secondHalfTeams));
-}
-
-function loadTeamsData() {
-  const storedFirstHalfTeams = localStorage.getItem('firstHalfTeams');
-  const storedSecondHalfTeams = localStorage.getItem('secondHalfTeams');
-
-  if (storedFirstHalfTeams) {
-    firstHalfTeams = JSON.parse(storedFirstHalfTeams);
-  }
-
-  if (storedSecondHalfTeams) {
-    secondHalfTeams = JSON.parse(storedSecondHalfTeams);
+  if (document.getElementById('arrival-player-search')) {
+    document.getElementById('arrival-player-search').addEventListener('input', handleArrivalSearch);
   }
 
-  updateTeamList('blue', true);
-  updateTeamList('orange', true);
-  updateTeamList('blue', false);
-  updateTeamList('orange', false);
-}
+  if (document.getElementById('player-form')) {
+    document.getElementById('player-form').addEventListener('submit', handlePlayerFormSubmit);
+  }
 
-function updateTotals() {
-  const totalRaisedSpan = document.getElementById('total-raised');
-  const totalExpensesSpan = document.getElementById('total-expenses');
-  const finalTotalSpan = document.getElementById('final-total');
+  if (document.getElementById('export-players')) {
+    document.getElementById('export-players').addEventListener('click', exportPlayersToCSV);
+  }
 
-  totalRaisedSpan.textContent = totalRaised.toFixed(2);
-  totalExpensesSpan.textContent = totalExpenses.toFixed(2);
-  finalTotalSpan.textContent = (totalRaised - totalExpenses).toFixed(2);
-}
-
-function saveData() {
-  localStorage.setItem('players', JSON.stringify(players));
-  localStorage.setItem('expenses', JSON.stringify(expenses));
-  localStorage.setItem('totalRaised', totalRaised);
-  localStorage.setItem('totalExpenses', totalExpenses);
-}
-
-function loadData() {
-  const storedPlayers = localStorage.getItem('players');
-  const storedExpenses = localStorage.getItem('expenses');
-  const storedTotalRaised = localStorage.getItem('totalRaised');
-  const storedTotalExpenses = localStorage.getItem('totalExpenses');
-
-  if (storedPlayers) {
-    players = JSON.parse(storedPlayers);
-    players.forEach(player => {
-      player.arrivalDate = new Date(`2000-01-01T${player.arrivalTime}`);
+  if (document.getElementById('import-players')) {
+    document.getElementById('import-players').addEventListener('click', () => {
+      document.getElementById('import-file')?.click();
     });
   }
-  if (storedExpenses) expenses = JSON.parse(storedExpenses);
-  if (storedTotalRaised) totalRaised = parseFloat(storedTotalRaised);
-  if (storedTotalExpenses) totalExpenses = parseFloat(storedTotalExpenses);
 
-  loadTeamsData();
+  if (document.getElementById('import-file')) {
+    document.getElementById('import-file').addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        importPlayersFromCSV(file);
+      }
+    });
+  }
 
-  updateSavedPlayersSelect();
-  updatePlayerLists();
-  updateTotals();
-  updatePlayerSelect();
-  updateGoalCardList();
+  if (document.getElementById('arrival-position-filter')) {
+    document.getElementById('arrival-position-filter').addEventListener('change', updatePlayerLists);
+  }
 
-  updateTeamList('blue', true);
-  updateTeamList('orange', true);
-  updateTeamList('blue', false);
-  updateTeamList('orange', false);
-}
+  if (document.getElementById('substitute-position-filter')) {
+    document.getElementById('substitute-position-filter').addEventListener('change', updatePlayerLists);
+  }
 
-function updateExpenseList() {
-  const expenseList = document.getElementById('expense-list').getElementsByTagName('tbody')[0];
-  expenseList.innerHTML = '';
+  if (document.getElementById('clear-all-data')) {
+    document.getElementById('clear-all-data').addEventListener('click', clearAllData);
+  }
+
+  loadData();
+  updateTeamLists();
+});
+
+function setupPlayerSearch() {
+  const searchInput = document.getElementById('player-search');
   
-  expenses.forEach((expense, index) => {
-    const row = expenseList.insertRow();
-    row.innerHTML = `
-      <td>${expense.type === 'entrada' ? 'Entrada' : 'Despesa'}</td>
-      <td>${expense.description}</td>
-      <td>R$ ${expense.value.toFixed(2)}</td>
-      <td>
-        <div class="edit-delete-buttons">
-          <button class="edit-btn" onclick="editExpense(${index})">Editar</button>
-          <button class="delete-btn" onclick="deleteExpense(${index})">Excluir</button>
-        </div>
-      </td>
-    `;
+  if (!searchInput) return;
+  
+  searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    updateRegisteredPlayersList(searchTerm);
   });
 }
 
-loadData();
+function handleArrivalSearch(e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const resultsDiv = document.getElementById('arrival-search-results');
+  
+  if (!searchTerm) {
+    resultsDiv.innerHTML = '';
+    return;
+  }
+  
+  const searchResults = players
+    .filter(p => !p.arrivalTime) 
+    .filter(p => p.name.toLowerCase().includes(searchTerm));
 
-document.getElementById('arrival-position-filter').addEventListener('change', updatePlayerLists);
-document.getElementById('substitute-position-filter').addEventListener('change', updatePlayerLists);
+  if (searchResults.length === 0) {
+    resultsDiv.innerHTML = '<p style="color: #666;">Nenhum jogador encontrado</p>';
+    return;
+  }
 
-document.getElementById('clear-all-data').addEventListener('click', function() {
-  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-    players = [];
-    expenses = [];
-    totalRaised = 0;
-    totalExpenses = 0;
+  resultsDiv.innerHTML = searchResults
+    .map(player => {
+      const now = new Date();
+      const timeString = now.getHours().toString().padStart(2, '0') + 
+                        ':' + now.getMinutes().toString().padStart(2, '0');
+      
+      return `
+        <div class="search-result-item" style="padding: 0.75rem; border-bottom: 1px solid #eee;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div>
+              <strong>${player.name}</strong> - ${player.position} (${player.type})
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 0.8rem; color: #666;">Valor R$:</label>
+                <input type="number" 
+                       id="amount-${player.name}" 
+                       style="width: 100%; padding: 0.25rem;">
+              </div>
+              <div style="flex: 1;">
+                <label style="display: block; font-size: 0.8rem; color: #666;">Horário:</label>
+                <input type="time" 
+                       id="time-${player.name}" 
+                       value="${timeString}" 
+                       style="width: 100%; padding: 0.25rem;">
+              </div>
+              <button onclick="addPlayerToArrival('${player.name}')" 
+                      style="background-color: #2196F3; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    })
+    .join('');
+}
+
+function addPlayerToArrival(playerName) {
+  const player = players.find(p => p.name === playerName);
+  if (player) {
+    const currentGoalkeepers = players.filter(p => 
+      p.position === 'Goleiro' && p.arrivalTime
+    ).length;
     
-    firstHalfTeams = {
-      blue: [],
-      orange: []
-    };
+    const currentNonGoalkeepers = players.filter(p => 
+      p.position !== 'Goleiro' && p.arrivalTime
+    ).length;
+
+    if (player.position === 'Goleiro' && currentGoalkeepers >= 4) {
+      alert('Limite de 4 goleiros já foi atingido!');
+      return;
+    } else if (currentNonGoalkeepers >= 40) {
+      alert('Limite de 40 jogadores de linha já foi atingido!');
+      return;
+    }
+
+    const amountInput = document.getElementById(`amount-${player.name}`);
+    const timeInput = document.getElementById(`time-${player.name}`);
     
-    secondHalfTeams = {
-      blue: [],
-      orange: []
-    };
+    const amount = amountInput.value ? parseFloat(amountInput.value) : undefined;
+    const timeString = timeInput.value;
+
+    player.arrivalTime = timeString;
+    if (amount !== undefined) {
+      player.amount = amount;
+    }
+    
+    document.getElementById('arrival-player-search').value = '';
+    document.getElementById('arrival-search-results').innerHTML = '';
     
     updatePlayerLists();
-    updateExpenseList();
-    updateTotals();
-    updateGoalCardList();
-    updateTeamList('blue', true);
-    updateTeamList('orange', true);
-    updateTeamList('blue', false);
-    updateTeamList('orange', false);
-    
-    localStorage.removeItem('players');
-    localStorage.removeItem('expenses');
-    localStorage.removeItem('totalRaised');
-    localStorage.removeItem('totalExpenses');
-    localStorage.removeItem('firstHalfTeams');
-    localStorage.removeItem('secondHalfTeams');
-    
-    document.getElementById('player-form').reset();
-    document.getElementById('goal-card-form').reset();
-    document.getElementById('expense-form').reset();
-    
-    alert('Todos os dados foram limpos com sucesso!');
+    saveData();
   }
-});
-
-document.getElementById('prev-time').addEventListener('click', function() {
-  currentTime = 'primeiro';
-  document.getElementById('current-time').textContent = 'Times Primeiro Tempo';
-  document.getElementById('times-primeiro-tempo').style.display = 'block';
-  document.getElementById('times-segundo-tempo').style.display = 'none';
-  
-  updateTeamList('blue', true);
-  updateTeamList('orange', true);
-});
-
-document.getElementById('next-time').addEventListener('click', function() {
-  currentTime = 'segundo';
-  document.getElementById('current-time').textContent = 'Times Segundo Tempo';
-  document.getElementById('times-primeiro-tempo').style.display = 'none';
-  document.getElementById('times-segundo-tempo').style.display = 'block';
-
-  if (secondHalfTeams.blue.length === 0 && secondHalfTeams.orange.length === 0) {
-    secondHalfTeams.blue = JSON.parse(JSON.stringify(firstHalfTeams.blue));
-    secondHalfTeams.orange = JSON.parse(JSON.stringify(firstHalfTeams.orange));
-  }
-  
-  updateTeamList('blue', false);
-  updateTeamList('orange', false);
-});
-
-function assignToTeam(player, team) {
-  const isPrimeiroTempo = currentTime === 'primeiro';
-  const teamList = document.getElementById(`${team}-team${isPrimeiroTempo ? '' : '-second'}`).getElementsByTagName('ul')[0];
-  const otherTeam = team === 'blue' ? 'orange' : 'blue';
-  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
-
-  const existingInOtherTeam = targetTeams[otherTeam].findIndex(p => p.name === player.name);
-  if (existingInOtherTeam !== -1) {
-    targetTeams[otherTeam].splice(existingInOtherTeam, 1);
-    updateTeamList(otherTeam, isPrimeiroTempo);
-  }
-
-  if (player.position === 'Goleiro') {
-    if (targetTeams[team].some(p => p.position === 'Goleiro')) {
-      alert('Este time já tem um goleiro.');
-      return;
-    }
-  } else {
-    const fieldPlayers = targetTeams[team].filter(p => p.position !== 'Goleiro').length;
-    if (fieldPlayers >= 10) {
-      alert('Este time já está completo para jogadores de linha.');
-      return;
-    }
-  }
-
-  if (!isPrimeiroTempo) {
-    const substituteList = Array.from(document.getElementById('substitute-list').getElementsByTagName('tr'))
-      .slice(1)
-      .map(row => row.cells[1].textContent);
-
-    const arrivalList = Array.from(document.getElementById('arrival-list').getElementsByTagName('tr'))
-      .slice(1)
-      .map(row => row.cells[1].textContent);
-
-    const firstHalfPlayers = targetTeams[team]
-      .filter(p => p.position !== 'Goleiro')
-      .sort((a, b) => {
-        return arrivalList.indexOf(b.name) - arrivalList.indexOf(a.name);
-      });
-
-    if (substituteList.length > 0 && !targetTeams[team].some(p => p.name === player.name)) {
-      if (firstHalfPlayers.length >= 10) {
-        const playerToRemove = firstHalfPlayers[firstHalfPlayers.length - 1];
-        const removeIndex = targetTeams[team].findIndex(p => p.name === playerToRemove.name);
-        if (removeIndex !== -1) {
-          targetTeams[team].splice(removeIndex, 1);
-        }
-      }
-    }
-  }
-
-  if (!targetTeams[team].some(p => p.name === player.name)) {
-    targetTeams[team].push(player);
-  }
-
-  updateTeamList(team, isPrimeiroTempo);
-  updatePlayerRowColor(player, team);
-  saveTeamsData();
 }
 
-function updatePlayerLists() {
-  const arrivalList = document.getElementById('arrival-list').getElementsByTagName('tbody')[0];
-  const goalkeeperList = document.getElementById('goalkeeper-list').getElementsByTagName('tbody')[0];
-  const substituteList = document.getElementById('substitute-list').getElementsByTagName('tbody')[0];
-
-  const arrivalPositionFilter = document.getElementById('arrival-position-filter').value;
-  const substitutePositionFilter = document.getElementById('substitute-position-filter').value;
-
-  arrivalList.innerHTML = '';
-  goalkeeperList.innerHTML = '';
-  substituteList.innerHTML = '';
-
-  const sortedPlayers = [...players].sort((a, b) => {
-    const cutoffTime = new Date('2000-01-01T06:30:00');
-    const aIsMensalista = a.type === 'Mensalista' && a.arrivalDate <= cutoffTime;
-    const bIsMensalista = b.type === 'Mensalista' && b.arrivalDate <= cutoffTime;
-
-    if (aIsMensalista && !bIsMensalista) {
-      return -1;
-    } else if (!aIsMensalista && bIsMensalista) {
-      return 1;
-    } else {
-      return a.arrivalDate - b.arrivalDate;
-    }
-  });
-
-  const goalkeepers = sortedPlayers.filter(p => p.position === 'Goleiro');
-  let goalkeeperCount = 0;
-  goalkeepers.forEach((player) => {
-    addPlayerToList(player, goalkeeperList, goalkeeperCount + 1);
-    goalkeeperCount++;
-  });
-
-  let arrivalCount = 0;
-  let substituteCount = 0;
-
-  sortedPlayers
-    .filter(p => p.position !== 'Goleiro')
-    .forEach((player, index) => {
-      const matchesArrivalFilter = !arrivalPositionFilter || player.position === arrivalPositionFilter;
-      const matchesSubstituteFilter = !substitutePositionFilter || player.position === substitutePositionFilter;
-
-      if (arrivalCount < 20 && matchesArrivalFilter) {
-        addPlayerToList(player, arrivalList, arrivalCount + 1);
-        arrivalCount++;
-      } else if (matchesSubstituteFilter) {
-        addPlayerToList(player, substituteList, substituteCount + 1, 21);
-        substituteCount++;
-      }
-    });
-}
-
-function updateSavedPlayersSelect() {
-  const searchInput = document.getElementById('player-search');
-  const searchResults = document.getElementById('search-results');
-  const persistentData = loadPlayerData();
-
-  searchInput.addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    const filteredPlayers = persistentData.filter(player => 
-      player.name.toLowerCase().includes(searchTerm) ||
-      player.position.toLowerCase().includes(searchTerm) ||
-      player.type.toLowerCase().includes(searchTerm)
-    );
-
-    searchResults.innerHTML = '';
-    searchResults.style.display = filteredPlayers.length && searchTerm ? 'block' : 'none';
-
-    filteredPlayers.forEach(player => {
-      const div = document.createElement('div');
-      div.textContent = `${player.name} - ${player.position} - ${player.type}`;
-      div.addEventListener('click', () => {
-        document.getElementById('player-name').value = player.name;
-        document.getElementById('player-position').value = player.position;
-        document.getElementById('player-type').value = player.type;
-        searchInput.value = '';
-        searchResults.style.display = 'none';
-      });
-      searchResults.appendChild(div);
-    });
-  });
-
-  document.addEventListener('click', function(e) {
-    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
-      searchResults.style.display = 'none';
-    }
-  });
-}
-
-document.getElementById('player-form').addEventListener('submit', function(e) {
+function handlePlayerFormSubmit(e) {
   e.preventDefault();
   const name = document.getElementById('player-name').value;
   const position = document.getElementById('player-position').value;
   const type = document.getElementById('player-type').value;
-  const arrivalTime = document.getElementById('arrival-time').value;
-  const arrivalDate = new Date(`2000-01-01T${arrivalTime}`);
-  const amount = parseFloat(document.getElementById('amount-raised').value) || 0;
-  const paymentMethod = document.getElementById('payment-method').value;
-  const paymentStatus = document.getElementById('payment-status').value;
 
-  if (position === 'Goleiro') {
-    if (!name || !position || !arrivalTime) {
-      alert('Para goleiros, Nome, Posição e Chegada são obrigatórios.');
-      return;
-    }
-  } else {
-    if (!name || !position || !type || !arrivalTime) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-  }
-
-  if (players.some(p => p.name === name)) {
-    alert('Este jogador já está cadastrado. Não é permitido cadastrar o mesmo jogador duas vezes.');
+  if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+    alert('Já existe um jogador cadastrado com este nome!');
     return;
   }
 
-  const player = { 
-    name, 
-    position, 
-    type, 
-    arrivalTime, 
-    arrivalDate, 
-    amount, 
-    paymentMethod, 
-    paymentStatus 
-  };
-  players.push(player);
-
-  if (paymentStatus === 'Em Dias') {
-    totalRaised += amount;
-  }
-  updateTotals();
-  updatePlayerLists();
-  updateSavedPlayersSelect();
-  updatePlayerSelect();
-  savePlayerData();
-  saveData();
-  this.reset();
-  saveTeamsData();
-});
-
-document.getElementById('player-position').addEventListener('change', function() {
-  const isGoalkeeper = this.value === 'Goleiro';
-  document.getElementById('player-type').disabled = isGoalkeeper;
-  document.getElementById('amount-raised').disabled = isGoalkeeper;
-  document.getElementById('payment-method').disabled = isGoalkeeper;
-  document.getElementById('payment-status').disabled = isGoalkeeper;
-});
-
-function addPlayerToList(player, tableBody, index, startIndex = 1) {
-  const row = tableBody.insertRow();
-
-  if (player.position === 'Goleiro') {
-    row.innerHTML = `
-      <td>${index}</td>
-      <td>${player.name}</td>
-      <td>${player.position}</td>
-      <td>${player.arrivalTime}</td>
-      <td>R$ ${player.amount ? player.amount.toFixed(2) : '0.00'}</td>
-    `;
+  if (position === 'Goleiro' || type) {
+    players.push({ name, position, type });
+    saveData();
+    updateRegisteredPlayersList();
+    e.target.reset();
   } else {
-    row.innerHTML = `
-      <td>${startIndex ? startIndex + index - 1 : index}</td>
-      <td>${player.name}</td>
-      <td>${player.position}</td>
-      <td>${player.type === 'Mensalista' ? 'M' : 'D'}</td>
-      <td>${player.arrivalTime}</td>
-      <td>R$ ${player.amount ? player.amount.toFixed(2) : '0.00'}</td>
-    `;
-  }
-
-  const actionsCell = row.insertCell();
-  const buttonsDiv = document.createElement('div');
-  buttonsDiv.classList.add('edit-delete-buttons');
-
-  const editButton = document.createElement('button');
-  editButton.textContent = 'Editar';
-  editButton.classList.add('edit-btn');
-  editButton.addEventListener('click', () => editPlayer(player, row));
-
-  const deleteButton = document.createElement('button');
-  deleteButton.textContent = 'Excluir';
-  deleteButton.classList.add('delete-btn');
-  deleteButton.addEventListener('click', () => deletePlayer(player, row));
-
-  buttonsDiv.appendChild(editButton);
-  buttonsDiv.appendChild(deleteButton);
-
-  if (tableBody.parentElement.id === 'arrival-list' || 
-      tableBody.parentElement.id === 'goalkeeper-list' || 
-      tableBody.parentElement.id === 'substitute-list') {
-    const blueTeamButton = document.createElement('button');
-    blueTeamButton.textContent = 'Azul';
-    blueTeamButton.classList.add('team-button', 'blue-team-btn');
-    blueTeamButton.addEventListener('click', () => assignToTeam(player, 'blue'));
-
-    const orangeTeamButton = document.createElement('button');
-    orangeTeamButton.textContent = 'Laranja';
-    orangeTeamButton.classList.add('team-button', 'orange-team-btn');
-    orangeTeamButton.addEventListener('click', () => assignToTeam(player, 'orange'));
-
-    buttonsDiv.appendChild(blueTeamButton);
-    buttonsDiv.appendChild(orangeTeamButton);
-  }
-
-  actionsCell.appendChild(buttonsDiv);
-}
-
-let blueTeamCount = 0;
-let orangeTeamCount = 0;
-let blueGoalkeeper = false;
-let orangeGoalkeeper = false;
-let blueTeamCountSecond = 0;
-let orangeTeamCountSecond = 0;
-let blueGoalkeeperSecond = false;
-let orangeGoalkeeperSecond = false;
-
-function updateTeamList(team, isPrimeiroTempo) {
-  const teamList = document.getElementById(`${team}-team${isPrimeiroTempo ? '' : '-second'}`).getElementsByTagName('ul')[0];
-  teamList.innerHTML = '';
-
-  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
-
-  const sortedPlayers = [...targetTeams[team]].sort((a, b) => {
-    const playerA = players.find(p => p.name === a.name);
-    const playerB = players.find(p => p.name === b.name);
-
-    if (playerA.position === 'Goleiro' && playerB.position !== 'Goleiro') return -1;
-    if (playerA.position !== 'Goleiro' && playerB.position === 'Goleiro') return 1;
-    
-    return targetTeams[team].indexOf(a) - targetTeams[team].indexOf(b);
-  });
-
-  sortedPlayers.forEach((player, index) => {
-    const li = document.createElement('li');
-    li.setAttribute('data-number', index + 1);
-
-    const playerData = players.find(p => p.name === player.name);
-    let playerNumber = '-';
-    
-    const arrivalList = Array.from(document.getElementById('arrival-list').getElementsByTagName('tr')).slice(1);
-    const substituteList = Array.from(document.getElementById('substitute-list').getElementsByTagName('tr')).slice(1);
-    
-    for(let i = 0; i < arrivalList.length; i++) {
-      if(arrivalList[i].cells[1].textContent === player.name) {
-        playerNumber = i + 1;
-        break;
-      }
-    }
-    
-    if(playerNumber === '-') {
-      for(let i = 0; i < substituteList.length; i++) {
-        if(substituteList[i].cells[1].textContent === player.name) {
-          playerNumber = i + 21;
-          break;
-        }
-      }
-    }
-
-    const playerSpan = document.createElement('span');
-    playerSpan.textContent = `${player.name} - ${playerData.position}`;
-    li.appendChild(playerSpan);
-
-    const numberCircle = document.createElement('span');
-    numberCircle.textContent = playerNumber;
-    numberCircle.style.backgroundColor = '#fff';
-    numberCircle.style.borderRadius = '50%';
-    numberCircle.style.padding = '2px 6px';
-    numberCircle.style.marginRight = '5px';
-    numberCircle.style.border = '1px solid #000';
-    numberCircle.style.fontSize = '12px';
-
-    const removeButton = document.createElement('button');
-    removeButton.textContent = 'X';
-    removeButton.classList.add('remove-btn');
-    removeButton.addEventListener('click', () => removeFromTeam(player, team, isPrimeiroTempo));
-
-    const buttonContainer = document.createElement('div');
-    buttonContainer.style.display = 'flex';
-    buttonContainer.style.alignItems = 'center';
-    buttonContainer.appendChild(numberCircle);
-    buttonContainer.appendChild(removeButton);
-    
-    li.appendChild(buttonContainer);
-    teamList.appendChild(li);
-  });
-}
-
-function removeFromTeam(player, team, isPrimeiroTempo) {
-  const targetTeams = isPrimeiroTempo ? firstHalfTeams : secondHalfTeams;
-  const index = targetTeams[team].findIndex(p => p.name === player.name);
-
-  if (index !== -1) {
-    targetTeams[team].splice(index, 1);
-    updateTeamList(team, isPrimeiroTempo);
-    updatePlayerRowColor(player, null);
-    saveTeamsData();
+    alert('Por favor preencha o tipo do jogador');
   }
 }
 
-function updatePlayerRowColor(player, team) {
-  const tables = [
-    document.getElementById('arrival-list'),
-    document.getElementById('goalkeeper-list'),
-    document.getElementById('substitute-list')
-  ];
-
-  tables.forEach(table => {
-    const rows = table.getElementsByTagName('tr');
-    for (let row of rows) {
-      if (row.cells[1] && row.cells[1].textContent === player.name) {
-        row.style.backgroundColor = team ? (team === 'blue' ? '#cce5ff' : '#ffeeba') : '';
-        break;
-      }
-    }
-  });
-}
-
-function editPlayer(player, row) {
-  document.getElementById('player-name').value = player.name;
-  document.getElementById('player-position').value = player.position;
-  document.getElementById('player-type').value = player.type;
-  document.getElementById('arrival-time').value = player.arrivalTime;
-  document.getElementById('amount-raised').value = player.amount || '';
-  document.getElementById('payment-method').value = player.paymentMethod || '';
-  document.getElementById('payment-status').value = player.paymentStatus || '';
-
-  const index = players.indexOf(player);
-  if (index > -1) {
-    players.splice(index, 1);
-    if (player.paymentStatus === 'Em Dias') {
-      totalRaised -= player.amount;
-    }
-    updateTotals();
-    updatePlayerLists();
-    updatePlayerSelect();
-  }
-
-  row.remove();
-  document.getElementById('player-name').focus();
-}
-
-function deletePlayer(player, row) {
-  if (confirm(`Tem certeza que deseja excluir ${player.name}?`)) {
-    const index = players.indexOf(player);
-    if (index > -1) {
-      players.splice(index, 1);
-      if (player.paymentStatus === 'Em Dias') {
-        totalRaised -= player.amount;
-      }
-      updateTotals();
-      updatePlayerLists();
-      updatePlayerSelect();
-      saveData();
-    }
-    row.remove();
-  }
-}
-
-function updatePlayerSelect() {
-  const select = document.getElementById('player-goal-card');
-  select.innerHTML = '<option value="">Selecione o Jogador</option>';
-  players.forEach(player => {
-    const option = document.createElement('option');
-    option.value = player.name;
-    option.textContent = player.name;
-    select.appendChild(option);
-  });
-}
-
-document.getElementById('goal-card-form').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const playerName = document.getElementById('player-goal-card').value;
-  const goals = parseInt(document.getElementById('goals-scored').value);
-  const cardType = document.getElementById('card-type').value;
-
-  if (!playerName || isNaN(goals)) {
-    alert('Por favor, selecione um jogador e preencha o número de gols corretamente.');
-    return;
-  }
-
+function removeFromArrivalList(playerName) {
   const player = players.find(p => p.name === playerName);
   if (player) {
-    let playerTeam = null;
-    let isPrimeiroTempo = false;
+    delete player.arrivalTime;
+    delete player.amount;
+    saveData();
+    updatePlayerLists();
+  }
+}
 
-    if (firstHalfTeams.blue.find(p => p.name === playerName)) {
-      playerTeam = 'blue';
-      isPrimeiroTempo = true;
-    } else if (firstHalfTeams.orange.find(p => p.name === playerName)) {
-      playerTeam = 'orange';
-      isPrimeiroTempo = true;
-    } else if (secondHalfTeams.blue.find(p => p.name === playerName)) {
-      playerTeam = 'blue';
-      isPrimeiroTempo = false;
-    } else if (secondHalfTeams.orange.find(p => p.name === playerName)) {
-      playerTeam = 'orange';
-      isPrimeiroTempo = false;
-    }
+function editArrivalPlayer(playerName) {
+  const player = players.find(p => p.name === playerName);
+  if (player) {
+    const time = player.arrivalTime || '';
+    const amount = player.amount || '';
+    
+    const searchResults = document.getElementById('arrival-search-results');
+    const searchInput = document.getElementById('arrival-player-search');
+    
+    searchResults.innerHTML = `
+      <div class="search-result-item" style="padding: 0.75rem; border-bottom: 1px solid #eee;">
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div>
+            <strong>${player.name}</strong> - ${player.position} (${player.type})
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <div style="flex: 1;">
+              <label style="display: block; font-size: 0.8rem; color: #666;">Valor R$:</label>
+              <input type="number" 
+                     id="edit-amount-${player.name}" 
+                     value="${amount}"
+                     style="width: 100%; padding: 0.25rem;">
+            </div>
+            <div style="flex: 1;">
+              <label style="display: block; font-size: 0.8rem; color: #666;">Horário:</label>
+              <input type="time" 
+                     id="edit-time-${player.name}" 
+                     value="${time}"
+                     style="width: 100%; padding: 0.25rem;">
+            </div>
+            <button onclick="updateArrivalPlayer('${player.name}')" 
+                    style="background-color: #4CAF50; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            </button>
+            <button onclick="cancelEdit()" 
+                    style="background-color: #f44336; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    searchInput.focus();
+  }
+}
 
-    if (!playerTeam) {
-      alert('O jogador precisa estar em um time para registrar gols!');
+function updateArrivalPlayer(playerName) {
+  const player = players.find(p => p.name === playerName);
+  if (player) {
+    const timeInput = document.getElementById(`edit-time-${player.name}`);
+    const amountInput = document.getElementById(`edit-amount-${player.name}`);
+    
+    player.arrivalTime = timeInput.value;
+    player.amount = amountInput.value ? parseFloat(amountInput.value) : undefined;
+    
+    document.getElementById('arrival-player-search').value = '';
+    document.getElementById('arrival-search-results').innerHTML = '';
+    
+    saveData();
+    updatePlayerLists();
+  }
+}
+
+function editPlayer(playerName) {
+  const player = players.find(p => p.name === playerName);
+  if (player) {
+    const oldName = player.name; // Store original name before any changes
+    
+    document.getElementById('player-name').value = player.name;
+    document.getElementById('player-position').value = player.position;
+    document.getElementById('player-type').value = player.type;
+    
+    players = players.filter(p => p.name !== playerName);
+    
+    const form = document.getElementById('player-form');
+    const originalSubmitHandler = form.onsubmit;
+    
+    form.onsubmit = (e) => {
+      e.preventDefault();
+      const newName = document.getElementById('player-name').value;
+      const position = document.getElementById('player-position').value;
+      const type = document.getElementById('player-type').value;
+      
+      if (newName.toLowerCase() !== oldName.toLowerCase() && 
+          players.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
+        alert('Já existe um jogador cadastrado com este nome!');
+        players.push(player); // Add back the original player
+        saveData();
+        updateRegisteredPlayersList();
+        form.reset();
+        form.onsubmit = originalSubmitHandler;
+        return;
+      }
+      
+      const newPlayer = { name: newName, position, type };
+      players.push(newPlayer);
+      
+      if (player.arrivalTime) {
+        newPlayer.arrivalTime = player.arrivalTime;
+        newPlayer.amount = player.amount;
+      }
+      
+      ['blue', 'orange'].forEach(team => {
+        if (firstHalfTeams[team].includes(oldName)) {
+          firstHalfTeams[team] = firstHalfTeams[team].map(p => p === oldName ? newName : p);
+        }
+        if (secondHalfTeams[team].includes(oldName)) {
+          secondHalfTeams[team] = secondHalfTeams[team].map(p => p === oldName ? newName : p);
+        }
+      });
+      
+      saveData();
+      updateRegisteredPlayersList();
+      updatePlayerLists();
+      updateTeamLists();
+      
+      form.reset();
+      form.onsubmit = originalSubmitHandler;
+    };
+  }
+}
+
+function findPlayerIndex(playerName) {
+  const playersWithArrival = players
+    .filter(p => p.arrivalTime && p.position !== 'Goleiro')
+    .sort((a, b) => {
+      const timeA = a.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+      const timeB = b.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+      
+      const isPriorityTimeA = timeA <= (6 * 60 + 30);
+      const isPriorityTimeB = timeB <= (6 * 60 + 30);
+      const hasAPriority = a.type === 'M' && isPriorityTimeA;
+      const hasBPriority = b.type === 'M' && isPriorityTimeB;
+
+      if (hasAPriority && !hasBPriority) return -1;
+      if (!hasAPriority && hasBPriority) return 1;
+      
+      return timeA - timeB;
+    });
+
+  return playersWithArrival.findIndex(p => p.name === playerName);
+}
+
+function formFirstHalfTeam(team, playerName) {
+  const otherTeam = team === 'blue' ? 'orange' : 'blue';
+  const player = players.find(p => p.name === playerName);
+  const blueBtn = document.getElementById(`blue-btn-${playerName}`);
+  const orangeBtn = document.getElementById(`orange-btn-${playerName}`);
+
+  // Check if player is from first 20 or is a goalkeeper
+  const playerIndex = findPlayerIndex(playerName);
+  const isInFirstTwenty = playerIndex < 20;
+  const isGoalkeeper = player.position === 'Goleiro';
+  
+  if (!isGoalkeeper && !isInFirstTwenty) {
+    alert('Apenas jogadores do Primeiro Tempo (1-20) podem ser selecionados para o Times Primeiro Tempo.');
+    return;
+  }
+
+  // Check team composition limits
+  const currentTeam = firstHalfTeams[team];
+  const currentGoalkeepers = currentTeam.filter(name => 
+    players.find(p => p.name === name)?.position === 'Goleiro'
+  ).length;
+  const currentFieldPlayers = currentTeam.filter(name => 
+    players.find(p => p.name === name)?.position !== 'Goleiro'
+  ).length;
+
+  // If trying to add a goalkeeper
+  if (isGoalkeeper && !currentTeam.includes(playerName)) {
+    if (currentGoalkeepers >= 1) {
+      alert('Este time já possui um goleiro.');
       return;
     }
-
-    player.goals = (player.goals || 0) + goals;
-    if (cardType) {
-      player.card = cardType;
-    }
-
-    updatePlayerStats(player);
-    updateGoalCardList();
-    saveData();
-  } else {
-    alert('Jogador não encontrado!');
   }
-  this.reset();
-});
 
-function updatePlayerStats(player) {
-  const teamLists = [
-    document.getElementById('blue-team').getElementsByTagName('ul')[0],
-    document.getElementById('orange-team').getElementsByTagName('ul')[0],
-    document.getElementById('blue-team-second').getElementsByTagName('ul')[0],
-    document.getElementById('orange-team-second').getElementsByTagName('ul')[0]
-  ];
+  // If trying to add a field player
+  if (!isGoalkeeper && !currentTeam.includes(playerName)) {
+    if (currentFieldPlayers >= 10) {
+      alert('Este time já possui 10 jogadores de linha.');
+      return;
+    }
+  }
 
-  teamLists.forEach(list => {
-    Array.from(list.children).forEach(li => {
-      if (li.textContent.includes(player.name)) {
-        li.innerHTML += `
-          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
-          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
-        `;
-      }
+  // Remove from both teams first
+  firstHalfTeams.blue = firstHalfTeams.blue.filter(name => name !== playerName);
+  firstHalfTeams.orange = firstHalfTeams.orange.filter(name => name !== playerName);
+  secondHalfTeams.blue = secondHalfTeams.blue.filter(name => name !== playerName);
+  secondHalfTeams.orange = secondHalfTeams.orange.filter(name => name !== playerName);
+
+  // Toggle team membership
+  if (!firstHalfTeams[team].includes(playerName)) {
+    firstHalfTeams[team].push(playerName);
+    
+    // Update button styles
+    if (team === 'blue') {
+      blueBtn.style.background = '#2d3436';
+      blueBtn.style.border = '2px solid #fdcb6e';
+      orangeBtn.style.background = '#f39c12';
+      orangeBtn.style.border = 'none';
+    } else {
+      orangeBtn.style.background = '#2d3436';
+      orangeBtn.style.border = '2px solid #fdcb6e';
+      blueBtn.style.background = '#0984e3';
+      blueBtn.style.border = 'none';
+    }
+  } else {
+    firstHalfTeams[team] = firstHalfTeams[team].filter(name => name !== playerName);
+    
+    // Reset button styles
+    blueBtn.style.background = '#0984e3';
+    orangeBtn.style.background = '#f39c12';
+    blueBtn.style.border = 'none';
+    orangeBtn.style.border = 'none';
+  }
+
+  saveData();
+  updateTeamLists();
+}
+
+function updatePlayerLists() {
+  const positionFilter = document.getElementById('arrival-position-filter')?.value;
+  const substitutePositionFilter = document.getElementById('substitute-position-filter')?.value;
+
+  const arrivalList = document.getElementById('arrival-list')?.querySelector('tbody');
+  const substituteList = document.getElementById('substitute-list')?.querySelector('tbody');
+  const goalkeeperList = document.getElementById('goalkeeper-list')?.querySelector('tbody');
+
+  if (!arrivalList || !substituteList || !goalkeeperList) return;
+
+  const playersWithArrival = players
+    .filter(p => p.arrivalTime)
+    .sort((a, b) => {
+      const timeA = a.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+      const timeB = b.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+      
+      const isPriorityTimeA = timeA <= (6 * 60 + 30);
+      const isPriorityTimeB = timeB <= (6 * 60 + 30);
+      const hasAPriority = a.type === 'M' && isPriorityTimeA;
+      const hasBPriority = b.type === 'M' && isPriorityTimeB;
+
+      if (hasAPriority && !hasBPriority) return -1;
+      if (!hasAPriority && hasBPriority) return 1;
+      
+      return timeA - timeB;
     });
+
+  // Clear all lists
+  arrivalList.innerHTML = '';
+  substituteList.innerHTML = '';
+  goalkeeperList.innerHTML = '';
+
+  // Split players into goalkeepers and non-goalkeepers
+  const goalkeeperPlayers = playersWithArrival.filter(p => p.position === 'Goleiro');
+  const nonGoalkeeperPlayers = playersWithArrival.filter(p => p.position !== 'Goleiro');
+
+  // Modify the button generation part in the row template to maintain selected state
+  const getButtonStyles = (playerName) => {
+    const isInBlueFirst = firstHalfTeams.blue.includes(playerName);
+    const isInOrangeFirst = firstHalfTeams.orange.includes(playerName);
+    const isInBlueSecond = secondHalfTeams.blue.includes(playerName);
+    const isInOrangeSecond = secondHalfTeams.orange.includes(playerName);
+    
+    return {
+      blue: isInBlueFirst || isInBlueSecond ? 
+        'background: #2d3436; border: 2px solid #fdcb6e;' : 
+        'background: #0984e3; border: none;',
+      orange: isInOrangeFirst || isInOrangeSecond ? 
+        'background: #2d3436; border: 2px solid #fdcb6e;' : 
+        'background: #f39c12; border: none;'
+    };
+  };
+
+  // Handle goalkeepers list separately - limit to 4
+  goalkeeperPlayers.slice(0, 4).forEach((player, index) => {
+    const arrivalTime = player.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+    const hasPriority = player.type === 'M' && arrivalTime <= (6 * 60 + 30);
+    const priorityBadge = hasPriority ? 
+      '<span class="priority-indicator">Prioridade Mensalista</span><br>' : '';
+
+    const styles = getButtonStyles(player.name);
+    goalkeeperList.innerHTML += `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${priorityBadge}${player.name}</td>
+        <td>${player.position}</td>
+        <td>${player.arrivalTime}</td>
+        <td>${player.amount || ''}</td>
+        <td>
+          <div style="display: flex; gap: 4px;">
+            <button onclick="editArrivalPlayer('${player.name}')" 
+                    style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+            </button>
+            <button onclick="removeFromArrivalList('${player.name}')"
+                    style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+            <button onclick="formFirstHalfTeam('blue', '${player.name}')" 
+                    id="blue-btn-${player.name}"
+                    style="${styles.blue} padding: 4px; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
+              </svg>
+            </button>
+            <button onclick="formFirstHalfTeam('orange', '${player.name}')" 
+                    id="orange-btn-${player.name}" 
+                    style="${styles.orange} padding: 4px; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  // Handle non-goalkeeper players
+  nonGoalkeeperPlayers.forEach((player, index) => {
+    if (positionFilter && player.position !== positionFilter) return;
+    if (substitutePositionFilter && player.position !== substitutePositionFilter) return;
+
+    const arrivalTime = player.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
+    const hasPriority = player.type === 'M' && arrivalTime <= (6 * 60 + 30);
+    const priorityBadge = hasPriority ? 
+      '<span class="priority-indicator">Prioridade Mensalista</span><br>' : '';
+
+    const styles = getButtonStyles(player.name);
+    const row = `
+      <tr>
+        <td>${index + 1}</td>
+        <td>${priorityBadge}${player.name}</td>
+        <td>${player.position}</td>
+        <td>${player.type || ''}</td>
+        <td>${player.arrivalTime}</td>
+        <td>${player.amount || ''}</td>
+        <td>
+          <div style="display: flex; gap: 4px;">
+            <button onclick="editArrivalPlayer('${player.name}')" 
+                    style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+              </svg>
+            </button>
+            <button onclick="removeFromArrivalList('${player.name}')"
+                    style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
+            <button onclick="formFirstHalfTeam('blue', '${player.name}')" 
+                    id="blue-btn-${player.name}"
+                    style="${styles.blue} padding: 4px; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
+              </svg>
+            </button>
+            <button onclick="formFirstHalfTeam('orange', '${player.name}')" 
+                    id="orange-btn-${player.name}" 
+                    style="${styles.orange} padding: 4px; border-radius: 4px; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
+              </svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+    if (index < 20) {
+      arrivalList.innerHTML += row;
+    } else if (index < 40) {
+      substituteList.innerHTML += row;
+    }
   });
 }
 
-function updateGoalCardList() {
-  const table = document.getElementById('goal-card-list').getElementsByTagName('tbody')[0];
-  table.innerHTML = '';
-  let currentRow = table.insertRow();
+function updateRegisteredPlayersList(searchTerm = '') {
+  const tbody = document.getElementById('registered-players-list');
+  if (!tbody) return;
 
-  const teamPlayers = {
-    blue: [...firstHalfTeams.blue, ...secondHalfTeams.blue],
-    orange: [...firstHalfTeams.orange, ...secondHalfTeams.orange]
+  const filteredPlayers = players
+    .filter(player => 
+      !searchTerm || 
+      player.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  tbody.innerHTML = filteredPlayers.map(player => `
+    <tr>
+      <td>${player.name}</td>
+      <td>${player.position}</td>
+      <td>${player.type || ''}</td>
+      <td>
+        <div style="display: flex; gap: 4px;">
+          <button onclick="editPlayer('${player.name}')"
+                  style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            </svg>
+          </button>
+          <button onclick="removePlayer('${player.name}')"
+                  style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function saveData() {
+  const data = {
+    players,
+    firstHalfTeams,
+    secondHalfTeams
   };
+  localStorage.setItem('rachaPeladaData', JSON.stringify(data));
+}
 
-  const maxPlayers = Math.max(teamPlayers.blue.length, teamPlayers.orange.length);
-
-  for (let i = 0; i < maxPlayers; i++) {
-    const bluePlayer = teamPlayers.blue[i];
-    const orangePlayer = teamPlayers.orange[i];
-
-    const blueCell = currentRow.insertCell();
-    const orangeCell = currentRow.insertCell();
-
-    if (bluePlayer) {
-      const player = players.find(p => p.name === bluePlayer.name);
-      if (player) {
-        blueCell.innerHTML = `
-          ${player.name}
-          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
-          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
-        `;
-      }
-    }
-
-    if (orangePlayer) {
-      const player = players.find(p => p.name === orangePlayer.name);
-      if (player) {
-        orangeCell.innerHTML = `
-          ${player.name}
-          ${player.goals ? ` <span class="badge">${player.goals} gols</span>` : ''}
-          ${player.card ? ` <span class="badge ${player.card.toLowerCase()}">${player.card}</span>` : ''}
-        `;
-      }
-    }
-
-    currentRow = table.insertRow();
+function loadData() {
+  const savedData = localStorage.getItem('rachaPeladaData');
+  if (savedData) {
+    const data = JSON.parse(savedData);
+    players = data.players || [];
+    firstHalfTeams = data.firstHalfTeams || { blue: [], orange: [] };
+    secondHalfTeams = data.secondTeams || { blue: [], orange: [] };
+    updateRegisteredPlayersList();
+    updatePlayerLists();
+    updateTeamLists();
   }
 }
 
-document.getElementById('import-players').addEventListener('click', function() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '.txt';
+function updateTeamLists() {
+  const blueTeamList = document.querySelector('#blue-team ul');
+  const orangeTeamList = document.querySelector('#orange-team ul');
+  const blueTeamSecondList = document.querySelector('#blue-team-second ul');
+  const orangeTeamSecondList = document.querySelector('#orange-team-second ul');
+
+  if (!blueTeamList || !orangeTeamList || !blueTeamSecondList || !orangeTeamSecondList) return;
+
+  blueTeamList.innerHTML = '';
+  orangeTeamList.innerHTML = '';
+  blueTeamSecondList.innerHTML = '';
+  orangeTeamSecondList.innerHTML = '';
+
+  const createPlayerListItem = (playerName, team, half) => {
+    const player = players.find(p => p.name === playerName);
+    if (!player) return '';
+    
+    return `
+      <li>
+        <span>${player.name} (${player.position})</span>
+        <button onclick="removeFromTeam('${team}', '${player.name}', '${half}')" 
+                style="background: #f44336; padding: 4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </li>
+    `;
+  };
+
+  const sortTeamPlayers = (teamList) => {
+    return teamList.sort((a, b) => {
+      const playerA = players.find(p => p.name === a);
+      const playerB = players.find(p => p.name === b);
+      if (!playerA || !playerB) return 0;
+      
+      // Goleiros first
+      if (playerA.position === 'Goleiro' && playerB.position !== 'Goleiro') return -1;
+      if (playerA.position !== 'Goleiro' && playerB.position === 'Goleiro') return 1;
+      
+      return playerA.name.localeCompare(playerB.name);
+    });
+  };
+
+  // Update first half teams
+  sortTeamPlayers(firstHalfTeams.blue).forEach(playerName => {
+    blueTeamList.innerHTML += createPlayerListItem(playerName, 'blue', 'first');
+  });
   
-  input.onchange = function(e) {
-    const file = e.target.files[0];
-    if (!file.name.endsWith('.txt')) {
-      alert('Por favor, selecione um arquivo .txt');
+  sortTeamPlayers(firstHalfTeams.orange).forEach(playerName => {
+    orangeTeamList.innerHTML += createPlayerListItem(playerName, 'orange', 'first');
+  });
+
+  // Update second half teams
+  sortTeamPlayers(secondHalfTeams.blue).forEach(playerName => {
+    blueTeamSecondList.innerHTML += createPlayerListItem(playerName, 'blue', 'second');
+  });
+  
+  sortTeamPlayers(secondHalfTeams.orange).forEach(playerName => {
+    orangeTeamSecondList.innerHTML += createPlayerListItem(playerName, 'orange', 'second');
+  });
+}
+
+function removeFromTeam(team, playerName, half) {
+  const teams = half === 'first' ? firstHalfTeams : secondHalfTeams;
+  teams[team] = teams[team].filter(name => name !== playerName);
+  
+  saveData();
+  updateTeamLists();
+}
+
+function clearAllData() {
+  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
+    localStorage.removeItem('rachaPeladaData');
+    players = [];
+    firstHalfTeams = { blue: [], orange: [] };
+    secondHalfTeams = { blue: [], orange: [] };
+    updateRegisteredPlayersList();
+    updatePlayerLists();
+    updateTeamLists();
+  }
+}
+
+function exportPlayersToCSV() {
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(
+    players.map(({ name, position, type }) => ({ Nome: name, Posicao: position, Tipo: type }))
+  );
+  XLSX.utils.book_append_sheet(wb, ws, "Jogadores");
+  XLSX.writeFile(wb, "jogadores.xlsx");
+}
+
+function importPlayersFromCSV(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const data = new Uint8Array(e.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+    
+    const newPlayers = jsonData.map(row => ({
+      name: row.Nome,
+      position: row.Posicao,
+      type: row.Tipo
+    }));
+
+    players = newPlayers;
+    saveData();
+    updateRegisteredPlayersList();
+    updatePlayerLists();
+    updateTeamLists();
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function generateSecondHalfTeams() {
+  // Confirm before overwriting
+  if (secondHalfTeams.blue.length > 0 || secondHalfTeams.orange.length > 0) {
+    if (!confirm('Isso irá substituir os times atuais do segundo tempo. Deseja continuar?')) {
       return;
     }
+  }
+
+  // Copy teams
+  secondHalfTeams.blue = [...firstHalfTeams.blue];
+  secondHalfTeams.orange = [...firstHalfTeams.orange];
+
+  // Save and update display
+  saveData();
+  updateTeamLists();
+}
+
+function removePlayer(playerName) {
+  if (confirm(`Tem certeza que deseja remover o jogador ${playerName}?`)) {
+    // Remove player from main list
+    players = players.filter(p => p.name !== playerName);
     
-    const reader = new FileReader();
+    // Remove player from both first and second half teams
+    firstHalfTeams.blue = firstHalfTeams.blue.filter(name => name !== playerName);
+    firstHalfTeams.orange = firstHalfTeams.orange.filter(name => name !== playerName);
+    secondHalfTeams.blue = secondHalfTeams.blue.filter(name => name !== playerName);
+    secondHalfTeams.orange = secondHalfTeams.orange.filter(name => name !== playerName);
     
-    reader.onload = function(event) {
-      try {
-        const content = event.target.result;
-        const lines = content.split('\n');
-        const importedData = lines.map(line => {
-          const [name, position, type] = line.split(',').map(item => item.trim());
-          return { name, position, type };
-        }).filter(player => player.name && player.position && player.type);
-
-        if (importedData.length === 0) {
-          throw new Error('Arquivo vazio ou formato inválido');
-        }
-
-        const isValid = importedData.every(player => 
-          player.name && 
-          player.position && 
-          ['Atacante', 'Meia', 'Volante', 'Zagueiro', 'Lateral', 'Goleiro'].includes(player.position) &&
-          ['Mensalista', 'Diarista'].includes(player.type)
-        );
-
-        if (!isValid) {
-          throw new Error('Formato inválido. O arquivo deve conter: Nome, Posição, Tipo em cada linha, separados por vírgula');
-        }
-
-        localStorage.setItem('persistentPlayerData', JSON.stringify(importedData));
-        updateSavedPlayersSelect();
-        alert('Jogadores importados com sucesso!');
-      } catch (error) {
-        alert('Erro ao importar arquivo: ' + error.message);
-      }
-    };
-    
-    reader.readAsText(file);
-  };
-  
-  input.click();
-});
-
-document.getElementById('export-players').addEventListener('click', function() {
-  const persistentData = loadPlayerData();
-  
-  const content = persistentData.map(player => 
-    `${player.name}, ${player.position}, ${player.type}`
-  ).join('\n');
-  
-  const blob = new Blob([content], { type: 'text/plain' });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'jogadores.txt';
-  a.click();
-  window.URL.revokeObjectURL(url);
-});
-
-loadData();
+    saveData();
+    updateRegisteredPlayersList();
+    updatePlayerLists();
+    updateTeamLists();
+  }
+}
 </script>
 </body>
 </html>
