@@ -28,9 +28,9 @@ body {
 
 .container {
   max-width: 100%;
-  padding: 0.75rem; /* Reduced from 1rem */
+  padding: 0.5rem; /* Reduced padding */
   border-radius: 8px;
-  margin: 0.5rem;
+  margin: 0; /* Remove margins */
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   background: rgba(255,255,255,0.95);
 }
@@ -167,6 +167,8 @@ button:hover {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  margin: 0 -0.5rem; /* Compensate for container padding */
+  padding: 0 0.5rem;
 }
 
 table {
@@ -209,7 +211,7 @@ tr:hover {
 }
 
 .team-list {
-  flex: 1 1 48%;
+  flex: 1 1 48%; /* Adjust flex basis */
   margin-bottom: 1rem;
   border: 2px solid rgba(255,255,255,0.2);
   border-radius: 12px;
@@ -360,45 +362,18 @@ footer {
 
 @media (max-width: 767px) {
   .container {
-    margin: 0.5rem;
-    padding: 0.5rem; /* Reduced from 0.75rem */
+    margin: 0;
+    padding: 0.5rem; /* Reduced padding */
   }
 
-  header {
-    padding: 1rem;
+  .team-list {
+    flex: 1 1 100%; /* Full width on mobile */
+    margin: 0 0 0.75rem 0;
   }
-
-  h1 {
-    font-size: 1.2rem; /* Reduced from 1.5rem */
-    text-align: center;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  input[type="time"],
-  select {
-    width: 100%;
-  }
-
-  button,
-  .edit-delete-buttons button {
-    min-height: 36px; /* Reduced from 44px */
-    padding: 0.25rem 0.5rem; /* Reduced padding */
-  }
-
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .totals {
-    flex-direction: column;
-  }
-
-  .totals p {
-    flex: 1 1 100%;
-    text-align: center;
+  
+  .team-lists {
+    margin: 1rem 0;
+    gap: 0.5rem;
   }
 }
 
@@ -1584,15 +1559,30 @@ function updateTeamLists() {
   };
 
   const sortTeamPlayers = (teamList) => {
+    const positionOrder = {
+      'Goleiro': 1,
+      'Lateral': 2, 
+      'Zagueiro': 3,
+      'Volante': 4,
+      'Meio-Campo': 5,
+      'Atacante': 6
+    };
+
     return teamList.sort((a, b) => {
       const playerA = players.find(p => p.name === a);
       const playerB = players.find(p => p.name === b);
       if (!playerA || !playerB) return 0;
       
-      // Goleiros first
-      if (playerA.position === 'Goleiro' && playerB.position !== 'Goleiro') return -1;
-      if (playerA.position !== 'Goleiro' && playerB.position === 'Goleiro') return 1;
+      // Sort by position order
+      const orderA = positionOrder[playerA.position] || 99;
+      const orderB = positionOrder[playerB.position] || 99;
       
+      // If positions are different, sort by position order
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      
+      // If positions are the same, sort alphabetically by name
       return playerA.name.localeCompare(playerB.name);
     });
   };
@@ -1619,6 +1609,17 @@ function updateTeamLists() {
 function removeFromTeam(team, playerName, half) {
   const teams = half === 'first' ? firstHalfTeams : secondHalfTeams;
   teams[team] = teams[team].filter(name => name !== playerName);
+  
+  // Reset button colors after removing from team
+  const blueBtn = document.getElementById(`blue-btn-${playerName}`);
+  const orangeBtn = document.getElementById(`orange-btn-${playerName}`);
+  
+  if (blueBtn && orangeBtn) {
+    blueBtn.style.background = '#0984e3';
+    blueBtn.style.border = 'none';
+    orangeBtn.style.background = '#f39c12';
+    orangeBtn.style.border = 'none';
+  }
   
   saveData();
   updateTeamLists();
@@ -1683,24 +1684,6 @@ function generateSecondHalfTeams() {
   // Save and update display
   saveData();
   updateTeamLists();
-}
-
-function removePlayer(playerName) {
-  if (confirm(`Tem certeza que deseja remover o jogador ${playerName}?`)) {
-    // Remove player from main list
-    players = players.filter(p => p.name !== playerName);
-    
-    // Remove player from both first and second half teams
-    firstHalfTeams.blue = firstHalfTeams.blue.filter(name => name !== playerName);
-    firstHalfTeams.orange = firstHalfTeams.orange.filter(name => name !== playerName);
-    secondHalfTeams.blue = secondHalfTeams.blue.filter(name => name !== playerName);
-    secondHalfTeams.orange = secondHalfTeams.orange.filter(name => name !== playerName);
-    
-    saveData();
-    updateRegisteredPlayersList();
-    updatePlayerLists();
-    updateTeamLists();
-  }
 }
 </script>
 </body>
