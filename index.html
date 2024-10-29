@@ -28,9 +28,9 @@ body {
 
 .container {
   max-width: 100%;
-  padding: 0.5rem; /* Reduced padding */
+  padding: 0.5rem; /* Reduced from 0.75rem */
   border-radius: 8px;
-  margin: 0; /* Remove margins */
+  margin: 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   background: rgba(255,255,255,0.95);
 }
@@ -211,7 +211,7 @@ tr:hover {
 }
 
 .team-list {
-  flex: 1 1 48%; /* Adjust flex basis */
+  flex: 1 1 48%;
   margin-bottom: 1rem;
   border: 2px solid rgba(255,255,255,0.2);
   border-radius: 12px;
@@ -257,9 +257,19 @@ tr:hover {
 
 .team-list li span {
   flex: 1;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.team-list li div {
+  flex-shrink: 0;
+}
+
+.team-list li.button {
+  padding: 4px;
+  margin-left: auto;
 }
 
 .team-list li button {
@@ -363,17 +373,46 @@ footer {
 @media (max-width: 767px) {
   .container {
     margin: 0;
-    padding: 0.5rem; /* Reduced padding */
+    padding: 0.5rem; /* Reduced from 0.75rem */
   }
 
-  .team-list {
-    flex: 1 1 100%; /* Full width on mobile */
-    margin: 0 0 0.75rem 0;
+  header {
+    padding: 1rem;
   }
 
-  .team-lists {
-    margin: 1rem 0;
-    gap: 0.5rem;
+  h1 {
+    font-size: 1.2rem; /* Reduced from 1.5rem */
+    text-align: center;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="time"],
+  select {
+    width: 100%;
+  }
+
+  button,
+  .edit-delete-buttons button {
+    min-height: 36px; /* Reduced from 44px */
+    padding: 0.25rem 0.5rem; /* Reduced padding */
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -0.5rem; /* Compensate for container padding */
+    padding: 0 0.5rem;
+  }
+
+  .totals {
+    flex-direction: column;
+  }
+
+  .totals p {
+    flex: 1 1 100%;
+    text-align: center;
   }
 }
 
@@ -1545,44 +1584,38 @@ function updateTeamLists() {
     const player = players.find(p => p.name === playerName);
     if (!player) return '';
     
+    // Get player's arrival index
+    const arrivalIndex = findPlayerIndex(playerName) + 1; // Add 1 for display
+    const arrivalNumber = arrivalIndex > 0 ? arrivalIndex : '-';
+    
     return `
       <li>
         <span>${player.name} (${player.position})</span>
-        <button onclick="removeFromTeam('${team}', '${player.name}', '${half}')" 
-                style="background: #f44336; padding: 4px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </button>
+        <div style="display: flex; gap: 4px; align-items: center;">
+          <span style="font-size: 0.8rem; color: #666; margin-right: 4px;">
+            #${arrivalNumber}
+          </span>
+          <button onclick="removeFromTeam('${team}', '${player.name}', '${half}')" 
+                  style="background: #f44336; padding: 4px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+          </button>
+        </div>
       </li>
     `;
   };
 
   const sortTeamPlayers = (teamList) => {
-    const positionOrder = {
-      'Goleiro': 1,
-      'Lateral': 2, 
-      'Zagueiro': 3,
-      'Volante': 4,
-      'Meio-Campo': 5,
-      'Atacante': 6
-    };
-
     return teamList.sort((a, b) => {
       const playerA = players.find(p => p.name === a);
       const playerB = players.find(p => p.name === b);
       if (!playerA || !playerB) return 0;
       
-      // Sort by position order
-      const orderA = positionOrder[playerA.position] || 99;
-      const orderB = positionOrder[playerB.position] || 99;
+      // Goleiros first
+      if (playerA.position === 'Goleiro' && playerB.position !== 'Goleiro') return -1;
+      if (playerA.position !== 'Goleiro' && playerB.position === 'Goleiro') return 1;
       
-      // If positions are different, sort by position order
-      if (orderA !== orderB) {
-        return orderA - orderB;
-      }
-      
-      // If positions are the same, sort alphabetically by name
       return playerA.name.localeCompare(playerB.name);
     });
   };
@@ -1609,17 +1642,6 @@ function updateTeamLists() {
 function removeFromTeam(team, playerName, half) {
   const teams = half === 'first' ? firstHalfTeams : secondHalfTeams;
   teams[team] = teams[team].filter(name => name !== playerName);
-  
-  // Reset button colors after removing from team
-  const blueBtn = document.getElementById(`blue-btn-${playerName}`);
-  const orangeBtn = document.getElementById(`orange-btn-${playerName}`);
-  
-  if (blueBtn && orangeBtn) {
-    blueBtn.style.background = '#0984e3';
-    blueBtn.style.border = 'none';
-    orangeBtn.style.background = '#f39c12';
-    orangeBtn.style.border = 'none';
-  }
   
   saveData();
   updateTeamLists();
