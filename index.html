@@ -1,1712 +1,1709 @@
-<html><head><base href="https://websim.com/racha-pelada-uniao/?">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Racha Pelada União - Sistema Interativo Aprimorado</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<html><head><base href="https://example.com">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RACHA PELADA UNIÃO</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 <style>
-:root {
-  --primary-color: #00b894; /* Fresh teal */
-  --secondary-color: #2d3436; /* Deep charcoal */
-  --accent-color: #fdcb6e; /* Warm gold */
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 14px; 
+    }
+
+    .floating-counts-window {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px;
+        z-index: 1000;
+        cursor: move;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .floating-counts-window .close-btn {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
+    }
+
+    .toggle-counts {
+        cursor: pointer;
+        margin-left: 5px;
+        font-size: 12px;
+        color: #666;
+    }
+
+.position-counts {
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 4px;
+    min-width: 200px;
+    font-size: 10px; /* Set consistent base font size */
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-  line-height: 1.4;
-  font-size: 14px; /* Reduced from default 16px */
-  color: var(--secondary-color);
-  background: linear-gradient(135deg, #00b894 0%, #00a18c 100%);
-  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><line x1="50" y1="0" x2="50" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="2"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></svg>');
-  background-repeat: repeat;
-}
-
-.container {
-  max-width: 100%;
-  padding: 0.5rem; /* Reduced from 0.75rem */
-  border-radius: 8px;
-  margin: 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  background: rgba(255,255,255,0.95);
-}
-
-.container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="none" stroke="rgba(240, 206, 110, 0.1)" stroke-width="2"/></svg>');
-  background-repeat: repeat;
-  z-index: -1;
-}
-
-header {
-  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
-  position: relative;
-  padding: 2rem;
-  text-align: center;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-header h1 {
-  color: #ffffff;
-  opacity: 0.95;
-  font-size: 1.5rem; /* Reduced from 2rem */
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-header::before {
-  content: "⚽";
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 2rem;
-  z-index: 1;
-}
-
-header::after {
-  content: "⚽";
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 2rem;
-  z-index: 1;
-}
-
-@media (max-width: 767px) {
-  header h1 {
-    font-size: 1.2rem; /* Reduced from 1.5rem */
-  }
-}
-
-h1, h2 {
-  margin-bottom: 0.5rem;
-}
-
-.card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.card h2 {
-  color: var(--secondary-color);
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  font-size: 1.2rem; /* Add explicit smaller size */
-}
-
-.form-group {
-  margin-bottom: 0.5rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="number"],
-input[type="time"],
-select {
-  height: 36px; /* Reduced from 48px */
-  border-radius: 8px;
-  border: 2px solid #e0e0e0;
-  padding: 0.5rem; /* Reduced from 0.75rem */
-  font-size: 14px; /* Reduced from 16px */
-  background: #f8f9fa;
-  transition: all 0.3s ease;
-}
-
-input:focus,
-select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0,184,148,0.2);
-}
-
-button {
-  height: 36px; /* Reduced from 48px */
-  background-color: var(--primary-color);
-  color: white;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  font-size: 0.9rem; /* Reduced from 1rem */
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0.5rem; /* Added smaller padding */
-  transition: all 0.3s ease;
-}
-
-button:hover {
-  background-color: #00a18c;
-}
-
-.table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: 0 -0.5rem; /* Compensate for container padding */
-  padding: 0 0.5rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-th, td {
-  padding: 0.5rem; /* Reduced from 0.75rem */
-  text-align: left;
-}
-
-th {
-  background: var(--secondary-color);
-  color: white;
-  text-transform: uppercase;
-  font-size: 0.8em; /* Reduced from 0.9em */
-  letter-spacing: 1px;
-}
-
-tr:nth-child(even) {
-  background-color: rgba(0, 184, 148, 0.1);
-}
-
-tr:hover {
-  background-color: rgba(0, 184, 148, 0.2);
-}
-
-.team-lists {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 1rem;
-  gap: 0.75rem;
-}
-
-.team-list {
-  flex: 1 1 48%;
-  margin-bottom: 1rem;
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  background: #fff;
-  padding: 1rem;
-}
-
-.team-list h3 {
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: white;
-  font-size: 1rem; /* Add explicit smaller size */
-}
-
-#blue-team, #blue-team-second {
-  background: linear-gradient(135deg, #0984e3 0%, #0652DD 100%);
-}
-
-#orange-team, #orange-team-second {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-}
-
-.team-list ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.team-list li {
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  text-align: left;
-  transition: transform 0.2s ease;
-  font-size: 0.9em; /* Added explicit smaller size */
-  gap: 0.5rem;
-}
-
-.team-list li span {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.team-list li div {
-  flex-shrink: 0;
-}
-
-.team-list li.button {
-  padding: 4px;
-  margin-left: auto;
-}
-
-.team-list li button {
-  width: 24px;
-  height: 24px;
-  padding: 4px;
-  margin-left: auto;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.totals {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-top: 1rem;
-  font-weight: bold;
-}
-
-.totals p {
-  flex: 1 1 30%;
-  margin-bottom: 0.5rem;
-}
-
-footer {
-  text-align: center;
-  padding: 1.5rem;
-  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
-  border-top: 4px solid var(--accent-color);
-  color: white;
-}
-
-.tab-navigation {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
-  padding: 0.5rem;
-}
-
-.tab-button {
-  flex: 1;
-  min-width: calc(50% - 0.25rem);
-  padding: 0.4rem; /* Reduced padding */
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.75rem; /* Reduced from 0.85rem */
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tab-button.active {
-  background: var(--primary-color);
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
-}
-
-.fixed-buttons {
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
-  padding: 1rem;
-  display: flex;
-  gap: 0.5rem;
-  z-index: 1000;
-}
-
-.fixed-buttons button {
-  flex: 1;
-  margin: 0;
-}
-
-@media (min-width: 768px) {
-  .tab-button {
-    min-width: auto;
-    font-size: 0.8rem; /* Reduced from 0.9rem */
-  }
-}
-
-@media (max-width: 767px) {
-  .container {
-    margin: 0;
-    padding: 0.5rem; /* Reduced from 0.75rem */
-  }
-
-  header {
-    padding: 1rem;
-  }
-
-  h1 {
-    font-size: 1.2rem; /* Reduced from 1.5rem */
-    text-align: center;
-  }
-
-  input[type="text"],
-  input[type="number"],
-  input[type="time"],
-  select {
+.position-counts .d-flex {
+    margin-bottom: 2px;
     width: 100%;
-  }
+}
 
-  button,
-  .edit-delete-buttons button {
-    min-height: 36px; /* Reduced from 44px */
-    padding: 0.25rem 0.5rem; /* Reduced padding */
-  }
+.position-counts .d-flex > div {
+    font-size: 10px; /* Ensure all text is the same size */
+    line-height: 1.2;
+    padding: 2px 0;
+}
 
-  .table-responsive {
+/* Make the header line (Time Azul/Laranja) slightly bigger */
+.position-counts div:first-child {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 3px;
     width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: 0 -0.5rem; /* Compensate for container padding */
-    padding: 0 0.5rem;
-  }
-
-  .totals {
-    flex-direction: column;
-  }
-
-  .totals p {
-    flex: 1 1 100%;
-    text-align: center;
-  }
 }
 
-.search-container {
-  position: relative;
-  margin-top: 1.5rem;
+/* Style for the totals row */
+.position-counts .d-flex:last-child {
+    font-size: 10px;
+    margin-top: 2px;
+    padding-top: 2px;
 }
 
-.search-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  pointer-events: none;
+/* Ensure even spacing between columns */
+.position-counts .d-flex > div {
+    flex: 1;
+    text-align: left;
 }
 
-.search-input {
-  padding-right: 35px;
-  width: 100%;
+.position-counts .d-flex > div:last-child {
+    text-align: right;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    .navbar {
+        background-color: #000000;
+    }
+    .nav-link, .navbar-brand {
+        color: #ffffff !important;
+    }
+    .nav-link.active {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    .nav-tabs .nav-link {
+        color: #ffffff;
+        background-color: #333333;
+        border: 1px solid #444444;
+        font-size: 14px;
+    }
+    .nav-tabs .nav-link.active {
+        color: #ffffff;
+        background-color: #222222;
+        border-color: #444444;
+    }
+    .nav-tabs .nav-link:hover:not(.active) {
+        background-color: #444444;
+        border-color: #555555;
+    }
+    .tab-pane {
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        color: #000000;
+        border-radius: 0.25rem;
+        padding: 20px;
+    }
+    .container {
+        max-width: 960px;  
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+    .player-item, .time-item {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.2s;
+    }
+    .player-item:hover, .time-item:hover {
+        transform: translateY(-2px);
+    }
+    .btn-secondary, .btn-primary, .btn-success {
+        margin-right: 5px;
+    }
+    .import-export-buttons {
+        margin-bottom: 15px;
+    }
+    .import-export-buttons .btn {
+        margin-right: 5px;  
+        padding: 4px 8px;   
+        font-size: 12px;    
+    }
+    .import-export-buttons .fas {
+        font-size: 11px;    
+    }
+    #fileInput {
+        display: none;
+    }
+    #searchResults {
+        margin-top: 0.5rem;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+    }
+    .input-group {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+    }
+    .form-control, .form-select {
+        background-color: #ffffff;
+        border-color: #ddd;
+        color: #000000;
+        font-size: 14px;
+    }
+    .form-control:focus, .form-select:focus {
+        background-color: #ffffff;
+        border-color: #aaa;
+        color: #000000;
+    }
+    .input-group-text {
+        background-color: #f5f5f5;
+        border-color: #ddd;
+        color: #000000;
+        font-size: 14px;
+    }
+    .list-group-item {
+        background-color: #ffffff;
+        border-color: #ddd;
+        color: #000000;
+    }
+    .tab-pane h3, .tab-pane h5, 
+    .player-item span, 
+    .list-group-item,
+    .table {
+        color: #000000 !important;
+    }
+    .table {
+        --bs-table-color: #000000;
+        --bs-table-bg: #ffffff;
+        --bs-table-border-color: #ddd;
+        font-size: 14px;
+    }
+    .table-responsive {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .table thead th {
+        background-color: #f5f5f5;
+        border-color: #ddd;
+    }
+    .table tbody td {
+        border-color: #ddd;
+        position: relative;
+        padding: 12px;
+        text-align: center;
+        vertical-align: middle;
+    }
+    h3 {
+        font-size: 1.5rem;
+    }
+    h5 {
+        font-size: 1.1rem;
+    }
+    .btn {
+        font-size: 14px;
+    }
+    .priority-badge {
+        font-size: 8px;
+        background-color: gold;
+        color: #000000;
+        font-weight: bold;
+        margin-bottom: 2px;
+        padding: 1px 4px;
+        border-radius: 2px;
+        display: inline-block;
+        position: absolute; 
+        top: 0;           
+        right: 0;         
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="time"],
+    select,
+    textarea {
+        font-size: 16px !important; 
+        max-height: 100%;
+        -webkit-text-size-adjust: 100%;
+    }
 
-.fade-in {
-  animation: slideIn 0.3s ease-out;
-}
+    .form-control-sm {
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 
-.search-result-item:hover {
-  background-color: #f5f5f5;
-}
+    .input-group-sm .form-control {
+        height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 
-.search-result-item:last-child {
-  border-bottom: none;
-}
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+    }
 
-.rules-section {
-  padding: 1.5rem;
-  line-height: 1.6;
-}
+    .list-group-item .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
 
-.rules-section h3 {
-  color: var(--primary-color);
-  margin: 2rem 0 1rem 0;
-  font-size: 1.1rem; /* Reduced from 1.3rem */
-  border-bottom: 2px solid var(--primary-color);
-  padding-bottom: 0.5rem;
-}
+    .list-group-item .col-6 {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
 
-.rules-section h3:first-child {
-  margin-top: 0;
-}
+    .teams-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 0 -10px;
+    }
 
-.rules-section ul {
-  list-style-type: none;
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
-}
+    .teams-container .col-md-6 {
+        flex: 1;
+        min-width: 280px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
 
-.rules-section ul ul {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  padding-left: 2rem;
-}
+    .teams-container h5 {
+        color: #000;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #dee2e6;
+    }
 
-.rules-section li {
-  position: relative;
-  padding: 0.5rem 0;
-  line-height: 1.4;
-  font-size: 0.9em; /* Added explicit smaller size */
-}
+    .teams-container .list-group-item {
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,.125);
+        margin-bottom: 8px;
+        border-radius: 6px;
+        padding: 12px 15px;
+    }
 
-.rules-section li::before {
-  content: "•";
-  color: var(--primary-color);
-  font-weight: bold;
-  position: absolute;
-  left: -1rem;
-}
+    /* Blue team specific styles */
+    #blueTeam .list-group-item {
+        border-left: 4px solid #0d6efd;
+    }
 
-.rules-section p {
-  margin: 1rem 0;
-  line-height: 1.6;
-}
+    /* Orange team specific styles */
+    #orangeTeam .list-group-item {
+        border-left: 4px solid #fd7e14;
+    }
 
-@media (max-width: 767px) {
-  .rules-section {
-    padding: 1rem;
-  }
+    @media screen and (max-width: 768px) {
+        .teams-container {
+            margin: 0;
+        }
+        
+        .teams-container .col-md-6 {
+            min-width: calc(50% - 10px);
+            padding: 10px;
+        }
+    }
 
-  .rules-section h3 {
-    font-size: 1.2rem;
-  }
+    .btn-group .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+    }
 
-  .rules-section ul {
-    padding-left: 1.2rem;
-  }
-}
-
-.arrival-tab-navigation {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: linear-gradient(135deg, #2d3436 0%, #222629 100%);
-  padding: 0.5rem;
-}
-
-.arrival-tab-button {
-  flex: 1;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.75rem; /* Reduced from 0.85rem */
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.arrival-tab-button.active {
-  background: var(--primary-color);
-}
-
-.arrival-tab-content {
-  display: none;
-}
-
-.arrival-tab-content.active {
-  display: block;
-}
-
-.priority-indicator {
-  font-size: 0.6rem;
-  background-color: var(--accent-color);
-  color: black;
-  padding: 1px 4px;
-  border-radius: 2px;
-  margin-bottom: 2px;
-  display: inline-block;
-}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-<header>
-  <h1>Racha Pelada União</h1>
-</header>
 
-<div class="container">
-  <div id="main-section">
-    <div class="tab-navigation">
-      <button class="tab-button active" data-tab="cadastro">JOGADORES</button>
-      <button class="tab-button" data-tab="ordem-chegada">LISTA DE CHEGADA</button>
-      <button class="tab-button" data-tab="times">TIMES</button>
-      <button class="tab-button" data-tab="regulamento">REGULAMENTO</button>
-    </div>
-
-    <div id="tab-cadastro" class="tab-content active">
-      <div class="card fade-in">
-        <h2>Cadastro do Jogador</h2>
-        <form id="player-form">
-          <div class="form-group">
-            <label for="player-name" class="required-field">Nome do Jogador:</label>
-            <input type="text" id="player-name" required>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="player-position" class="required-field">Posição:</label>
-              <select id="player-position" required>
-                <option value="">Selecione</option>
-                <option value="Atacante">Atacante</option>
-                <option value="Meio-Campo">Meio-Campo</option>
-                <option value="Volante">Volante</option>
-                <option value="Zagueiro">Zagueiro</option>
-                <option value="Lateral">Lateral</option>
-                <option value="Goleiro">Goleiro</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="player-type">Tipo:</label>
-              <select id="player-type">
-                <option value="">Selecione</option>
-                <option value="M">M</option>
-                <option value="D">D</option>
-              </select>
-            </div>
-          </div>
-          <button type="submit">Cadastrar Jogador</button>
-        </form>
-
-        <div class="search-container">
-          <label for="player-search">Buscar Jogador:</label>
-          <div style="position: relative;">
-            <input type="text" id="player-search" class="search-input" placeholder="Digite o nome do jogador para editar">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
-            </svg>
-          </div>
-        </div>
-
-        <div class="import-export-buttons" style="display: flex; gap: 1rem; margin-top: 1rem;">
-          <button id="export-players" type="button" style="flex: 1; background-color: #2196F3;">EXPORTAR</button>
-          <button id="import-players" type="button" style="flex: 1; background-color: #4CAF50;">IMPORTAR</button>
-          <button id="clear-all-data" style="flex: 1; background-color: #f44336;">LIMPAR TUDO</button>
-          <input type="file" id="import-file" accept=".xlsx" style="display: none;">
-        </div>
-
-        <div class="registered-players" style="margin-top: 1.5rem;">
-          <h3>Jogadores Cadastrados</h3>
-          <div class="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Nome</th>
-                  <th>Posição</th>
-                  <th>Tipo</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody id="registered-players-list">
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="tab-ordem-chegada" class="tab-content">
-      <div class="card fade-in">
-        <div class="search-container">
-          <label for="arrival-player-search">Buscar Jogador:</label>
-          <div style="position: relative;">
-            <input type="text" id="arrival-player-search" class="search-input" placeholder="Digite o nome do jogador para adicionar à lista">
-            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
-            </svg>
-          </div>
-          <div id="arrival-search-results" style="margin-top: 0.5rem;"></div>
-        </div>
-
-        <div class="arrival-tab-navigation" style="display: flex; gap: 0.25rem; margin-bottom: 1rem;">
-          <button class="arrival-tab-button active" data-arrival-tab="first-half">Primeiro Tempo (1-20)</button>
-          <button class="arrival-tab-button" data-arrival-tab="goalkeepers">Goleiros 1/4</button>
-          <button class="arrival-tab-button" data-arrival-tab="second-half">Segundo Tempo (21-40)</button>
-        </div>
-
-        <div id="arrival-tab-first-half" class="arrival-tab-content active">
-          <div class="card fade-in">
-            <h2>Primeiro Tempo (1-20)</h2>
-            <div class="form-group">
-              <label for="arrival-position-filter">Filtrar por Posição:</label>
-              <select id="arrival-position-filter">
-                <option value="">Todas as Posições</option>
-                <option value="Atacante">Atacante</option>
-                <option value="Meio-Campo">Meio-Campo</option>
-                <option value="Volante">Volante</option>
-                <option value="Zagueiro">Zagueiro</option>
-                <option value="Lateral">Lateral</option>
-              </select>
-            </div>
-            <div class="table-responsive">
-              <table id="arrival-list">
-                <thead>
-                  <tr>
-                    <th>Nº</th>
-                    <th>Nome</th>
-                    <th>Posição</th>
-                    <th>Tipo</th>
-                    <th>Chegada</th>
-                    <th>Valor (R$)</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div id="arrival-tab-goalkeepers" class="arrival-tab-content">
-          <div class="card fade-in">
-            <h2>Goleiros 1/4</h2>
-            <div class="table-responsive">
-              <table id="goalkeeper-list">
-                <thead>
-                  <tr>
-                    <th>Nº</th>
-                    <th>Nome</th>
-                    <th>Posição</th>
-                    <th>Chegada</th>
-                    <th>Valor (R$)</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div id="arrival-tab-second-half" class="arrival-tab-content">
-          <div class="card fade-in">
-            <h2>Segundo Tempo (21-40)</h2>
-            <div class="form-group">
-              <label for="substitute-position-filter">Filtrar por Posição:</label>
-              <select id="substitute-position-filter">
-                <option value="">Todas as Posições</option>
-                <option value="Atacante">Atacante</option>
-                <option value="Meio-Campo">Meio-Campo</option>
-                <option value="Volante">Volante</option>
-                <option value="Zagueiro">Zagueiro</option>
-                <option value="Lateral">Lateral</option>
-              </select>
-            </div>
-            <div class="table-responsive">
-              <table id="substitute-list">
-                <thead>
-                  <tr>
-                    <th>Nº</th>
-                    <th>Nome</th>
-                    <th>Posição</th>
-                    <th>Tipo</th>
-                    <th>Chegada</th>
-                    <th>Valor (R$)</th>
-                    <th>Ações</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="tab-times" class="tab-content">
-      <div class="card fade-in">
-        <h2>Times Primeiro Tempo</h2>
-        <div id="times-primeiro-tempo">
-          <div class="team-lists">
-            <div class="team-list" id="blue-team">
-              <h3>Time Azul</h3>
-              <ul></ul>
-            </div>
-            <div class="team-list" id="orange-team">
-              <h3>Time Laranja</h3>
-              <ul></ul>
-            </div>
-          </div>
-        </div>
-        
-        <button onclick="generateSecondHalfTeams()" 
-                style="margin-top: 1rem; background-color: #4CAF50;">
-          GERAR TIME SEGUNDO TEMPO
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="https://example.com"><i class="fas fa-futbol me-2"></i>RACHA PELADA UNIÃO</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
-
-        <h2 style="margin-top: 2rem;">Times Segundo Tempo</h2>
-        <div id="times-segundo-tempo">
-          <div class="team-lists">
-            <div class="team-list" id="blue-team-second">
-              <h3>Time Azul (2º Tempo)</h3>
-              <ul></ul>
-            </div>
-            <div class="team-list" id="orange-team-second">
-              <h3>Time Laranja (2º Tempo)</h3>
-              <ul></ul>
-            </div>
-          </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#jogadores" type="button" role="tab">Jogadores</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#listaChegada" type="button" role="tab">Lista de Chegada</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#times" type="button" role="tab">Times</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#golsCartoes" type="button" role="tab">Gols/Cartões</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#financeiro" type="button" role="tab">Financeiro</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#regulamento" type="button" role="tab">Regulamento</button>
+                </li>
+            </ul>
         </div>
-      </div>
     </div>
+</nav>
 
-    <div id="tab-regulamento" class="tab-content">
-      <div class="card fade-in">
-        <h2>Regulamento do Racha Pelada União</h2>
-        
-        <div class="rules-section">
-          <h3>1. Regras Gerais</h3>
-          <ul>
-            <li>Os times são formados por 2 participantes que estejam na ordem de entrada e em dia com o racha</li>
-            <li>A escolha inicial dos times é feita por cara ou coroa</li>
-            <li>Os primeiros 20 atletas que chegarem ao campo e estiverem em dia começarão jogando</li>
-            <li>É obrigatório que o atleta, ao chegar, procure o responsável pela lista para quitar débitos e validar presença</li>
-          </ul>
-
-          <h3>2. Reservas e Substituições</h3>
-          <ul>
-            <li>Atletas que jogarem no primeiro tempo podem ser substituídos no segundo tempo, dependendo do número de reservas</li>
-            <li>Time que estiver perdendo no fim do primeiro tempo escolhe primeiro reserva</li>
-            <li>Em caso de empate, decisão por cara ou coroa</li>
-            <li>Atleta não pode jogar em time diferente do que começou</li>
-          </ul>
-
-          <h3>3. Requisitos para Jogar</h3>
-          <ul>
-            <li>Estar em dia (débito máximo de R$10,00)</li>
-            <li>Respeitar a ordem de chegada</li>
-            <li>Estar com colete padronizado pelo racha</li>
-            <li>Não estar com sintomas de embriaguez</li>
-            <li>Não usar chuteiras de trava ou estar descalço</li>
-          </ul>
-
-          <h3>4. Mensalistas e Diaristas</h3>
-          <ul>
-            <li>D: R$10,00 por jogo</li>
-            <li>M: R$40,00 mensais</li>
-            <li>M pagam no primeiro domingo de cada mês</li>
-            <li>Opção de pagar R$10,00 no primeiro domingo, quitando o restante no domingo seguinte</li>
-            <li>M têm prioridade até 6:30 da manhã</li>
-            <li>Após 6:00, M entram na ordem normal com D</li>
-          </ul>
-
-          <h3>5. Cartões e Punições</h3>
-          <ul>
-            <li>Cartão Amarelo: R$3,00</li>
-            <li>Cartão Azul: R$4,00 + 5 minutos fora</li>
-            <li>Cartão Vermelho: R$5,00 + exclusão do jogo (time pode substituir após 5 minutos)</li>
-            <li>Cartões devem ser pagos no domingo seguinte</li>
-            <li>Proibido qualquer tipo de agressão, violência ou ameaças</li>
-            <li>Casos de violência serão levados ao Conselho Gestor</li>
-            <li>Punições podem variar de suspensão até desligamento do racha</li>
-          </ul>
-
-          <h3>6. Goleiros</h3>
-          <ul>
-            <li>Opções de remuneração:
-              <ul>
-                <li>R$10,00 por tempo jogado</li>
-                <li>Participação na confraternização (com direito a acompanhantes e filhos menores de 12 anos)</li>
-              </ul>
-            </li>
-            <li>Necessário 70% de presença para benefícios</li>
-            <li>Goleiros não são isentos de multas por cartões</li>
-          </ul>
-
-          <h3>7. Convidados</h3>
-          <ul>
-            <li>Permitido mediante pagamento da diária</li>
-            <li>Jogam após mensalistas e diaristas na ordem</li>
-            <li>Cartões do convidado são responsabilidade do atleta que o convidou</li>
-            <li>A partir do segundo racha, podem entrar de saída se estiverem em dia</li>
-            <li>Valor do colete será convertido em crédito após 3 meses sem falta</li>
-          </ul>
-
-          <h3>8. Eventos e Confraternização</h3>
-          <ul>
-            <li>Mínimo de 3 meses de participação para eventos</li>
-            <li>Atletas afastados por contusões comprovadas mantêm direitos</li>
-            <li>Para confraternização: mínimo 70% de presença nas mensalidades</li>
-            <li>Possibilidade de complementar valor para atingir percentual necessário</li>
-            <li> direito a levar esposa/namorada e filhos menores de 12 anos (goleiros)</li>
-          </ul>
-
-          <p style="margin-top: 2rem; font-style: italic; text-align: center;">
-            Casos não previstos neste regulamento serão decididos por votação e posteriormente incluídos.
-          </p>
+<div class="container my-4">
+    <div class="tab-content">
+        <!-- Aba Jogadores -->
+        <div class="tab-pane fade show active" id="jogadores" role="tabpanel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3>Cadastro de Jogadores</h3>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="playerSearchInput" class="form-control" placeholder="Buscar jogador">
+            </div>
+            <form id="playerForm" class="mb-3">
+                <input type="text" id="playerName" class="form-control mb-2" placeholder="Nome" required>
+                <select id="playerPosition" class="form-select mb-2" required>
+                    <option value="">Posição</option>
+                    <option value="ATA">ATA</option>
+                    <option value="ZAG">ZAG</option>
+                    <option value="LAT">LAT</option>
+                    <option value="MEI">MEI</option>
+                    <option value="VOL">VOL</option>
+                    <option value="GOL">GOL</option>
+                </select>
+                <select id="playerType" class="form-select mb-2" required>
+                    <option value="">Tipo</option>
+                    <option value="M">M</option>
+                    <option value="D">D</option>
+                </select>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none">
+                    <button type="button" class="btn btn-success" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-file-import"></i> Importar
+                    </button>
+                    <button type="button" class="btn btn-info text-white" onclick="exportToExcel()">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="clearAllPlayers()">
+                        <i class="fas fa-trash-alt"></i> Apagar Tudo
+                    </button>
+                </div>
+            </form>
+            <div id="playerList" class="list-group"></div>
         </div>
-      </div>
-    </div>
 
-  </div>
+        <!-- Aba Lista de Chegada -->
+        <div class="tab-pane fade" id="listaChegada" role="tabpanel">
+            <h3>Lista de Chegada</h3>
+            <div class="input-group mb-2">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input type="text" id="searchPlayer" class="form-control" placeholder="Buscar jogador">
+            </div>
+            <button class="btn btn-danger mb-3 ms-2" onclick="clearAllLists()">
+                <i class="fas fa-trash-alt"></i> Limpar Listas
+            </button>
+            <div id="searchResults"></div>
+
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#primeiroTempo" type="button" role="tab">1º Tempo</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#segundoTempo" type="button" role="tab">2º Tempo</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#goleiros" type="button" role="tab">Goleiros</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#timesTab" type="button" role="tab">Times</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="primeiroTempo" role="tabpanel">
+                    <h5>1º Tempo</h5>
+                    <div id="firstHalfList" class="list-group"></div>
+                </div>
+                <div class="tab-pane fade" id="segundoTempo" role="tabpanel">
+                    <h5>2º Tempo</h5>
+                    <div id="secondHalfList" class="list-group"></div>
+                </div>
+                <div class="tab-pane fade" id="goleiros" role="tabpanel">
+                    <h5>Goleiros</h5>
+                    <div id="goalkeeperList" class="list-group"></div>
+                </div>
+                <div class="tab-pane fade" id="timesTab" role="tabpanel">
+                    <h3 class="mb-4">Times 1º Tempo</h3>
+                    <div class="teams-container">
+                        <div class="col-md-6">
+                            <h5>Time Azul</h5>
+                            <div id="blueTeamCopy"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Time Laranja</h5>
+                            <div id="orangeTeamCopy"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aba Times -->
+        <div class="tab-pane fade" id="times" role="tabpanel">
+            <!-- First half teams -->
+            <h3 class="mb-4">Times 1º Tempo</h3>
+            <div class="teams-container">
+                <div class="col-md-6">
+                    <h5>Time Azul</h5>
+                    <div id="blueTeam"></div>
+                </div>
+                <div class="col-md-6">
+                    <h5>Time Laranja</h5>
+                    <div id="orangeTeam"></div>
+                </div>
+            </div>
+
+            <div class="text-center my-4">
+                <button class="btn btn-primary" onclick="generateSecondHalfTeams()">
+                    <i class="fas fa-clock"></i> Gerar Times 2º Tempo
+                </button>
+            </div>
+
+            <!-- Second half teams -->
+            <div id="secondHalfTeamsContainer" style="display: none;">
+                <h3 class="mb-4">Times 2º Tempo</h3>
+                <div class="teams-container">
+                    <div class="col-md-6">
+                        <h5>Time Azul</h5>
+                        <div id="blueTeamSecond"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Time Laranja</h5>
+                        <div id="orangeTeamSecond"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aba Gols/Cartões -->
+        <div class="tab-pane fade" id="golsCartoes" role="tabpanel">
+            <h3>Gols/Cartões</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Artilharia</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Jogador</th>
+                                    <th>Gols</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="scorersList"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addGoalModal">
+                        <i class="fas fa-plus"></i> Adicionar Gol
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <h5>Cartões</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Jogador</th>
+                                    <th>Amarelos</th>
+                                    <th>Vermelhos</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cardsList"></tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addCardModal">
+                        <i class="fas fa-plus"></i> Adicionar Cartão
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aba Financeiro -->
+        <div class="tab-pane fade" id="financeiro" role="tabpanel">
+            <h3>Financeiro</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Resumo</h5>
+                            <table class="table">
+                                <tr>
+                                    <td>Total Mensalistas:</td>
+                                    <td id="totalMensalistas">R$ 0,00</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Diaristas:</td>
+                                    <td id="totalDiaristas">R$ 0,00</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Geral:</td>
+                                    <td id="totalGeral">R$ 0,00</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pagamentos</h5>
+                            <div id="pagamentosList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aba Regulamento -->
+        <div class="tab-pane fade" id="regulamento" role="tabpanel">
+            <h3 class="text-center mb-4">REGULAMENTO PARA PARTICIPAR DO RACHA PELADA UNIÃO</h3>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">REGRAS PARA FORMAÇÃO DOS TIMES</h5>
+                    <p>Os times serão formados por 2 participantes desde que os mesmos estejam na ordem de entrada e em dias com o racha. Na entrada dos times, começa tirando aquele que ganhar o cara ou coroa.</p>
+                    <p>Os primeiros 20 atletas que chegarem ao campo e que estiverem em dias com o racha começarão jogando de saída.</p>
+                    <p><em>OBS: É obrigação do atleta na chegada, ir até o responsável pela lista para quitar possíveis débitos e assim validar sua presença.</em></p>
+
+                    <p>Para que os atletas possam começar jogando, o mesmo terá que obedecer às seguintes regras:</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">Estar em dias com o limite de débito no máximo de dez reais (R$10,00)</li>
+                        <li class="list-group-item">Estar na ordem de chegada</li>
+                        <li class="list-group-item">Estar devidamente uniformizado com colete padronizado pelo racha</li>
+                        <li class="list-group-item">Não estar com sintomas de embriaguez</li>
+                        <li class="list-group-item">Não estar com chuteiras de trava ou descalço</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">RESERVAS E SUBSTITUIÇÕES</h5>
+                    <p>Os atletas que começarem jogando no primeiro tempo, poderão ser substituídos no segundo tempo, dependendo do número de atletas que estejam na reserva e em dias com o racha, sempre respeitando a ordem de chegada.</p>
+                    <p>O time que estiver perdendo no término do primeiro tempo terá o direito de escolher o primeiro reserva. Em caso de empate, será decidido quem escolhe primeiro no cara ou coroa.</p>
+                    <p>O atleta não poderá jogar em outro time que não seja o que o mesmo começou jogando.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">CONVIDADOS</h5>
+                    <p>Todos os atletas poderão levar convidados para o racha, desde que o mesmo pague o valor da diária estabelecida. Todos os convidados só poderão jogar de saída se os mensalistas e diaristas não estiverem na ordem de chegada.</p>
+                    <p>Será de responsabilidade do atleta do racha, possíveis cartões que seu convidado venha a tomar durante a partida.</p>
+                    <p>A partir do segundo racha, o convidado já poderá entrar de saída, desde que tenha pago seu colete e esteja em dias com o racha.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">OPÇÕES PARA PARTICIPAÇÃO</h5>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><strong>Diarista:</strong> R$ 10,00</li>
+                        <li class="list-group-item"><strong>Mensalista:</strong> R$ 40,00</li>
+                    </ul>
+                    <p>O mensalista fará seu pagamento no primeiro domingo de cada mês, tendo a opção de pagar R$10,00 no primeiro domingo e quitar o restante no seguinte.</p>
+                    <p>A prioridade do mensalista é até as 6:30 da manhã, os mesmo terão prioridade sobre os dariaristas que chegarem antes do mesmo até esse horário.</p>
+                    <p>Após o horário de 6:00, o mensalista entrará na ordem como os diaristas.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">CARTÕES</h5>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">Cartão amarelo: R$ 3,00</li>
+                        <li class="list-group-item">Cartão azul: R$ 4,00 (o atleta fica fora do jogo por 5 minutos)</li>
+                        <li class="list-group-item">Cartão vermelho: R$ 5,00 (o atleta está fora do jogo, podendo seu time colocar outro após 5 minutos)</li>
+                    </ul>
+                    <p>Todos os cartões deverão ser pagos no domingo seguinte. É expressamente proibido qualquer tipo de agressão, violência e ameaças a qualquer participante do racha ou arbitragem dentro da areninha.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">GOLEIROS</h5>
+                    <p>Os goleiros serão remunerados de acordo com a sua opção:</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">Receber o valor de R$ 10,00 por tempo jogado</li>
+                        <li class="list-group-item">Ter o direito de participar da confraternização, podendo levar esposa ou namorada e filhos menores de 12 anos (necessário ter presença de pelo menos 70% dos rachadas)</li>
+                    </ul>
+                    <p>Os goleiros não são isentos das multas referentes a cartões.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">EVENTOS E CONFRATERNIZAÇÃO</h5>
+                    <p>Somente terão direito a participar de eventos organizados pelo racha os atletas que estejam participando do racha no mínimo de 3 meses ou atletas afastados por contusões comprovadas.</p>
+                    <p>Somente poderão estar presente a confraternização os atletas que tiverem feito sua contribuição alongo ao racha de no mínimo 70% em suas mensalidades, caso não atinja esse percentual o atleta tem a opção de complementar o valor restante, caso queira participar.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">CASOS EXTRAS</h5>
+                    <p>Casos extras que venham a ocorrer e que não estejam neste regulamento serão colocados em votação e acrescentados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<footer>
-  <p>&copy; 2024 Racha Pelada União - Todos os direitos reservados.</p>
-</footer>
+<div class="modal" id="addPlayerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Jogador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editPlayerForm">
+                    <div class="mb-3">
+                        <label for="arrivalTime" class="form-label">Horário de Chegada</label>
+                        <input type="time" class="form-control form-control-sm" id="arrivalTime" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Valor</label>
+                        <input type="number" class="form-control form-control-sm" id="price">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-let currentTime = 'primeiro'; 
-let players = [];
+let players = JSON.parse(localStorage.getItem('players')) || [];
+let firstHalfPlayers = JSON.parse(localStorage.getItem('firstHalfPlayers')) || [];
+let secondHalfPlayers = JSON.parse(localStorage.getItem('secondHalfPlayers')) || [];
+let goalkeeperPlayers = JSON.parse(localStorage.getItem('goalkeeperPlayers')) || [];
+let blueTeam = JSON.parse(localStorage.getItem('blueTeam')) || [];
+let orangeTeam = JSON.parse(localStorage.getItem('orangeTeam')) || [];
+let blueTeamSecond = JSON.parse(localStorage.getItem('blueTeamSecond')) || [];
+let orangeTeamSecond = JSON.parse(localStorage.getItem('orangeTeamSecond')) || [];
 
-let firstHalfTeams = {
-  blue: [],
-  orange: []
-};
-
-let secondHalfTeams = {
-  blue: [],
-  orange: []
-};
-
-document.addEventListener('DOMContentLoaded', function() {
-  const tabs = document.querySelectorAll('.tab-button');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      const tabContent = document.getElementById(`tab-${tab.dataset.tab}`);
-      if (tabContent) {
-        tabContent.classList.add('active');
-      }
-    });
-  });
-
-  const arrivalTabs = document.querySelectorAll('.arrival-tab-button');
-  arrivalTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.arrival-tab-button').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.arrival-tab-content').forEach(c => c.classList.remove('active'));
-      
-      tab.classList.add('active');
-      const tabContent = document.getElementById(`arrival-tab-${tab.dataset.arrivalTab}`);
-      if (tabContent) {
-        tabContent.classList.add('active');
-      }
-    });
-  });
-
-  setupPlayerSearch();
-
-  if (document.getElementById('arrival-player-search')) {
-    document.getElementById('arrival-player-search').addEventListener('input', handleArrivalSearch);
-  }
-
-  if (document.getElementById('player-form')) {
-    document.getElementById('player-form').addEventListener('submit', handlePlayerFormSubmit);
-  }
-
-  if (document.getElementById('export-players')) {
-    document.getElementById('export-players').addEventListener('click', exportPlayersToCSV);
-  }
-
-  if (document.getElementById('import-players')) {
-    document.getElementById('import-players').addEventListener('click', () => {
-      document.getElementById('import-file')?.click();
-    });
-  }
-
-  if (document.getElementById('import-file')) {
-    document.getElementById('import-file').addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        importPlayersFromCSV(file);
-      }
-    });
-  }
-
-  if (document.getElementById('arrival-position-filter')) {
-    document.getElementById('arrival-position-filter').addEventListener('change', updatePlayerLists);
-  }
-
-  if (document.getElementById('substitute-position-filter')) {
-    document.getElementById('substitute-position-filter').addEventListener('change', updatePlayerLists);
-  }
-
-  if (document.getElementById('clear-all-data')) {
-    document.getElementById('clear-all-data').addEventListener('click', clearAllData);
-  }
-
-  loadData();
-  updateTeamLists();
-});
-
-function setupPlayerSearch() {
-  const searchInput = document.getElementById('player-search');
-  
-  if (!searchInput) return;
-  
-  searchInput.addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    updateRegisteredPlayersList(searchTerm);
-  });
-}
-
-function handleArrivalSearch(e) {
-  const searchTerm = e.target.value.toLowerCase();
-  const resultsDiv = document.getElementById('arrival-search-results');
-  
-  if (!searchTerm) {
-    resultsDiv.innerHTML = '';
-    return;
-  }
-  
-  const searchResults = players
-    .filter(p => !p.arrivalTime) 
-    .filter(p => p.name.toLowerCase().includes(searchTerm));
-
-  if (searchResults.length === 0) {
-    resultsDiv.innerHTML = '<p style="color: #666;">Nenhum jogador encontrado</p>';
-    return;
-  }
-
-  resultsDiv.innerHTML = searchResults
-    .map(player => {
-      const now = new Date();
-      const timeString = now.getHours().toString().padStart(2, '0') + 
-                        ':' + now.getMinutes().toString().padStart(2, '0');
-      
-      return `
-        <div class="search-result-item" style="padding: 0.75rem; border-bottom: 1px solid #eee;">
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <div>
-              <strong>${player.name}</strong> - ${player.position} (${player.type})
-            </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <div style="flex: 1;">
-                <label style="display: block; font-size: 0.8rem; color: #666;">Valor R$:</label>
-                <input type="number" 
-                       id="amount-${player.name}" 
-                       style="width: 100%; padding: 0.25rem;">
-              </div>
-              <div style="flex: 1;">
-                <label style="display: block; font-size: 0.8rem; color: #666;">Horário:</label>
-                <input type="time" 
-                       id="time-${player.name}" 
-                       value="${timeString}" 
-                       style="width: 100%; padding: 0.25rem;">
-              </div>
-              <button onclick="addPlayerToArrival('${player.name}')" 
-                      style="background-color: #2196F3; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
-    })
-    .join('');
-}
-
-function addPlayerToArrival(playerName) {
-  const player = players.find(p => p.name === playerName);
-  if (player) {
-    const currentGoalkeepers = players.filter(p => 
-      p.position === 'Goleiro' && p.arrivalTime
-    ).length;
-    
-    const currentNonGoalkeepers = players.filter(p => 
-      p.position !== 'Goleiro' && p.arrivalTime
-    ).length;
-
-    if (player.position === 'Goleiro' && currentGoalkeepers >= 4) {
-      alert('Limite de 4 goleiros já foi atingido!');
-      return;
-    } else if (currentNonGoalkeepers >= 40) {
-      alert('Limite de 40 jogadores de linha já foi atingido!');
-      return;
-    }
-
-    const amountInput = document.getElementById(`amount-${player.name}`);
-    const timeInput = document.getElementById(`time-${player.name}`);
-    
-    const amount = amountInput.value ? parseFloat(amountInput.value) : undefined;
-    const timeString = timeInput.value;
-
-    player.arrivalTime = timeString;
-    if (amount !== undefined) {
-      player.amount = amount;
-    }
-    
-    document.getElementById('arrival-player-search').value = '';
-    document.getElementById('arrival-search-results').innerHTML = '';
-    
-    updatePlayerLists();
-    saveData();
-  }
-}
-
-function handlePlayerFormSubmit(e) {
-  e.preventDefault();
-  const name = document.getElementById('player-name').value;
-  const position = document.getElementById('player-position').value;
-  const type = document.getElementById('player-type').value;
-
-  if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
-    alert('Já existe um jogador cadastrado com este nome!');
-    return;
-  }
-
-  if (position === 'Goleiro' || type) {
-    players.push({ name, position, type });
-    saveData();
-    updateRegisteredPlayersList();
-    e.target.reset();
-  } else {
-    alert('Por favor preencha o tipo do jogador');
-  }
-}
-
-function removeFromArrivalList(playerName) {
-  const player = players.find(p => p.name === playerName);
-  if (player) {
-    delete player.arrivalTime;
-    delete player.amount;
-    saveData();
-    updatePlayerLists();
-  }
-}
-
-function editArrivalPlayer(playerName) {
-  const player = players.find(p => p.name === playerName);
-  if (player) {
-    const time = player.arrivalTime || '';
-    const amount = player.amount || '';
-    
-    const searchResults = document.getElementById('arrival-search-results');
-    const searchInput = document.getElementById('arrival-player-search');
-    
-    searchResults.innerHTML = `
-      <div class="search-result-item" style="padding: 0.75rem; border-bottom: 1px solid #eee;">
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <div>
-            <strong>${player.name}</strong> - ${player.position} (${player.type})
-          </div>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <div style="flex: 1;">
-              <label style="display: block; font-size: 0.8rem; color: #666;">Valor R$:</label>
-              <input type="number" 
-                     id="edit-amount-${player.name}" 
-                     value="${amount}"
-                     style="width: 100%; padding: 0.25rem;">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; font-size: 0.8rem; color: #666;">Horário:</label>
-              <input type="time" 
-                     id="edit-time-${player.name}" 
-                     value="${time}"
-                     style="width: 100%; padding: 0.25rem;">
-            </div>
-            <button onclick="updateArrivalPlayer('${player.name}')" 
-                    style="background-color: #4CAF50; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-              </svg>
-            </button>
-            <button onclick="cancelEdit()" 
-                    style="background-color: #f44336; width: 40px; height: 40px; padding: 0.25rem; border-radius: 4px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0.8rem;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    searchInput.focus();
-  }
-}
-
-function updateArrivalPlayer(playerName) {
-  const player = players.find(p => p.name === playerName);
-  if (player) {
-    const timeInput = document.getElementById(`edit-time-${player.name}`);
-    const amountInput = document.getElementById(`edit-amount-${player.name}`);
-    
-    player.arrivalTime = timeInput.value;
-    player.amount = amountInput.value ? parseFloat(amountInput.value) : undefined;
-    
-    document.getElementById('arrival-player-search').value = '';
-    document.getElementById('arrival-search-results').innerHTML = '';
-    
-    saveData();
-    updatePlayerLists();
-  }
-}
-
-function editPlayer(playerName) {
-  const player = players.find(p => p.name === playerName);
-  if (player) {
-    const oldName = player.name; // Store original name before any changes
-    
-    document.getElementById('player-name').value = player.name;
-    document.getElementById('player-position').value = player.position;
-    document.getElementById('player-type').value = player.type;
-    
-    players = players.filter(p => p.name !== playerName);
-    
-    const form = document.getElementById('player-form');
-    const originalSubmitHandler = form.onsubmit;
-    
-    form.onsubmit = (e) => {
-      e.preventDefault();
-      const newName = document.getElementById('player-name').value;
-      const position = document.getElementById('player-position').value;
-      const type = document.getElementById('player-type').value;
-      
-      if (newName.toLowerCase() !== oldName.toLowerCase() && 
-          players.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
-        alert('Já existe um jogador cadastrado com este nome!');
-        players.push(player); // Add back the original player
-        saveData();
-        updateRegisteredPlayersList();
-        form.reset();
-        form.onsubmit = originalSubmitHandler;
-        return;
-      }
-      
-      const newPlayer = { name: newName, position, type };
-      players.push(newPlayer);
-      
-      if (player.arrivalTime) {
-        newPlayer.arrivalTime = player.arrivalTime;
-        newPlayer.amount = player.amount;
-      }
-      
-      ['blue', 'orange'].forEach(team => {
-        if (firstHalfTeams[team].includes(oldName)) {
-          firstHalfTeams[team] = firstHalfTeams[team].map(p => p === oldName ? newName : p);
-        }
-        if (secondHalfTeams[team].includes(oldName)) {
-          secondHalfTeams[team] = secondHalfTeams[team].map(p => p === oldName ? newName : p);
-        }
-      });
-      
-      saveData();
-      updateRegisteredPlayersList();
-      updatePlayerLists();
-      updateTeamLists();
-      
-      form.reset();
-      form.onsubmit = originalSubmitHandler;
+function getTeamPositionCounts(team) {
+    const counts = {
+        ATA: 0,
+        ZAG: 0,
+        LAT: 0,
+        MEI: 0,
+        VOL: 0,
+        GOL: 0
     };
-  }
-}
-
-function findPlayerIndex(playerName) {
-  const playersWithArrival = players
-    .filter(p => p.arrivalTime && p.position !== 'Goleiro')
-    .sort((a, b) => {
-      const timeA = a.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-      const timeB = b.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-      
-      const isPriorityTimeA = timeA <= (6 * 60 + 30);
-      const isPriorityTimeB = timeB <= (6 * 60 + 30);
-      const hasAPriority = a.type === 'M' && isPriorityTimeA;
-      const hasBPriority = b.type === 'M' && isPriorityTimeB;
-
-      if (hasAPriority && !hasBPriority) return -1;
-      if (!hasAPriority && hasBPriority) return 1;
-      
-      return timeA - timeB;
-    });
-
-  return playersWithArrival.findIndex(p => p.name === playerName);
-}
-
-function formFirstHalfTeam(team, playerName) {
-  const otherTeam = team === 'blue' ? 'orange' : 'blue';
-  const player = players.find(p => p.name === playerName);
-  const blueBtn = document.getElementById(`blue-btn-${playerName}`);
-  const orangeBtn = document.getElementById(`orange-btn-${playerName}`);
-
-  // Check if player is from first 20 or is a goalkeeper
-  const playerIndex = findPlayerIndex(playerName);
-  const isInFirstTwenty = playerIndex < 20;
-  const isGoalkeeper = player.position === 'Goleiro';
-  
-  if (!isGoalkeeper && !isInFirstTwenty) {
-    alert('Apenas jogadores do Primeiro Tempo (1-20) podem ser selecionados para o Times Primeiro Tempo.');
-    return;
-  }
-
-  // Check team composition limits
-  const currentTeam = firstHalfTeams[team];
-  const currentGoalkeepers = currentTeam.filter(name => 
-    players.find(p => p.name === name)?.position === 'Goleiro'
-  ).length;
-  const currentFieldPlayers = currentTeam.filter(name => 
-    players.find(p => p.name === name)?.position !== 'Goleiro'
-  ).length;
-
-  // If trying to add a goalkeeper
-  if (isGoalkeeper && !currentTeam.includes(playerName)) {
-    if (currentGoalkeepers >= 1) {
-      alert('Este time já possui um goleiro.');
-      return;
-    }
-  }
-
-  // If trying to add a field player
-  if (!isGoalkeeper && !currentTeam.includes(playerName)) {
-    if (currentFieldPlayers >= 10) {
-      alert('Este time já possui 10 jogadores de linha.');
-      return;
-    }
-  }
-
-  // Remove from both teams first
-  firstHalfTeams.blue = firstHalfTeams.blue.filter(name => name !== playerName);
-  firstHalfTeams.orange = firstHalfTeams.orange.filter(name => name !== playerName);
-  secondHalfTeams.blue = secondHalfTeams.blue.filter(name => name !== playerName);
-  secondHalfTeams.orange = secondHalfTeams.orange.filter(name => name !== playerName);
-
-  // Toggle team membership
-  if (!firstHalfTeams[team].includes(playerName)) {
-    firstHalfTeams[team].push(playerName);
     
-    // Update button styles
-    if (team === 'blue') {
-      blueBtn.style.background = '#2d3436';
-      blueBtn.style.border = '2px solid #fdcb6e';
-      orangeBtn.style.background = '#f39c12';
-      orangeBtn.style.border = 'none';
-    } else {
-      orangeBtn.style.background = '#2d3436';
-      orangeBtn.style.border = '2px solid #fdcb6e';
-      blueBtn.style.background = '#0984e3';
-      blueBtn.style.border = 'none';
+    // Ensure team is an array before using forEach
+    if (Array.isArray(team)) {
+        team.forEach(player => {
+            if (counts.hasOwnProperty(player.position)) {
+                counts[player.position]++;
+            }
+        });
     }
-  } else {
-    firstHalfTeams[team] = firstHalfTeams[team].filter(name => name !== playerName);
     
-    // Reset button styles
-    blueBtn.style.background = '#0984e3';
-    orangeBtn.style.background = '#f39c12';
-    blueBtn.style.border = 'none';
-    orangeBtn.style.border = 'none';
-  }
-
-  saveData();
-  updateTeamLists();
+    return counts;
 }
 
-function updatePlayerLists() {
-  const positionFilter = document.getElementById('arrival-position-filter')?.value;
-  const substitutePositionFilter = document.getElementById('substitute-position-filter')?.value;
-
-  const arrivalList = document.getElementById('arrival-list')?.querySelector('tbody');
-  const substituteList = document.getElementById('substitute-list')?.querySelector('tbody');
-  const goalkeeperList = document.getElementById('goalkeeper-list')?.querySelector('tbody');
-
-  if (!arrivalList || !substituteList || !goalkeeperList) return;
-
-  const playersWithArrival = players
-    .filter(p => p.arrivalTime)
-    .sort((a, b) => {
-      const timeA = a.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-      const timeB = b.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-      
-      const isPriorityTimeA = timeA <= (6 * 60 + 30);
-      const isPriorityTimeB = timeB <= (6 * 60 + 30);
-      const hasAPriority = a.type === 'M' && isPriorityTimeA;
-      const hasBPriority = b.type === 'M' && isPriorityTimeB;
-
-      if (hasAPriority && !hasBPriority) return -1;
-      if (!hasAPriority && hasBPriority) return 1;
-      
-      return timeA - timeB;
-    });
-
-  // Clear all lists
-  arrivalList.innerHTML = '';
-  substituteList.innerHTML = '';
-  goalkeeperList.innerHTML = '';
-
-  // Split players into goalkeepers and non-goalkeepers
-  const goalkeeperPlayers = playersWithArrival.filter(p => p.position === 'Goleiro');
-  const nonGoalkeeperPlayers = playersWithArrival.filter(p => p.position !== 'Goleiro');
-
-  // Modify the button generation part in the row template to maintain selected state
-  const getButtonStyles = (playerName) => {
-    const isInBlueFirst = firstHalfTeams.blue.includes(playerName);
-    const isInOrangeFirst = firstHalfTeams.orange.includes(playerName);
-    const isInBlueSecond = secondHalfTeams.blue.includes(playerName);
-    const isInOrangeSecond = secondHalfTeams.orange.includes(playerName);
-    
-    return {
-      blue: isInBlueFirst || isInBlueSecond ? 
-        'background: #2d3436; border: 2px solid #fdcb6e;' : 
-        'background: #0984e3; border: none;',
-      orange: isInOrangeFirst || isInOrangeSecond ? 
-        'background: #2d3436; border: 2px solid #fdcb6e;' : 
-        'background: #f39c12; border: none;'
-    };
-  };
-
-  // Handle goalkeepers list separately - limit to 4
-  goalkeeperPlayers.slice(0, 4).forEach((player, index) => {
-    const arrivalTime = player.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-    const hasPriority = player.type === 'M' && arrivalTime <= (6 * 60 + 30);
-    const priorityBadge = hasPriority ? 
-      '<span class="priority-indicator">Prioridade Mensalista</span><br>' : '';
-
-    const styles = getButtonStyles(player.name);
-    goalkeeperList.innerHTML += `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${priorityBadge}${player.name}</td>
-        <td>${player.position}</td>
-        <td>${player.arrivalTime}</td>
-        <td>${player.amount || ''}</td>
-        <td>
-          <div style="display: flex; gap: 4px;">
-            <button onclick="editArrivalPlayer('${player.name}')" 
-                    style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-              </svg>
-            </button>
-            <button onclick="removeFromArrivalList('${player.name}')"
-                    style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-              </svg>
-            </button>
-            <button onclick="formFirstHalfTeam('blue', '${player.name}')" 
-                    id="blue-btn-${player.name}"
-                    style="${styles.blue} padding: 4px; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
-              </svg>
-            </button>
-            <button onclick="formFirstHalfTeam('orange', '${player.name}')" 
-                    id="orange-btn-${player.name}" 
-                    style="${styles.orange} padding: 4px; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
-              </svg>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `;
-  });
-
-  // Handle non-goalkeeper players
-  nonGoalkeeperPlayers.forEach((player, index) => {
-    if (positionFilter && player.position !== positionFilter) return;
-    if (substitutePositionFilter && player.position !== substitutePositionFilter) return;
-
-    const arrivalTime = player.arrivalTime.split(':').reduce((acc, t) => acc * 60 + parseInt(t), 0);
-    const hasPriority = player.type === 'M' && arrivalTime <= (6 * 60 + 30);
-    const priorityBadge = hasPriority ? 
-      '<span class="priority-indicator">Prioridade Mensalista</span><br>' : '';
-
-    const styles = getButtonStyles(player.name);
-    const row = `
-      <tr>
-        <td>${index + 1}</td>
-        <td>${priorityBadge}${player.name}</td>
-        <td>${player.position}</td>
-        <td>${player.type || ''}</td>
-        <td>${player.arrivalTime}</td>
-        <td>${player.amount || ''}</td>
-        <td>
-          <div style="display: flex; gap: 4px;">
-            <button onclick="editArrivalPlayer('${player.name}')" 
-                    style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-              </svg>
-            </button>
-            <button onclick="removeFromArrivalList('${player.name}')"
-                    style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-              </svg>
-            </button>
-            <button onclick="formFirstHalfTeam('blue', '${player.name}')" 
-                    id="blue-btn-${player.name}"
-                    style="${styles.blue} padding: 4px; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
-              </svg>
-            </button>
-            <button onclick="formFirstHalfTeam('orange', '${player.name}')" 
-                    id="orange-btn-${player.name}" 
-                    style="${styles.orange} padding: 4px; border-radius: 4px; cursor: pointer;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M16 21H8a3 3 0 0 1-3-3v-4l-2-4h17l-2 4v4a3 3 0 0 1-3 3zm-8-9v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6l1.5-3h-11l1.5 3z M12 3a3 3 0 0 0 3 3h1l-1.5 3h-5L8 6h1a3 3 0 0 0 3-3z"/>
-              </svg>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `;
-    if (index < 20) {
-      arrivalList.innerHTML += row;
-    } else if (index < 40) {
-      substituteList.innerHTML += row;
-    }
-  });
-}
-
-function updateRegisteredPlayersList(searchTerm = '') {
-  const tbody = document.getElementById('registered-players-list');
-  if (!tbody) return;
-
-  const filteredPlayers = players
-    .filter(player => 
-      !searchTerm || 
-      player.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
-
-  tbody.innerHTML = filteredPlayers.map(player => `
-    <tr>
-      <td>${player.name}</td>
-      <td>${player.position}</td>
-      <td>${player.type || ''}</td>
-      <td>
-        <div style="display: flex; gap: 4px;">
-          <button onclick="editPlayer('${player.name}')"
-                  style="background: #2196F3; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-            </svg>
-          </button>
-          <button onclick="removePlayer('${player.name}')"
-                  style="background: #f44336; padding: 4px; border: none; border-radius: 4px; cursor: pointer;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
-}
-
-function saveData() {
-  const data = {
-    players,
-    firstHalfTeams,
-    secondHalfTeams
-  };
-  localStorage.setItem('rachaPeladaData', JSON.stringify(data));
-}
-
-function loadData() {
-  const savedData = localStorage.getItem('rachaPeladaData');
-  if (savedData) {
-    const data = JSON.parse(savedData);
-    players = data.players || [];
-    firstHalfTeams = data.firstHalfTeams || { blue: [], orange: [] };
-    secondHalfTeams = data.secondTeams || { blue: [], orange: [] };
-    updateRegisteredPlayersList();
-    updatePlayerLists();
-    updateTeamLists();
-  }
-}
-
-function updateTeamLists() {
-  const blueTeamList = document.querySelector('#blue-team ul');
-  const orangeTeamList = document.querySelector('#orange-team ul');
-  const blueTeamSecondList = document.querySelector('#blue-team-second ul');
-  const orangeTeamSecondList = document.querySelector('#orange-team-second ul');
-
-  if (!blueTeamList || !orangeTeamList || !blueTeamSecondList || !orangeTeamSecondList) return;
-
-  blueTeamList.innerHTML = '';
-  orangeTeamList.innerHTML = '';
-  blueTeamSecondList.innerHTML = '';
-  orangeTeamSecondList.innerHTML = '';
-
-  const createPlayerListItem = (playerName, team, half) => {
-    const player = players.find(p => p.name === playerName);
-    if (!player) return '';
-    
-    // Get player's arrival index
-    const arrivalIndex = findPlayerIndex(playerName) + 1; // Add 1 for display
-    const arrivalNumber = arrivalIndex > 0 ? arrivalIndex : '-';
+function generateTeamCountsHTML(blueTeamCounts, orangeTeamCounts) {
+    // Calculate totals
+    const blueTotal = Object.values(blueTeamCounts).reduce((a, b) => a + b, 0);
+    const orangeTotal = Object.values(orangeTeamCounts).reduce((a, b) => a + b, 0);
     
     return `
-      <li>
-        <span>${player.name} (${player.position})</span>
-        <div style="display: flex; gap: 4px; align-items: center;">
-          <span style="font-size: 0.8rem; color: #666; margin-right: 4px;">
-            #${arrivalNumber}
-          </span>
-          <button onclick="removeFromTeam('${team}', '${player.name}', '${half}')" 
-                  style="background: #f44336; padding: 4px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
+        <div class="position-counts">
+            <div class="d-flex justify-content-between">
+                <div><strong>Time Azul</strong></div>
+                <div><strong>Time Laranja</strong></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">ATA: ${blueTeamCounts.ATA}</div>
+                <div style="width: 50%">ATA: ${orangeTeamCounts.ATA}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">ZAG: ${blueTeamCounts.ZAG}</div>
+                <div style="width: 50%">ZAG: ${orangeTeamCounts.ZAG}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">LAT: ${blueTeamCounts.LAT}</div>
+                <div style="width: 50%">LAT: ${orangeTeamCounts.LAT}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">MEI: ${blueTeamCounts.MEI}</div>
+                <div style="width: 50%">MEI: ${orangeTeamCounts.MEI}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">VOL: ${blueTeamCounts.VOL}</div>
+                <div style="width: 50%">VOL: ${orangeTeamCounts.VOL}</div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div style="width: 50%">GOL: ${blueTeamCounts.GOL}</div>
+                <div style="width: 50%">GOL: ${orangeTeamCounts.GOL}</div>
+            </div>
+            <div class="d-flex justify-content-between" style="border-top: 1px solid #dee2e6; margin-top: 4px; padding-top: 4px;">
+                <div style="width: 50%"><strong>Total: ${blueTotal}</strong></div>
+                <div style="width: 50%"><strong>Total: ${orangeTotal}</strong></div>
+            </div>
         </div>
-      </li>
     `;
-  };
-
-  const sortTeamPlayers = (teamList) => {
-    return teamList.sort((a, b) => {
-      const playerA = players.find(p => p.name === a);
-      const playerB = players.find(p => p.name === b);
-      if (!playerA || !playerB) return 0;
-      
-      // Goleiros first
-      if (playerA.position === 'Goleiro' && playerB.position !== 'Goleiro') return -1;
-      if (playerA.position !== 'Goleiro' && playerB.position === 'Goleiro') return 1;
-      
-      return playerA.name.localeCompare(playerB.name);
-    });
-  };
-
-  // Update first half teams
-  sortTeamPlayers(firstHalfTeams.blue).forEach(playerName => {
-    blueTeamList.innerHTML += createPlayerListItem(playerName, 'blue', 'first');
-  });
-  
-  sortTeamPlayers(firstHalfTeams.orange).forEach(playerName => {
-    orangeTeamList.innerHTML += createPlayerListItem(playerName, 'orange', 'first');
-  });
-
-  // Update second half teams
-  sortTeamPlayers(secondHalfTeams.blue).forEach(playerName => {
-    blueTeamSecondList.innerHTML += createPlayerListItem(playerName, 'blue', 'second');
-  });
-  
-  sortTeamPlayers(secondHalfTeams.orange).forEach(playerName => {
-    orangeTeamSecondList.innerHTML += createPlayerListItem(playerName, 'orange', 'second');
-  });
 }
 
-function removeFromTeam(team, playerName, half) {
-  const teams = half === 'first' ? firstHalfTeams : secondHalfTeams;
-  teams[team] = teams[team].filter(name => name !== playerName);
-  
-  saveData();
-  updateTeamLists();
+// Initialize storage for goals and cards
+let goals = JSON.parse(localStorage.getItem('goals')) || [];
+let cards = JSON.parse(localStorage.getItem('cards')) || [];
+
+function updateFinancialSummary() {
+    const mensalistasPlayers = [...firstHalfPlayers, ...secondHalfPlayers, ...goalkeeperPlayers].filter(p => p.type === 'M');
+    const diaristasPlayers = [...firstHalfPlayers, ...secondHalfPlayers, ...goalkeeperPlayers].filter(p => p.type === 'D');
+
+    // Calculate totals based on price if set, otherwise use default values
+    const totalMensalistas = mensalistasPlayers.reduce((acc, player) => {
+        return acc + (player.price !== null ? Number(player.price) : 40);
+    }, 0);
+
+    const totalDiaristas = diaristasPlayers.reduce((acc, player) => {
+        return acc + (player.price !== null ? Number(player.price) : 10);
+    }, 0);
+
+    const totalGeral = totalMensalistas + totalDiaristas;
+
+    // Update the display elements if they exist
+    const totalMensalistasElement = document.getElementById('totalMensalistas');
+    if (totalMensalistasElement) {
+        totalMensalistasElement.textContent = `R$ ${totalMensalistas.toFixed(2)}`;
+    }
+
+    const totalDiaristasElement = document.getElementById('totalDiaristas');
+    if (totalDiaristasElement) {
+        totalDiaristasElement.textContent = `R$ ${totalDiaristas.toFixed(2)}`;
+    }
+
+    const totalGeralElement = document.getElementById('totalGeral');
+    if (totalGeralElement) {
+        totalGeralElement.textContent = `R$ ${totalGeral.toFixed(2)}`;
+    }
+
+    // Update payments list if it exists
+    const pagamentosList = document.getElementById('pagamentosList');
+    if (pagamentosList) {
+        const allPlayers = [...firstHalfPlayers, ...secondHalfPlayers, ...goalkeeperPlayers];
+        pagamentosList.innerHTML = allPlayers
+            .map(player => `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>${player.name} (${player.type})</span>
+                    <span>R$ ${(player.price !== null ? Number(player.price) : (player.type === 'M' ? 40 : 10)).toFixed(2)}</span>
+                </div>
+            `)
+            .join('');
+    }
 }
 
-function clearAllData() {
-  if (confirm('Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.')) {
-    localStorage.removeItem('rachaPeladaData');
-    players = [];
-    firstHalfTeams = { blue: [], orange: [] };
-    secondHalfTeams = { blue: [], orange: [] };
-    updateRegisteredPlayersList();
-    updatePlayerLists();
-    updateTeamLists();
-  }
+function renderPlayerList(filteredPlayersList = players) {
+    const playerList = document.getElementById("playerList");
+    if (playerList) {
+        playerList.innerHTML = filteredPlayersList.map(player => `
+            <div class="player-item">
+                <div>
+                    <span>${player.name} - ${player.position}</span>
+                    ${player.type ? `<small class="text-muted">(${player.type === 'M' ? 'Mensalista' : 'Diarista'})</small>` : ''}
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="editPlayer(${player.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="deletePlayer(${player.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
 }
 
-function exportPlayersToCSV() {
-  const wb = XLSX.utils.book_new();
-  const ws = XLSX.utils.json_to_sheet(
-    players.map(({ name, position, type }) => ({ Nome: name, Posicao: position, Tipo: type }))
-  );
-  XLSX.utils.book_append_sheet(wb, ws, "Jogadores");
-  XLSX.writeFile(wb, "jogadores.xlsx");
-}
-
-function importPlayersFromCSV(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const data = new Uint8Array(e.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+function handlePlayerSearch(searchText) {
+    const searchResults = document.getElementById('searchResults');
+    const playerSearchInput = document.getElementById("playerSearchInput");
     
-    const newPlayers = jsonData.map(row => ({
-      name: row.Nome,
-      position: row.Posicao,
-      type: row.Tipo
-    }));
+    if (playerSearchInput && playerSearchInput === document.activeElement) {
+        const filteredPlayers = players.filter(player => 
+            player.name.toLowerCase().includes(searchText.toLowerCase())
+        );
+        renderPlayerList(filteredPlayers);
+        return;
+    }
 
-    players = newPlayers;
-    saveData();
-    updateRegisteredPlayersList();
-    updatePlayerLists();
-    updateTeamLists();
-  };
-  reader.readAsArrayBuffer(file);
+    if (!searchText.trim()) {
+        searchResults.innerHTML = '';
+        return;
+    }
+
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const currentTime = `${hours}:${minutes}`;
+
+    const existingPlayerIds = new Set([
+        ...firstHalfPlayers.map(p => p.id),
+        ...secondHalfPlayers.map(p => p.id),
+        ...goalkeeperPlayers.map(p => p.id)
+    ]);
+
+    const filteredPlayers = players.filter(player => 
+        player.name.toLowerCase().includes(searchText.toLowerCase()) &&
+        !existingPlayerIds.has(player.id)
+    );
+
+    searchResults.innerHTML = filteredPlayers.length ? `
+        <div class="list-group" style="width: 100%; max-width: 100%;">
+            ${filteredPlayers.map(player => `
+                <div class="list-group-item" style="width: 100%;">
+                    <div class="d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <strong>${player.name}</strong> - ${player.position}
+                                <small class="text-muted">(${player.type === 'M' ? 'Mensalista' : 'Diarista'})</small>
+                            </div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <input type="time" class="form-control form-control-sm" 
+                                           id="time-${player.id}" 
+                                           value="${currentTime}"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group input-group-sm">
+                                    <input type="number" class="form-control form-control-sm" 
+                                           id="price-${player.id}" 
+                                           value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-success" onclick="addPlayerToList(${player.id})">
+                                <i class="fas fa-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    ` : '<div class="alert alert-info">Nenhum jogador encontrado</div>';
+}
+
+function getTeamButtonStyle(team, playerId) {
+    if (team === 'blue') {
+        return blueTeam.some(p => p.id === playerId) ? 'btn-dark' : 'btn-outline-primary';
+    } else if (team === 'orange') {
+        return orangeTeam.some(p => p.id === playerId) ? 'btn-warning text-dark' : 'btn-outline-warning';
+    }
+    return '';
+}
+
+function addPlayerToList(playerId) {
+    const player = players.find(p => p.id === playerId);
+    const timeInput = document.getElementById(`time-${playerId}`);
+    const priceInput = document.getElementById(`price-${playerId}`);
+    
+    if (!player || !timeInput.value) {
+        alert('Por favor preencha o horário de chegada');
+        return;
+    }
+
+    const arrivalTime = timeInput.value;
+    const price = priceInput.value ? parseFloat(priceInput.value) : null;
+
+    const playerWithDetails = {
+        ...player,
+        arrivalTime,
+        price
+    };
+
+    // Check if player is mensalista with priority time
+    const [hours, minutes] = arrivalTime.split(':').map(Number);
+    const hasPriority = player.type === 'M' && (hours < 6 || (hours === 6 && minutes <= 30));
+
+    const totalPlayers = firstHalfPlayers.length + secondHalfPlayers.length;
+
+    if (player.position === 'GOL') {
+        if (goalkeeperPlayers.length >= 4) {
+            alert('Lista de Goleiros está cheia (limite de 4 jogadores)');
+            return;
+        }
+        goalkeeperPlayers.push(playerWithDetails);
+        localStorage.setItem('goalkeeperPlayers', JSON.stringify(goalkeeperPlayers));
+    } else if (totalPlayers >= 40) {
+        alert('Todas as listas de jogadores estão cheias (limite de 40 jogadores no total)');
+        return;
+    } else {
+        // If player has priority, they should be added to the beginning of the appropriate list
+        if (hasPriority) {
+            if (firstHalfPlayers.length < 20) {
+                firstHalfPlayers.unshift(playerWithDetails);
+            } else {
+                // Move last player from first half to second half
+                const lastPlayer = firstHalfPlayers.pop();
+                if (lastPlayer) {
+                    secondHalfPlayers.unshift(lastPlayer);
+                }
+                firstHalfPlayers.unshift(playerWithDetails);
+            }
+        } else {
+            // Regular non-priority addition
+            if (firstHalfPlayers.length < 20) {
+                firstHalfPlayers.push(playerWithDetails);
+            } else {
+                secondHalfPlayers.push(playerWithDetails);
+            }
+        }
+
+        // Sort both lists by priority and time
+        firstHalfPlayers.sort(sortByPriorityAndTime);
+        secondHalfPlayers.sort(sortByPriorityAndTime);
+
+        localStorage.setItem('firstHalfPlayers', JSON.stringify(firstHalfPlayers));
+        localStorage.setItem('secondHalfPlayers', JSON.stringify(secondHalfPlayers));
+    }
+
+    document.getElementById('searchPlayer').value = '';
+    document.getElementById('searchResults').innerHTML = '';
+
+    renderArrivalLists();
+    updateFinancialSummary();
+}
+
+// Update the sortByPriorityAndTime function to apply priority rules across both lists
+function sortByPriorityAndTime(a, b) {
+    const aTime = a.arrivalTime || "23:59";
+    const bTime = b.arrivalTime || "23:59";
+    const [aHours, aMinutes] = aTime.split(':').map(Number);
+    const [bHours, bMinutes] = bTime.split(':').map(Number);
+    
+    // Priority rule: Mensalistas arriving before 6:30
+    const aIsPriority = a.type === 'M' && (aHours < 6 || (aHours === 6 && aMinutes <= 30));
+    const bIsPriority = b.type === 'M' && (bHours < 6 || (bHours === 6 && bMinutes <= 30));
+    
+    if (aIsPriority !== bIsPriority) {
+        return aIsPriority ? -1 : 1;
+    }
+    
+    return aTime.localeCompare(bTime);
+}
+
+// Update removeFromList function
+window.removeFromList = function(listType, playerId) {
+    if (!confirm('Tem certeza que deseja remover este jogador da lista? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    switch(listType) {
+        case 'first':
+            // Remove from first half
+            firstHalfPlayers = firstHalfPlayers.filter(p => p.id !== playerId);
+            
+            // If there are players in second half, promote the first one
+            if (secondHalfPlayers.length > 0) {
+                const promotedPlayer = secondHalfPlayers.shift(); // Remove and get first player
+                firstHalfPlayers.push(promotedPlayer); // Add to first half
+            }
+            
+            break;
+        case 'second':
+            secondHalfPlayers = secondHalfPlayers.filter(p => p.id !== playerId);
+            break;
+        case 'goalkeeper':
+            goalkeeperPlayers = goalkeeperPlayers.filter(p => p.id !== playerId);
+            break;
+    }
+    
+    // Save updated lists to localStorage
+    localStorage.setItem('firstHalfPlayers', JSON.stringify(firstHalfPlayers));
+    localStorage.setItem('secondHalfPlayers', JSON.stringify(secondHalfPlayers));
+    localStorage.setItem('goalkeeperPlayers', JSON.stringify(goalkeeperPlayers));
+    
+    renderArrivalLists();
+};
+
+// Update secondHalfList rendering in renderArrivalLists function
+function renderArrivalLists() {
+    const positions = ['Todos', 'ATA', 'ZAG', 'LAT', 'MEI', 'VOL'];
+    
+    function sortByPriorityAndTime(a, b) {
+        const aTime = a.arrivalTime || "23:59";
+        const bTime = b.arrivalTime || "23:59";
+        const [aHours, aMinutes] = aTime.split(':').map(Number);
+        const [bHours, bMinutes] = bTime.split(':').map(Number);
+        
+        const aIsPriority = a.type === 'M' && (aHours < 6 || (aHours === 6 && aMinutes <= 30));
+        const bIsPriority = b.type === 'M' && (bHours < 6 || (bHours === 6 && bMinutes <= 30));
+        
+        if (aIsPriority === bIsPriority) {
+            return aTime.localeCompare(bTime);
+        }
+        return aIsPriority ? -1 : 1;
+    }
+
+    // Sort the lists applying priority rules
+    firstHalfPlayers.sort(sortByPriorityAndTime);
+    secondHalfPlayers.sort(sortByPriorityAndTime);
+    
+    // Update localStorage with sorted lists
+    localStorage.setItem('firstHalfPlayers', JSON.stringify(firstHalfPlayers));
+    localStorage.setItem('secondHalfPlayers', JSON.stringify(secondHalfPlayers));
+
+    const firstHalfList = document.getElementById("firstHalfList");
+    const secondHalfList = document.getElementById("secondHalfList");
+    const goalkeeperList = document.getElementById("goalkeeperList");
+
+    if (firstHalfList) {
+        const blueTeamCounts = getTeamPositionCounts(Array.isArray(blueTeam) ? blueTeam : []);
+        const orangeTeamCounts = getTeamPositionCounts(Array.isArray(orangeTeam) ? orangeTeam : []);
+
+        firstHalfList.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h6>
+                        Jogadores: ${firstHalfPlayers.length}/20
+                        <i class="fas fa-chart-bar toggle-counts" onclick="showPositionCounts()" title="Ver contagem de posições"></i>
+                    </h6>
+                </div>
+            </div>
+            <div class="btn-group mb-3" role="group" aria-label="Position filters">
+                ${positions.map(pos => `
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-filter" 
+                            data-list="first" data-position="${pos}">
+                        ${pos}
+                    </button>
+                `).join('')}
+            </div>
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Posição</th>
+                        <th>Horário</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${firstHalfPlayers.map((player, index) => {
+                        const arrivalTime = player.arrivalTime || "";
+                        const [hours, minutes] = arrivalTime.split(':').map(Number);
+                        const isPriority = player.type === 'M' && 
+                            (hours < 6 || (hours === 6 && minutes <= 30));
+                        
+                        const typeLabel = player.type === 'M' ? 'Mensalista' : player.type === 'D' ? 'Diarista' : '';
+                        
+                        return `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td style="position: relative; padding-top: 16px;">
+                                    ${isPriority ? '<div class="priority-badge">Prioridade Mensalista</div>' : ''}
+                                    ${player.name}
+                                    ${typeLabel ? `<div><small class="text-muted">(${typeLabel})</small></div>` : ''}
+                                </td>
+                                <td>${player.position}</td>
+                                <td>${player.arrivalTime || '-'}</td>
+                                <td>${player.price !== null ? `R$ ${Number(player.price || (player.type === 'M' ? 40 : 10)).toFixed(2)}` : '-'}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <button class="btn btn-sm ${getTeamButtonStyle('blue', player.id)}" onclick="addToTeam('blue', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm ${getTeamButtonStyle('orange', player.id)}" onclick="addToTeam('orange', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editPlayer(${player.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromList('first', ${player.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    if (secondHalfList) {
+        secondHalfList.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                    <h6>
+                        Jogadores: ${firstHalfPlayers.length + secondHalfPlayers.length}/40
+                        <i class="fas fa-chart-bar toggle-counts" onclick="showPositionCounts()" title="Ver contagem de posições"></i>
+                    </h6>
+                </div>
+            </div>
+            <div class="btn-group mb-3" role="group" aria-label="Position filters">
+                ${positions.map(pos => `
+                    <button type="button" class="btn btn-sm btn-outline-secondary position-filter" 
+                            data-list="second" data-position="${pos}">
+                        ${pos}
+                    </button>
+                `).join('')}
+            </div>
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Posição</th>
+                        <th>Horário</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${secondHalfPlayers.map((player, index) => {
+                        const arrivalTime = player.arrivalTime || "";
+                        const [hours, minutes] = arrivalTime.split(':').map(Number);
+                        const isPriority = player.type === 'M' && 
+                            (hours < 6 || (hours === 6 && minutes <= 30));
+                        
+                        const typeLabel = player.type === 'M' ? 'Mensalista' : player.type === 'D' ? 'Diarista' : '';
+                        
+                        return `
+                            <tr>
+                                <td>${index + 21}</td>
+                                <td style="position: relative; padding-top: 16px;">
+                                    ${isPriority ? '<div class="priority-badge">Prioridade Mensalista</div>' : ''}
+                                    ${player.name}
+                                    ${typeLabel ? `<div><small class="text-muted">(${typeLabel})</small></div>` : ''}
+                                </td>
+                                <td>${player.position}</td>
+                                <td>${player.arrivalTime || '-'}</td>
+                                <td>${player.price !== null ? `R$ ${Number(player.price || (player.type === 'M' ? 40 : 10)).toFixed(2)}` : '-'}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <button class="btn btn-sm ${getTeamButtonStyle('blue', player.id)}" onclick="addToTeam('blue', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm ${getTeamButtonStyle('orange', player.id)}" onclick="addToTeam('orange', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editPlayer(${player.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromList('second', ${player.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+
+    if (goalkeeperList) {
+        goalkeeperList.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6>Goleiros: ${goalkeeperPlayers.length}/4</h6>
+            </div>
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Posição</th>
+                        <th>Horário</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${goalkeeperPlayers.map((player, index) => {
+                        const arrivalTime = player.arrivalTime || "";
+                        const [hours, minutes] = arrivalTime.split(':').map(Number);
+                        const isPriority = player.type === 'M' && 
+                            (hours < 6 || (hours === 6 && minutes <= 30));
+                        
+                        const typeLabel = player.type === 'M' ? 'Mensalista' : player.type === 'D' ? 'Diarista' : '';
+                        
+                        return `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td style="position: relative; padding-top: 16px;">
+                                    ${isPriority ? '<div class="priority-badge">Prioridade Mensalista</div>' : ''}
+                                    ${player.name}
+                                    ${typeLabel ? `<div><small class="text-muted">(${typeLabel})</small></div>` : ''}
+                                </td>
+                                <td>${player.position}</td>
+                                <td>${player.arrivalTime || '-'}</td>
+                                <td>${player.price !== null ? `R$ ${Number(player.price || (player.type === 'M' ? 40 : 10)).toFixed(2)}` : '-'}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <button class="btn btn-sm ${getTeamButtonStyle('blue', player.id)}" onclick="addToTeam('blue', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm ${getTeamButtonStyle('orange', player.id)}" onclick="addToTeam('orange', ${player.id})">
+                                        <i class="fas fa-tshirt"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editPlayer(${player.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="removeFromList('goalkeeper', ${player.id})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+        `;
+    }
+}
+
+function renderTeams() {
+    const teamContainers = {
+        blueTeam: document.getElementById('blueTeam'),
+        orangeTeam: document.getElementById('orangeTeam'),
+        blueTeamCopy: document.getElementById('blueTeamCopy'),
+        orangeTeamCopy: document.getElementById('orangeTeamCopy'),
+        blueTeamSecond: document.getElementById('blueTeamSecond'),
+        orangeTeamSecond: document.getElementById('orangeTeamSecond')
+    };
+
+    // Helper function to render team list
+    function renderTeamList(players, container) {
+        if (!container) return;
+        
+        container.innerHTML = `
+            <div class="list-group">
+                ${players.map(player => `
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            ${player.name}
+                            <small class="text-muted">(${player.position})</small>
+                            ${player.type ? `<small class="text-muted"> - ${player.type === 'M' ? 'Mensalista' : 'Diarista'}</small>` : ''}
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger" onclick="removeFromTeam('${player.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Render first half teams
+    renderTeamList(blueTeam, teamContainers.blueTeam);
+    renderTeamList(orangeTeam, teamContainers.orangeTeam);
+    renderTeamList(blueTeam, teamContainers.blueTeamCopy);
+    renderTeamList(orangeTeam, teamContainers.orangeTeamCopy);
+
+    // Render second half teams if they exist
+    renderTeamList(blueTeamSecond, teamContainers.blueTeamSecond);
+    renderTeamList(orangeTeamSecond, teamContainers.orangeTeamSecond);
+}
+
+// Add function to remove player from team
+function removeFromTeam(playerId) {
+    // Remove from all teams
+    blueTeam = blueTeam.filter(p => p.id !== playerId);
+    orangeTeam = orangeTeam.filter(p => p.id !== playerId);
+    blueTeamSecond = blueTeamSecond.filter(p => p.id !== playerId);
+    orangeTeamSecond = orangeTeamSecond.filter(p => p.id !== playerId);
+
+    // Save to localStorage
+    localStorage.setItem('blueTeam', JSON.stringify(blueTeam));
+    localStorage.setItem('orangeTeam', JSON.stringify(orangeTeam));
+    localStorage.setItem('blueTeamSecond', JSON.stringify(blueTeamSecond));
+    localStorage.setItem('orangeTeamSecond', JSON.stringify(orangeTeamSecond));
+
+    // Update UI
+    renderTeams();
+    renderArrivalLists();
+}
+
+function showPositionCounts() {
+    const floatingWindow = document.getElementById('floatingCountsWindow');
+    const content = document.getElementById('floatingCountsContent');
+    
+    // Check if we're viewing second half or first half teams
+    const secondHalfTab = document.querySelector('#segundoTempo.active');
+    let teamBlue, teamOrange;
+    
+    if (secondHalfTab) {
+        // Get teams from second half container if it exists
+        const secondHalfContainer = document.getElementById('secondHalfTeamsContainer');
+        if (secondHalfContainer && secondHalfContainer.style.display !== 'none') {
+            const blueTeamSecondElem = document.getElementById('blueTeamSecond');
+            const orangeTeamSecondElem = document.getElementById('orangeTeamSecond');
+            
+            // Parse the teams from the DOM elements
+            teamBlue = Array.from(blueTeamSecondElem?.querySelectorAll('.list-group-item') || [])
+                .map(item => ({
+                    position: item.querySelector('.text-muted')?.textContent || ''
+                }));
+            
+            teamOrange = Array.from(orangeTeamSecondElem?.querySelectorAll('.list-group-item') || [])
+                .map(item => ({
+                    position: item.querySelector('.text-muted')?.textContent || ''
+                }));
+        } else {
+            teamBlue = blueTeamSecond;
+            teamOrange = orangeTeamSecond;
+        }
+    } else {
+        teamBlue = blueTeam;
+        teamOrange = orangeTeam;
+    }
+    
+    // Create or get the floating window
+    if (!floatingWindow) {
+        const div = document.createElement('div');
+        div.id = 'floatingCountsWindow';
+        div.className = 'floating-counts-window';
+        div.innerHTML = `
+            <span class="close-btn" onclick="this.parentElement.style.display='none'">&times;</span>
+            <div id="floatingCountsContent"></div>
+        `;
+        document.body.appendChild(div);
+    }
+    
+    const counts = generateTeamCountsHTML(
+        getTeamPositionCounts(teamBlue),
+        getTeamPositionCounts(teamOrange)
+    );
+    
+    const floatingContent = document.getElementById('floatingCountsContent');
+    if (floatingContent) {
+        floatingContent.innerHTML = counts;
+    }
+    
+    // Show the window
+    document.getElementById('floatingCountsWindow').style.display = 'block';
+    
+    // Make the window draggable
+    makeDraggable(document.getElementById('floatingCountsWindow'));
+};
+
+function makeDraggable(element) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    
+    if (element.querySelector('.close-btn')) {
+        element.querySelector('.close-btn').onmousedown = dragMouseDown;
+    } else {
+        element.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
 }
 
 function generateSecondHalfTeams() {
-  // Confirm before overwriting
-  if (secondHalfTeams.blue.length > 0 || secondHalfTeams.orange.length > 0) {
-    if (!confirm('Isso irá substituir os times atuais do segundo tempo. Deseja continuar?')) {
-      return;
+    const secondHalfContainer = document.getElementById('secondHalfTeamsContainer');
+    if (secondHalfContainer) {
+        secondHalfContainer.style.display = 'block';
     }
-  }
 
-  // Copy teams
-  secondHalfTeams.blue = [...firstHalfTeams.blue];
-  secondHalfTeams.orange = [...firstHalfTeams.orange];
+    // Get players from second half list
+    const availablePlayers = [...secondHalfPlayers];
+    
+    // Clear existing second half teams
+    blueTeamSecond = [];
+    orangeTeamSecond = [];
 
-  // Save and update display
-  saveData();
-  updateTeamLists();
+    // Create balanced teams based on positions
+    const positions = ['ATA', 'ZAG', 'LAT', 'MEI', 'VOL', 'GOL'];
+    
+    positions.forEach(position => {
+        const positionPlayers = availablePlayers.filter(p => p.position === position);
+        const count = positionPlayers.length;
+        
+        for (let i = 0; i < count; i++) {
+            const player = positionPlayers[i];
+            if (!player) continue;
+            
+            if (i % 2 === 0 && blueTeamSecond.length < 10) {
+                blueTeamSecond.push(player);
+            } else if (orangeTeamSecond.length < 10) {
+                orangeTeamSecond.push(player);
+            }
+            
+            // Remove added player from available players
+            const index = availablePlayers.indexOf(player);
+            if (index > -1) {
+                availablePlayers.splice(index, 1);
+            }
+        }
+    });
+
+    // Save to localStorage
+    localStorage.setItem('blueTeamSecond', JSON.stringify(blueTeamSecond));
+    localStorage.setItem('orangeTeamSecond', JSON.stringify(orangeTeamSecond));
+
+    // Update UI
+    renderTeams();
 }
+
+// Attach event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    renderPlayerList();
+    renderArrivalLists();
+    renderTeams();
+    updateFinancialSummary();
+
+    // Search functionality
+    const searchPlayer = document.getElementById('searchPlayer');
+    const playerSearchInput = document.getElementById('playerSearchInput');
+    
+    if (searchPlayer) {
+        searchPlayer.addEventListener('input', (e) => handlePlayerSearch(e.target.value));
+    }
+    
+    if (playerSearchInput) {
+        playerSearchInput.addEventListener('input', (e) => handlePlayerSearch(e.target.value));
+    }
+
+    // Player form submission
+    const playerForm = document.getElementById('playerForm');
+    if (playerForm) {
+        playerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('playerName').value;
+            const position = document.getElementById('playerPosition').value;
+            const type = document.getElementById('playerType').value;
+
+            const newPlayer = {
+                id: Date.now(),
+                name,
+                position,
+                type
+            };
+
+            players.push(newPlayer);
+            localStorage.setItem('players', JSON.stringify(players));
+
+            playerForm.reset();
+            renderPlayerList();
+        });
+    }
+
+    // Import/Export functionality
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+
+                players = jsonData.map(row => ({
+                    id: Date.now() + Math.random(),
+                    name: row.Nome,
+                    position: row.Posição,
+                    type: row.Tipo
+                }));
+
+                localStorage.setItem('players', JSON.stringify(players));
+                renderPlayerList();
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+    }
+
+    // Position filters
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('position-filter')) {
+            const position = e.target.dataset.position;
+            const listType = e.target.dataset.list;
+            
+            // Remove active class from all buttons in the same group
+            e.target.parentElement.querySelectorAll('.position-filter').forEach(btn => {
+                btn.classList.remove('active', 'btn-secondary');
+                btn.classList.add('btn-outline-secondary');
+            });
+            
+            // Add active class to clicked button
+            e.target.classList.remove('btn-outline-secondary');
+            e.target.classList.add('active', 'btn-secondary');
+            
+            // Filter the list
+            const list = listType === 'first' ? firstHalfPlayers : 
+                        listType === 'second' ? secondHalfPlayers : 
+                        goalkeeperPlayers;
+            
+            const filteredList = position === 'Todos' ? 
+                list : 
+                list.filter(player => player.position === position);
+            
+            // Re-render the specific list
+            if (listType === 'first') {
+                const firstHalfList = document.getElementById('firstHalfList');
+                // ... render first half list with filtered data
+            } else if (listType === 'second') {
+                const secondHalfList = document.getElementById('secondHalfList');
+                // ... render second half list with filtered data
+            }
+        }
+    });
+});
+
+window.clearAllLists = function() {
+    if (!confirm('Tem certeza que deseja limpar todas as listas? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    firstHalfPlayers = [];
+    secondHalfPlayers = [];
+    goalkeeperPlayers = [];
+    blueTeam = [];
+    orangeTeam = [];
+    blueTeamSecond = [];
+    orangeTeamSecond = [];
+    
+    localStorage.setItem('firstHalfPlayers', JSON.stringify(firstHalfPlayers));
+    localStorage.setItem('secondHalfPlayers', JSON.stringify(secondHalfPlayers));
+    localStorage.setItem('goalkeeperPlayers', JSON.stringify(goalkeeperPlayers));
+    localStorage.setItem('blueTeam', JSON.stringify(blueTeam));
+    localStorage.setItem('orangeTeam', JSON.stringify(orangeTeam));
+    localStorage.setItem('blueTeamSecond', JSON.stringify(blueTeamSecond));
+    localStorage.setItem('orangeTeamSecond', JSON.stringify(orangeTeamSecond));
+    
+    renderArrivalLists();
+    renderTeams();
+    updateFinancialSummary();
+};
+
+window.clearAllPlayers = function() {
+    if (!confirm('Tem certeza que deseja apagar todos os jogadores? Esta ação não pode ser desfeita.')) {
+        return;
+    }
+    
+    players = [];
+    localStorage.setItem('players', JSON.stringify(players));
+    renderPlayerList();
+};
+
+window.exportToExcel = function() {
+    const ws = XLSX.utils.json_to_sheet(players.map(p => ({
+        Nome: p.name,
+        Posição: p.position,
+        Tipo: p.type
+    })));
+    
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Jogadores");
+    
+    XLSX.writeFile(wb, "jogadores.xlsx");
+};
+
+window.addToTeam = function(team, playerId) {
+    let playerToAdd;
+    const allPlayers = [...firstHalfPlayers, ...secondHalfPlayers, ...goalkeeperPlayers];
+    playerToAdd = allPlayers.find(p => p.id === playerId);
+
+    if (!playerToAdd) return;
+
+    if (team === 'blue') {
+        // Remove from orange team if present
+        orangeTeam = orangeTeam.filter(p => p.id !== playerId);
+        // Add to blue team if not already there
+        if (!blueTeam.some(p => p.id === playerId)) {
+            let updatedBlueTeam = [...blueTeam];
+            updatedBlueTeam.push(playerToAdd);
+            blueTeam = updatedBlueTeam;
+        }
+    } else {
+        // Remove from blue team if present
+        blueTeam = blueTeam.filter(p => p.id !== playerId);
+        // Add to orange team if not already there
+        if (!orangeTeam.some(p => p.id === playerId)) {
+            let updatedOrangeTeam = [...orangeTeam];
+            updatedOrangeTeam.push(playerToAdd);
+            orangeTeam = updatedOrangeTeam;
+        }
+    }
+
+    localStorage.setItem('blueTeam', JSON.stringify(blueTeam));
+    localStorage.setItem('orangeTeam', JSON.stringify(orangeTeam));
+
+    renderTeams();
+    renderArrivalLists();
+};
+
+window.editPlayer = function(playerId) {
+    // Implementation for editing player
+    console.log('Edit player:', playerId);
+};
 </script>
 </body>
 </html>
